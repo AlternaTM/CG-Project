@@ -39,3 +39,36 @@
 
 # debug information files
 *.dwo
+
+
+
+# Build files
+x64/
+Debug/
+Release/
+*.exe
+*.obj
+*.pdb
+*.ilk
+*.log
+*.tlog
+
+# Libraries DLL
+*.dll
+*.lib
+
+# Visual Studio files
+.vs/
+*.VC.db
+*.suo
+*.user
+*.userosscache
+
+# VSCode files
+.vscode/
+
+# CMake files
+CMakeFiles/
+CMakeCache.txt
+*.cmake
+build/
