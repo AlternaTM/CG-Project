@@ -11,7 +11,7 @@
 #include <shader/shader.h>
 #include <playerInput/playerInput.h>
 
-#include <filesystem>
+//#include <filesystem>
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
@@ -46,7 +46,7 @@ int main(void)
 		return -1;
 	}
 
-	std::cerr << "CWD: " << std::filesystem::current_path() << std::endl;
+	//std::cerr << "CWD: " << std::filesystem::current_path() << std::endl;
 	// Shader
 	Shader ourShader("./src/vertexShader.glsl", "./src/fragmentShader.glsl");
 
