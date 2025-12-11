@@ -7,5 +7,7 @@ class PlayerInput {
 private:
 public:
 	PlayerInput();
+	~PlayerInput();
+
 	void move(GLFWwindow* window, glm::vec3& pos, float speed, float dt);
 };

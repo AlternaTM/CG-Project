@@ -9,11 +9,17 @@
 #include <iostream>
 
 #include <shader/shader.h>
-#include <playerInput/playerInput.h>
+#include <player/playerInput.h>
+#include <player/player.h>
+#include <world/world.h>
 
 //#include <filesystem>
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+
+// settings
+const unsigned int SCR_WIDTH = 1920;
+const unsigned int SCR_HEIGHT = 1080;
 
 int main(void)
 {
@@ -29,7 +35,7 @@ int main(void)
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	/* Create a windowed mode window and its OpenGL context */
-	window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
+	window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Toy Survivor", NULL, NULL);
 	if (!window)
 	{
 		glfwTerminate();
@@ -38,6 +44,7 @@ int main(void)
 
 	/* Make the window's context current */
 	glfwMakeContextCurrent(window);
+	glfwSetWindowAspectRatio(window, 16, 9);
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -49,46 +56,25 @@ int main(void)
 	//std::cerr << "CWD: " << std::filesystem::current_path() << std::endl;
 	// Shader
 	Shader ourShader("./src/vertexShader.glsl", "./src/fragmentShader.glsl");
+	float screenHeight = 9.0f;
+	float aspect = 16.0f / 9.0f;
+	float screenWidth = screenHeight * aspect;
 
+	glm::mat4 proj = glm::ortho(
+		-screenWidth * 0.5f, screenWidth * 0.5f,
+		-screenHeight * 0.5f, screenHeight * 0.5f,
+		-1.0f, 1.0f
+	);
 
-	float vertices[] = {
-		-0.2f, -0.1f, 0.0f,
-		0.2f, -0.1f, 0.0f,
-		0.2f, 0.1f, 0.0f,
-		-0.2f, 0.1f, 0.0f,
-	};
+	float worldWidth = screenWidth * 2.0f;
+	float worldHeight = screenHeight * 2.0f;
 
-	unsigned int indices[] = {
-		0, 1, 2,
-		2, 3, 0
-	};
-
-	unsigned int VAO, VBO, EBO;
-
-	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &VBO);
-	glGenBuffers(1, &EBO);
-
-	glBindVertexArray(VAO);
-
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
-	glEnableVertexAttribArray(0);
-
-	// glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindVertexArray(0);
-	
-	// ----------- STATE
-	glm::vec3 pos(0.0f, 0.0f, 0.0f);
-	float speed = 1.2f;
+	ourShader.use();
+	ourShader.setMat4("uProj", proj);
 
 	float lastTime = (float)glfwGetTime();
 	
+	Player player;
 	PlayerInput playerInput;
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(window))
@@ -97,27 +83,30 @@ int main(void)
 		float dt = now - lastTime;
 		lastTime = now;
 
-		playerInput.move(window, pos, speed, dt);
+		playerInput.move(window, player.position, player.speed, dt);
+
+		// --- CAMERA LOGIC ---
+		float halfW = screenWidth / 2.0f;
+		float halfH = screenHeight / 2.0f;
+		float camX = player.position.x;
+		float camY = player.position.y;
+
+		camX = glm::clamp(camX, -worldWidth * 0.5f + halfW, worldWidth * 0.5f - halfW);
+		camY = glm::clamp(camY, -worldHeight * 0.5f + halfH, worldHeight * 0.5f - halfH);
+
+		std::cout << "Player: (" << player.position.x << ", " << player.position.y << ") ";
+		std::cout << "Camera: (" << camX << ", " << camY << ") ";
+		std::cout << "World: (" << worldWidth << ", " << worldHeight << ")\n";
+
+		glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(-camX, -camY, 0.0f));
+		ourShader.setMat4("uView", view);
 
 		glClearColor(0.08f, 0.08f, 0.10f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		ourShader.use();
 
-		glm::mat4 model(1.0f);
-		model = glm::translate(model, pos);
-
-		unsigned int uModelLoc = glGetUniformLocation(ourShader.ID, "uModel");
-		glUniformMatrix4fv(uModelLoc, 1, GL_FALSE, glm::value_ptr(model));
-
-		unsigned int uColorLoc = glGetUniformLocation(ourShader.ID, "uColor");
-		glUniform3f(uColorLoc, 1.0f, 0.0f, 0.0f);
-
-		glBindVertexArray(VAO);
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
-
-
+		player.draw(ourShader);
 
 		/* Render here */
 		// glClear(GL_COLOR_BUFFER_BIT);

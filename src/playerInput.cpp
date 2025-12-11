@@ -1,9 +1,13 @@
 #include <glm/vec3.hpp>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
-#include <playerInput/playerInput.h>
+#include <player/playerInput.h>
 
 PlayerInput::PlayerInput() {
+
+}
+
+PlayerInput::~PlayerInput() {
 
 }
 
@@ -25,6 +29,7 @@ void PlayerInput::move(GLFWwindow* window, glm::vec3& pos, float speed, float dt
 		pos.x += speed * dt;
 	}
 
-	pos.x = glm::clamp(pos.x, -1.0f + 0.2f,  1.0f - 0.2f);
-	pos.y = glm::clamp(pos.y, -1.0f + 0.1f,  1.0f - 0.1f);
+	// Da modificare con i limiti della mappa
+	pos.x = glm::clamp(pos.x, -16.0f + 0.5f,  16.0f - 0.5f);
+	pos.y = glm::clamp(pos.y, -9.0f + 0.5f,  9.0f - 0.5f);
 }
