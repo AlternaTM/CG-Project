@@ -10,4 +10,5 @@ public:
 	~PlayerInput();
 
 	void move(GLFWwindow* window, glm::vec3& pos, float speed, float dt);
+	void updateMouseOrientation(GLFWwindow* window, glm::vec3& mousePos);
 };

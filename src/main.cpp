@@ -42,6 +42,9 @@ int main(void)
 		return -1;
 	}
 
+	/* Capturing mouse if it stays inside the window */
+	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
 	/* Make the window's context current */
 	glfwMakeContextCurrent(window);
 	glfwSetWindowAspectRatio(window, 16, 9);
@@ -56,6 +59,7 @@ int main(void)
 	//std::cerr << "CWD: " << std::filesystem::current_path() << std::endl;
 	// Shader
 	Shader ourShader("./src/vertexShader.glsl", "./src/fragmentShader.glsl");
+	
 	float screenHeight = 9.0f;
 	float aspect = 16.0f / 9.0f;
 	float screenWidth = screenHeight * aspect;
@@ -84,22 +88,21 @@ int main(void)
 		lastTime = now;
 
 		playerInput.move(window, player.position, player.speed, dt);
+		playerInput.updateMouseOrientation(window, player.mousePosition);
 
-		// --- CAMERA LOGIC ---
-		float halfW = screenWidth / 2.0f;
-		float halfH = screenHeight / 2.0f;
-		float camX = player.position.x;
-		float camY = player.position.y;
+		
 
-		camX = glm::clamp(camX, -worldWidth * 0.5f + halfW, worldWidth * 0.5f - halfW);
-		camY = glm::clamp(camY, -worldHeight * 0.5f + halfH, worldHeight * 0.5f - halfH);
-
+		/*
 		std::cout << "Player: (" << player.position.x << ", " << player.position.y << ") ";
 		std::cout << "Camera: (" << camX << ", " << camY << ") ";
 		std::cout << "World: (" << worldWidth << ", " << worldHeight << ")\n";
+		*/
 
-		glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(-camX, -camY, 0.0f));
-		ourShader.setMat4("uView", view);
+		// std::cout << "Mouse World: (" << player.mousePosition.x << ", " << player.mousePosition.y << ")\n";
+
+		// std::cout << "Player: (" << player.position.x << ", " << player.position.y << ") " << std::endl;
+
+		
 
 		glClearColor(0.08f, 0.08f, 0.10f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
