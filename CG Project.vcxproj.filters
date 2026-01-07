@@ -13,27 +13,54 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="File di origine\player">
+      <UniqueIdentifier>{9d619d2b-7568-4d6a-920b-ac29745e65fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="File di origine\texture">
+      <UniqueIdentifier>{b0b8fb80-355a-4274-b5d4-09e8624de6b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="File di origine\world">
+      <UniqueIdentifier>{1e8e44fd-7ee0-4f04-9b85-9ba6c68f5f43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="File di origine\libraries">
+      <UniqueIdentifier>{56d4cd88-2bd0-4c9e-90d8-11c8a02bf61e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="File di origine\main">
+      <UniqueIdentifier>{ed969a54-00e2-41cd-bfc8-32549ba43dd7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="File di origine\camera">
+      <UniqueIdentifier>{8d5f6996-5163-4f86-beca-2f461c429810}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\player\player.cpp">
+      <Filter>File di origine\player</Filter>
+    </ClCompile>
+    <ClCompile Include="src\texture\texture.cpp">
+      <Filter>File di origine\texture</Filter>
+    </ClCompile>
+    <ClCompile Include="src\world\world.cpp">
+      <Filter>File di origine\world</Filter>
+    </ClCompile>
+    <ClCompile Include="src\player\playerInput.cpp">
+      <Filter>File di origine\player</Filter>
+    </ClCompile>
     <ClCompile Include="src\glad.c">
-      <Filter>File di origine</Filter>
+      <Filter>File di origine\libraries</Filter>
+    </ClCompile>
+    <ClCompile Include="src\stb\stb_image.cpp">
+      <Filter>File di origine\libraries</Filter>
     </ClCompile>
     <ClCompile Include="src\main.cpp">
+      <Filter>File di origine\main</Filter>
+    </ClCompile>
+    <ClCompile Include="src\camera\camera.cpp">
+      <Filter>File di origine\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resourceManager\resourceManager.cpp">
       <Filter>File di origine</Filter>
     </ClCompile>
-    <ClCompile Include="src\playerInput.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
-    <ClCompile Include="src\player.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
-    <ClCompile Include="src\world.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
-    <ClCompile Include="src\stb_image.cpp">
-      <Filter>File di origine</Filter>
-    </ClCompile>
-    <ClCompile Include="src\texture.cpp">
+    <ClCompile Include="src\spriteRenderer\spriteRenderer.cpp">
       <Filter>File di origine</Filter>
     </ClCompile>
   </ItemGroup>
@@ -53,22 +80,31 @@
     <ClInclude Include="resource.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
-    <ClInclude Include="include\player\playerInput.h">
+    <ClInclude Include="src\shader\shader.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
-    <ClInclude Include="include\shader\shader.h">
+    <ClInclude Include="src\stb\stb_image.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
-    <ClInclude Include="include\stb\stb_image.h">
+    <ClInclude Include="src\player\player.h">
+      <Filter>File di origine\player</Filter>
+    </ClInclude>
+    <ClInclude Include="src\texture\texture.h">
+      <Filter>File di origine\texture</Filter>
+    </ClInclude>
+    <ClInclude Include="src\world\world.h">
+      <Filter>File di origine\world</Filter>
+    </ClInclude>
+    <ClInclude Include="src\player\playerInput.h">
+      <Filter>File di origine\player</Filter>
+    </ClInclude>
+    <ClInclude Include="src\camera\camera.h">
+      <Filter>File di origine\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resourceManager\resourceManager.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
-    <ClInclude Include="include\player\player.h">
-      <Filter>File di intestazione</Filter>
-    </ClInclude>
-    <ClInclude Include="include\world\world.h">
-      <Filter>File di intestazione</Filter>
-    </ClInclude>
-    <ClInclude Include="include\texture\texture.h">
+    <ClInclude Include="src\spriteRenderer\spriteRenderer.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
   </ItemGroup>

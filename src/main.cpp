@@ -1,6 +1,6 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include <stb/stb_image.h>
+#include "stb/stb_image.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -8,10 +8,13 @@
 
 #include <iostream>
 
-#include <shader/shader.h>
-#include <player/playerInput.h>
-#include <player/player.h>
-#include <world/world.h>
+#include "shader/shader.h"
+#include "player/playerInput.h"
+#include "player/player.h"
+#include "world/world.h"
+#include "camera/camera.h"
+#include "resourceManager/resourceManager.h"
+#include "spriteRenderer/spriteRenderer.h"
 
 //#include <filesystem>
 
@@ -21,6 +24,10 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 const unsigned int SCR_WIDTH = 1920;
 const unsigned int SCR_HEIGHT = 1080;
 
+float SCREEN_HEIGHT = 9.0f;
+float ASPECT = 16.0f / 9.0f;
+float SCREEN_WIDTH = SCREEN_HEIGHT * ASPECT;
+
 int main(void)
 {
 	GLFWwindow* window;
@@ -28,7 +35,6 @@ int main(void)
 	/* Initialize the library */
 	if (!glfwInit())
 		return -1;
-
 
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -56,75 +62,79 @@ int main(void)
 		return -1;
 	}
 
-	//std::cerr << "CWD: " << std::filesystem::current_path() << std::endl;
-	// Shader
-	Shader ourShader("./src/vertexShader.glsl", "./src/fragmentShader.glsl");
-	
-	float screenHeight = 9.0f;
-	float aspect = 16.0f / 9.0f;
-	float screenWidth = screenHeight * aspect;
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	glm::mat4 proj = glm::ortho(
-		-screenWidth * 0.5f, screenWidth * 0.5f,
-		-screenHeight * 0.5f, screenHeight * 0.5f,
-		-1.0f, 1.0f
-	);
+    Shader spriteShader(
+        "./src/vertexShader.glsl",
+        "./src/fragmentShader.glsl"
+    );
 
-	float worldWidth = screenWidth * 2.0f;
-	float worldHeight = screenHeight * 2.0f;
+    glm::mat4 projection = glm::ortho(
+        -SCREEN_WIDTH * 0.5f, SCREEN_WIDTH * 0.5f,
+        -SCREEN_HEIGHT * 0.5f, SCREEN_HEIGHT * 0.5f,
+        -1.0f, 1.0f
+    );
 
-	ourShader.use();
-	ourShader.setMat4("uProj", proj);
+    spriteShader.use();
+    spriteShader.setMat4("uProj", projection);
+    spriteShader.setInt("uTexture", 0);
 
-	float lastTime = (float)glfwGetTime();
-	
-	Player player;
-	PlayerInput playerInput;
-	/* Loop until the user closes the window */
-	while (!glfwWindowShouldClose(window))
-	{
-		float now = (float)glfwGetTime();
-		float dt = now - lastTime;
-		lastTime = now;
+    Camera camera(SCREEN_WIDTH, SCREEN_HEIGHT);
 
-		playerInput.move(window, player.position, player.speed, dt);
-		playerInput.updateMouseOrientation(window, player.mousePosition);
+    float worldWidth = SCREEN_WIDTH * 2.0f;
+    float worldHeight = SCREEN_HEIGHT * 2.0f;
+    camera.setWorldBounds(worldWidth, worldHeight);
 
-		
+    // Inizializzo il renderer
+    SpriteRenderer renderer(spriteShader);
 
-		/*
-		std::cout << "Player: (" << player.position.x << ", " << player.position.y << ") ";
-		std::cout << "Camera: (" << camX << ", " << camY << ") ";
-		std::cout << "World: (" << worldWidth << ", " << worldHeight << ")\n";
-		*/
+    // Carico le textures
+    ResourceManager::LoadTexture("player", "./assets/teddybear.png");
+    ResourceManager::LoadTexture("world", "./assets/wood.jpeg");
 
-		// std::cout << "Mouse World: (" << player.mousePosition.x << ", " << player.mousePosition.y << ")\n";
+    // ------------------- Player -------------------
+    Player player;
 
-		// std::cout << "Player: (" << player.position.x << ", " << player.position.y << ") " << std::endl;
+    float lastTime = (float)glfwGetTime();
 
-		
+    while (!glfwWindowShouldClose(window)) {
+        float now = (float)glfwGetTime();
+        float dt = now - lastTime;
+        lastTime = now;
 
-		glClearColor(0.08f, 0.08f, 0.10f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
+        PlayerInput::move(window, player.position, player.speed, dt);
+        PlayerInput::updateMouse(window, player.mousePosition);
 
-		ourShader.use();
+        camera.follow(player.position);
 
-		player.draw(ourShader);
+        glClearColor(0.08f, 0.08f, 0.10f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
 
-		/* Render here */
-		// glClear(GL_COLOR_BUFFER_BIT);
+        renderer.Draw(
+            ResourceManager::GetTexture("world"),
+            { 0.0f, 0.0f },              // centro
+            { worldWidth, worldHeight },
+            0.0f,
+            camera.getViewMatrix()
+        );
 
-		/* Swap front and back buffers */
-		glfwSwapBuffers(window);
+        renderer.Draw(
+            ResourceManager::GetTexture("player"),
+            player.position,
+            { 1.0f, 1.0f },
+            0.0f,
+            camera.getViewMatrix()
+        );
 
-		/* Poll for and process events */
-		glfwPollEvents();
-	}
+        glfwSwapBuffers(window);
+        glfwPollEvents();
+    }
 
-	glfwTerminate();
-	return 0;
+    ResourceManager::Clear();
+    glfwTerminate();
+    return 0;
 }
-
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {

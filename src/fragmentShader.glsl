@@ -2,9 +2,13 @@
 
 out vec4 FragColor;
 
-uniform vec3 uColor;
+in vec2 vTex;
+
+uniform sampler2D uTexture;
+uniform vec3 uColor; // tint opzionale
 
 void main()
 {
-	FragColor = vec4(uColor, 1.0);
+    vec4 tex = texture(uTexture, vTex);
+    FragColor = tex;
 }

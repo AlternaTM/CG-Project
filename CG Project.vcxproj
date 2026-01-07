@@ -129,25 +129,31 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\camera\camera.cpp" />
     <ClCompile Include="src\glad.c" />
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\player.cpp" />
-    <ClCompile Include="src\playerInput.cpp" />
-    <ClCompile Include="src\stb_image.cpp" />
-    <ClCompile Include="src\texture.cpp" />
-    <ClCompile Include="src\world.cpp" />
+    <ClCompile Include="src\player\player.cpp" />
+    <ClCompile Include="src\player\playerInput.cpp" />
+    <ClCompile Include="src\resourceManager\resourceManager.cpp" />
+    <ClCompile Include="src\spriteRenderer\spriteRenderer.cpp" />
+    <ClCompile Include="src\stb\stb_image.cpp" />
+    <ClCompile Include="src\texture\texture.cpp" />
+    <ClCompile Include="src\world\world.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\camera\camera.h" />
     <ClInclude Include="include\glad\glad.h" />
     <ClInclude Include="include\GLFW\glfw3.h" />
     <ClInclude Include="include\GLFW\glfw3native.h" />
     <ClInclude Include="include\KHR\khrplatform.h" />
-    <ClInclude Include="include\player\player.h" />
-    <ClInclude Include="include\player\playerInput.h" />
-    <ClInclude Include="include\shader\shader.h" />
-    <ClInclude Include="include\stb\stb_image.h" />
-    <ClInclude Include="include\texture\texture.h" />
-    <ClInclude Include="include\world\world.h" />
+    <ClInclude Include="src\player\player.h" />
+    <ClInclude Include="src\player\playerInput.h" />
+    <ClInclude Include="src\resourceManager\resourceManager.h" />
+    <ClInclude Include="src\shader\shader.h" />
+    <ClInclude Include="src\spriteRenderer\spriteRenderer.h" />
+    <ClInclude Include="src\stb\stb_image.h" />
+    <ClInclude Include="src\texture\texture.h" />
+    <ClInclude Include="src\world\world.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
