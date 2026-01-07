@@ -16,6 +16,10 @@
 #include "resourceManager/resourceManager.h"
 #include "spriteRenderer/spriteRenderer.h"
 
+#include <irrKlang/irrKlang.h>
+#include <ft2build.h>
+#include FT_FREETYPE_H
+
 //#include <filesystem>
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
@@ -90,8 +94,16 @@ int main(void)
     SpriteRenderer renderer(spriteShader);
 
     // Carico le textures
-    ResourceManager::LoadTexture("player", "./assets/teddybear.png");
-    ResourceManager::LoadTexture("world", "./assets/wood.jpeg");
+    ResourceManager::LoadTexture("player", "assets/textures/teddybear.png");
+    ResourceManager::LoadTexture("world", "assets/textures/wood.jpeg");
+
+    // Avvio motore audio
+    irrklang::ISoundEngine* engine = irrklang::createIrrKlangDevice();
+    if (!engine)
+        return 0; // error starting up the engine
+
+    // Avvio BGM looped (da cambiare la musica)
+    engine->play2D("assets/audio/bgm.wav", true);
 
     // ------------------- Player -------------------
     Player player;
