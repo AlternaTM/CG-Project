@@ -16,6 +16,8 @@
 #include "resourceManager/resourceManager.h"
 #include "spriteRenderer/spriteRenderer.h"
 
+#include "models/model.h"
+
 #include <irrKlang/irrKlang.h>
 #include <ft2build.h>
 #include FT_FREETYPE_H
@@ -142,6 +144,14 @@ int main(void)
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
+
+
+    //----------------chest---------------------
+
+    //Model chestModel("assets/models/chest.obj");
+
+
+
 
     ResourceManager::Clear();
     glfwTerminate();

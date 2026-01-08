@@ -31,6 +31,9 @@
     <Filter Include="File di origine\camera">
       <UniqueIdentifier>{8d5f6996-5163-4f86-beca-2f461c429810}</UniqueIdentifier>
     </Filter>
+    <Filter Include="File di origine\models">
+      <UniqueIdentifier>{0ba5efa4-ac58-4505-a436-e74df11ff860}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\player\player.cpp">
@@ -62,6 +65,12 @@
     </ClCompile>
     <ClCompile Include="src\spriteRenderer\spriteRenderer.cpp">
       <Filter>File di origine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\models\mesh.cpp">
+      <Filter>File di origine\models</Filter>
+    </ClCompile>
+    <ClCompile Include="src\models\model.cpp">
+      <Filter>File di origine\models</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -106,6 +115,12 @@
     </ClInclude>
     <ClInclude Include="src\spriteRenderer\spriteRenderer.h">
       <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="src\models\mesh.h">
+      <Filter>File di origine\models</Filter>
+    </ClInclude>
+    <ClInclude Include="src\models\model.h">
+      <Filter>File di origine\models</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
