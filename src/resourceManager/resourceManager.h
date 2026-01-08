@@ -2,16 +2,16 @@
 
 #include <map>
 #include <string>
-#include "../texture/texture.h"
+#include "../spriteTexture/spriteTexture.h"
 
 class ResourceManager {
 public:
-    static Texture& LoadTexture(const std::string& name,
+    static SpriteTexture& LoadTexture(const std::string& name,
         const char* file);
 
-    static Texture& GetTexture(const std::string& name);
+    static SpriteTexture& GetTexture(const std::string& name);
     static void Clear();
 
 private:
-    static std::map<std::string, Texture> Textures;
+    static std::map<std::string, SpriteTexture> Textures;
 };

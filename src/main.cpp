@@ -15,6 +15,8 @@
 #include "camera/camera.h"
 #include "resourceManager/resourceManager.h"
 #include "spriteRenderer/spriteRenderer.h"
+#include "textRenderer/textRenderer.h"
+#include "timer/timer.h"
 
 #include "models/model.h"
 
@@ -68,12 +70,13 @@ int main(void)
 		return -1;
 	}
 
+    glDisable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     Shader spriteShader(
-        "./src/vertexShader.glsl",
-        "./src/fragmentShader.glsl"
+        "src/glsl/spriteVertexShader.glsl",
+        "src/glsl/spriteFragShader.glsl"
     );
 
     glm::mat4 projection = glm::ortho(
@@ -110,6 +113,11 @@ int main(void)
     // ------------------- Player -------------------
     Player player;
 
+    Timer timer;
+    TextRenderer textRenderer(SCR_WIDTH, SCR_HEIGHT);
+
+    textRenderer.LoadFont("./assets/fonts/PressStart2P-Regular.ttf", 48);
+
     float lastTime = (float)glfwGetTime();
 
     while (!glfwWindowShouldClose(window)) {
@@ -140,6 +148,16 @@ int main(void)
             0.0f,
             camera.getViewMatrix()
         );
+
+        timer.update(dt);
+
+        int min = timer.getMinutes();
+        int sec = timer.getSeconds();
+
+        char buffer[6];
+        sprintf_s(buffer, "%02d:%02d", min, sec);
+
+        textRenderer.RenderText(buffer, 20.0f, SCR_HEIGHT - 70.0f, 0.7f, { 1.0f, 1.0f, 1.0f });
 
         glfwSwapBuffers(window);
         glfwPollEvents();
