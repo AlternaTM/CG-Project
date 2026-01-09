@@ -40,6 +40,9 @@
     <Filter Include="File di origine\collision">
       <UniqueIdentifier>{496d29eb-0ea5-40fe-b15d-8a2454051179}</UniqueIdentifier>
     </Filter>
+    <Filter Include="File di origine\models\modelRenderer">
+      <UniqueIdentifier>{29390c40-43e6-4cb3-b1fd-e9aba02edf32}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\player\player.cpp">
@@ -83,6 +86,15 @@
     </ClCompile>
     <ClCompile Include="src\timer\timer.cpp">
       <Filter>File di origine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\modelRenderer\modelRenderer.cpp">
+      <Filter>File di origine\models\modelRenderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\camera\camera3D.cpp">
+      <Filter>File di origine\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="src\models\modelHelper.cpp">
+      <Filter>File di origine\models</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -143,6 +155,21 @@
     <ClInclude Include="src\timer\timer.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
+    <ClInclude Include="src\models\mesh.h">
+      <Filter>File di origine\models</Filter>
+    </ClInclude>
+    <ClInclude Include="src\models\model.h">
+      <Filter>File di origine\models</Filter>
+    </ClInclude>
+    <ClInclude Include="src\modelRenderer\modelRenderer.h">
+      <Filter>File di origine\models\modelRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\camera\camera3D.h">
+      <Filter>File di origine\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="src\models\modelHelper.h">
+      <Filter>File di origine\models</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CG Project.rc">
@@ -154,5 +181,7 @@
     <None Include="src\glsl\spriteVertexShader.glsl" />
     <None Include="src\glsl\textFragShader.glsl" />
     <None Include="src\glsl\textVertexShader.glsl" />
+    <None Include="src\glsl\modelFragShader.glsl" />
+    <None Include="src\glsl\modelVertexShader.glsl" />
   </ItemGroup>
 </Project>

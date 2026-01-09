@@ -29,6 +29,7 @@ public:
     // model data 
     vector<Texture> textures_loaded;	// stores all the textures loaded so far, optimization to make sure textures aren't loaded more than once.
     vector<Mesh>    meshes;
+
     string directory;
     bool gammaCorrection;
 
@@ -41,6 +42,7 @@ public:
     // draws the model, and thus all its meshes
     void Draw(Shader& shader)
     {
+        
         for (unsigned int i = 0; i < meshes.size(); i++)
             meshes[i].Draw(shader);
     }
@@ -63,6 +65,8 @@ private:
 
         // process ASSIMP's root node recursively
         processNode(scene->mRootNode, scene);
+        
+
     }
 
     // processes a node in a recursive fashion. Processes each individual mesh located at the node and repeats this process on its children nodes (if any).
@@ -204,7 +208,7 @@ private:
     }
 };
 
-unsigned int TextureFromFile(const char* path, const string& directory, bool gamma)
+inline unsigned int TextureFromFile(const char* path, const string& directory, bool gamma)
 {
     string filename = string(path);
     filename = directory + '/' + filename;

@@ -8,6 +8,12 @@
 
 class Player {
 public:
+    enum class STATUS {
+        PLAYING,
+        REWARD
+    };
+
+    STATUS status;
     glm::vec3 position;
     float speed;
     glm::vec2 size;

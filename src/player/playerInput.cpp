@@ -5,15 +5,18 @@
 
 #include "playerInput.h"
 
-void PlayerInput::move(GLFWwindow* window, glm::vec3& pos, float speed, float dt) 
+void PlayerInput::move(GLFWwindow* window, Player& pl, float speed, float dt)
 {
-    if (glfwGetKey(window, GLFW_KEY_W)) pos.y += speed * dt;
-    if (glfwGetKey(window, GLFW_KEY_S)) pos.y -= speed * dt;
-    if (glfwGetKey(window, GLFW_KEY_A)) pos.x -= speed * dt;
-    if (glfwGetKey(window, GLFW_KEY_D)) pos.x += speed * dt;
+    if (pl.status == Player::STATUS::PLAYING) {
+        if (glfwGetKey(window, GLFW_KEY_W)) pl.position.y += speed * dt;
+        if (glfwGetKey(window, GLFW_KEY_S)) pl.position.y -= speed * dt;
+        if (glfwGetKey(window, GLFW_KEY_A)) pl.position.x -= speed * dt;
+        if (glfwGetKey(window, GLFW_KEY_D)) pl.position.x += speed * dt;
 
-    pos.x = glm::clamp(pos.x, -15.5f, 15.5f);
-    pos.y = glm::clamp(pos.y, -8.5f, 8.5f);
+        pl.position.x = glm::clamp(pl.position.x, -15.5f, 15.5f);
+        pl.position.y = glm::clamp(pl.position.y, -8.5f, 8.5f);
+    }
+
 }
 
 void PlayerInput::updateMouse(GLFWwindow* window, glm::vec2 cameraPos, glm::vec3 playerPos, glm::vec3& aimPos, float& aimRotation)
@@ -44,11 +47,19 @@ void PlayerInput::interact(GLFWwindow* window,Player& pl,std::vector<Chest>& che
 
     if (isPressed && !wasPressed)
     {
-        for (size_t i = chests.size(); i-- > 0;) {
-            if (CollisionChecker::check_collision(pl, chests[i])) {
-                chests.erase(chests.begin() + i);
+        if (pl.status == Player::STATUS::PLAYING) {
+
+            for (size_t i = chests.size(); i-- > 0;) {
+                if (CollisionChecker::check_collision(pl, chests[i])) {
+                    chests.erase(chests.begin() + i);
+                    pl.status = Player::STATUS::REWARD;
+                }
             }
         }
+        else if(pl.status == Player::STATUS::REWARD){
+            pl.status = Player::STATUS::PLAYING;
+        }
+
     }
 
     wasPressed = isPressed;

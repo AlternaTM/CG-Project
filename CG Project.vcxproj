@@ -130,10 +130,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\camera\camera.cpp" />
+    <ClCompile Include="src\camera\camera3D.cpp" />
     <ClCompile Include="src\chest\chest.cpp" />
     <ClCompile Include="src\collision\collision.cpp" />
     <ClCompile Include="src\glad.c" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\modelRenderer\modelRenderer.cpp" />
+    <ClCompile Include="src\models\modelHelper.cpp" />
     <ClCompile Include="src\player\player.cpp" />
     <ClCompile Include="src\player\playerInput.cpp" />
     <ClCompile Include="src\resourceManager\resourceManager.cpp" />
@@ -150,9 +153,14 @@
     <ClInclude Include="include\GLFW\glfw3.h" />
     <ClInclude Include="include\GLFW\glfw3native.h" />
     <ClInclude Include="include\KHR\khrplatform.h" />
+    <ClInclude Include="src\camera\camera3D.h" />
+    <ClInclude Include="src\modelRenderer\modelRenderer.h" />
     <ClInclude Include="src\models\chest.h" />
     <ClInclude Include="src\chest\chest.h" />
     <ClInclude Include="src\collision\collision.h" />
+    <ClInclude Include="src\models\mesh.h" />
+    <ClInclude Include="src\models\model.h" />
+    <ClInclude Include="src\models\modelHelper.h" />
     <ClInclude Include="src\player\player.h" />
     <ClInclude Include="src\player\playerInput.h" />
     <ClInclude Include="src\resourceManager\resourceManager.h" />
@@ -169,6 +177,8 @@
     <ResourceCompile Include="CG Project.rc" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="src\glsl\modelFragShader.glsl" />
+    <None Include="src\glsl\modelVertexShader.glsl" />
     <None Include="src\glsl\spriteFragShader.glsl" />
     <None Include="src\glsl\spriteVertexShader.glsl" />
     <None Include="src\glsl\textFragShader.glsl" />
