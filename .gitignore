@@ -44,7 +44,6 @@ x64/
 Debug/
 Release/
 *.exe
-*.obj
 *.pdb
 *.ilk
 *.log
