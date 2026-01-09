@@ -8,10 +8,10 @@
 class Player {
 public:
     glm::vec3 position;
-    glm::vec3 mousePosition;
     float speed;
-    float rotation;
     Camera& camera;
+    glm::vec3 aimPosition;
+    float aimRotation;
 
     Player(Camera& camera);
 

@@ -148,9 +148,9 @@ int main(void)
 
         renderer.Draw(
             ResourceManager::GetTexture("arrow"),
-            player.mousePosition,
+            player.aimPosition,
             { 1.0f, 1.0f },     
-            player.rotation,    
+            player.aimRotation,    
             camera.getViewMatrix()
         );
 
