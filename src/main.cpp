@@ -21,8 +21,6 @@
 #include "models/model.h"
 
 #include <irrKlang/irrKlang.h>
-#include <ft2build.h>
-#include FT_FREETYPE_H
 
 //#include <filesystem>
 
@@ -101,6 +99,7 @@ int main(void)
     // Carico le textures
     ResourceManager::LoadTexture("player", "assets/textures/teddybear.png");
     ResourceManager::LoadTexture("world", "assets/textures/wood.jpeg");
+    ResourceManager::LoadTexture("arrow", "assets/textures/arrow.png");
 
     // Avvio motore audio
     irrklang::ISoundEngine* engine = irrklang::createIrrKlangDevice();
@@ -111,7 +110,7 @@ int main(void)
     engine->play2D("assets/audio/bgm.wav", true);
 
     // ------------------- Player -------------------
-    Player player;
+    Player player(camera);
 
     Timer timer;
     TextRenderer textRenderer(SCR_WIDTH, SCR_HEIGHT);
@@ -125,9 +124,7 @@ int main(void)
         float dt = now - lastTime;
         lastTime = now;
 
-        PlayerInput::move(window, player.position, player.speed, dt);
-        PlayerInput::updateMouse(window, player.mousePosition);
-
+        player.update(dt, window);
         camera.follow(player.position);
 
         glClearColor(0.08f, 0.08f, 0.10f, 1.0f);
@@ -146,6 +143,14 @@ int main(void)
             player.position,
             { 1.0f, 1.0f },
             0.0f,
+            camera.getViewMatrix()
+        );
+
+        renderer.Draw(
+            ResourceManager::GetTexture("arrow"),
+            player.mousePosition,
+            { 1.0f, 1.0f },     
+            player.rotation,    
             camera.getViewMatrix()
         );
 

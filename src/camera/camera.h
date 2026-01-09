@@ -11,6 +11,8 @@ public:
 
     glm::mat4 getViewMatrix() const;
 
+    glm::vec2 getCameraPosition();
+
 private:
     glm::vec2 position;
     float screenW, screenH;

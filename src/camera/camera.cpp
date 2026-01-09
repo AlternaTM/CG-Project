@@ -36,3 +36,8 @@ glm::mat4 Camera::getViewMatrix() const {
     return glm::translate(glm::mat4(1.0f),
         glm::vec3(-position, 0.0f));
 }
+
+glm::vec2 Camera::getCameraPosition()
+{
+    return position;
+}
