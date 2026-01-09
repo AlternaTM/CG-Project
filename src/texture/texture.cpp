@@ -6,8 +6,8 @@ Texture::Texture()
 }
 
 void Texture::generate(int width, int height, unsigned char* data) {
-    width = width;
-    height = height;
+    this->width = width;
+    this->height = height;
 
     glBindTexture(GL_TEXTURE_2D, ID);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,

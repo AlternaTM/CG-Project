@@ -16,7 +16,7 @@ Texture& ResourceManager::LoadTexture(const std::string& name,
 
     Texture tex;
     tex.generate(w, h, data);
-
+    
     stbi_image_free(data);
 
     Textures[name] = tex;

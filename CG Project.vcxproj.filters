@@ -34,6 +34,12 @@
     <Filter Include="File di origine\models">
       <UniqueIdentifier>{0ba5efa4-ac58-4505-a436-e74df11ff860}</UniqueIdentifier>
     </Filter>
+    <Filter Include="File di origine\chest">
+      <UniqueIdentifier>{37c3e4b1-c377-49cf-94b7-0fb60c5275e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="File di origine\collision">
+      <UniqueIdentifier>{496d29eb-0ea5-40fe-b15d-8a2454051179}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\player\player.cpp">
@@ -66,11 +72,11 @@
     <ClCompile Include="src\spriteRenderer\spriteRenderer.cpp">
       <Filter>File di origine</Filter>
     </ClCompile>
-    <ClCompile Include="src\models\mesh.cpp">
-      <Filter>File di origine\models</Filter>
+    <ClCompile Include="src\chest\chest.cpp">
+      <Filter>File di origine\chest</Filter>
     </ClCompile>
-    <ClCompile Include="src\models\model.cpp">
-      <Filter>File di origine\models</Filter>
+    <ClCompile Include="src\collision\collision.cpp">
+      <Filter>File di origine\collision</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -116,11 +122,11 @@
     <ClInclude Include="src\spriteRenderer\spriteRenderer.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
-    <ClInclude Include="src\models\mesh.h">
-      <Filter>File di origine\models</Filter>
+    <ClInclude Include="src\chest\chest.h">
+      <Filter>File di origine\chest</Filter>
     </ClInclude>
-    <ClInclude Include="src\models\model.h">
-      <Filter>File di origine\models</Filter>
+    <ClInclude Include="src\collision\collision.h">
+      <Filter>File di origine\collision</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

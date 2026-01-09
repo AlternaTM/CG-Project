@@ -3,14 +3,9 @@
 #include <glm/glm.hpp>
 #include <GLFW/glfw3.h>
 #include <string>
-
-class Player {
+class Chest {
 public:
     glm::vec3 position;
-    glm::vec3 mousePosition;
-    float speed;
     glm::vec2 size;
-    Player();
-
-    void update(float dt, GLFWwindow* window);
+    Chest(float x,float y);
 };

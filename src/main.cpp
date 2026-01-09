@@ -16,10 +16,14 @@
 #include "resourceManager/resourceManager.h"
 #include "spriteRenderer/spriteRenderer.h"
 
-#include "models/model.h"
+
+#include "chest/chest.h"
+#include "collision/collision.h"
 
 #include <irrKlang/irrKlang.h>
 #include <ft2build.h>
+#include <vector>
+
 #include FT_FREETYPE_H
 
 //#include <filesystem>
@@ -98,6 +102,7 @@ int main(void)
     // Carico le textures
     ResourceManager::LoadTexture("player", "assets/textures/teddybear.png");
     ResourceManager::LoadTexture("world", "assets/textures/wood.jpeg");
+    ResourceManager::LoadTexture("chest", "assets/textures/chest.png");
 
     // Avvio motore audio
     irrklang::ISoundEngine* engine = irrklang::createIrrKlangDevice();
@@ -107,8 +112,19 @@ int main(void)
     // Avvio BGM looped (da cambiare la musica)
     engine->play2D("assets/audio/bgm.wav", true);
 
+
+
+
+    //----------------chest---------------------
+    std::vector<Chest> chests;
+
+    //Model chestModel("assets/models/chest.obj");
+    chests.push_back(Chest(5.0f, 5.0f));
+    chests.push_back(Chest(-5.0f, -5.0f));
+
     // ------------------- Player -------------------
     Player player;
+
 
     float lastTime = (float)glfwGetTime();
 
@@ -119,6 +135,7 @@ int main(void)
 
         PlayerInput::move(window, player.position, player.speed, dt);
         PlayerInput::updateMouse(window, player.mousePosition);
+        PlayerInput::interact(window, player, chests);
 
         camera.follow(player.position);
 
@@ -133,22 +150,32 @@ int main(void)
             camera.getViewMatrix()
         );
 
+
+        for (size_t i = 0; i < chests.size(); i++) {
+            renderer.Draw(
+                ResourceManager::GetTexture("chest"),
+                chests[i].position,
+                chests[i].size,
+                0.0f,
+                camera.getViewMatrix()
+            );
+        }
+
+
         renderer.Draw(
             ResourceManager::GetTexture("player"),
             player.position,
-            { 1.0f, 1.0f },
+            player.size,
             0.0f,
             camera.getViewMatrix()
         );
+        
 
+       
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
 
-
-    //----------------chest---------------------
-
-    //Model chestModel("assets/models/chest.obj");
 
 
 
