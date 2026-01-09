@@ -45,7 +45,7 @@
     <ClCompile Include="src\player\player.cpp">
       <Filter>File di origine\player</Filter>
     </ClCompile>
-    <ClCompile Include="src\texture\texture.cpp">
+    <ClCompile Include="src\spriteTexture\spriteTexture.cpp">
       <Filter>File di origine\texture</Filter>
     </ClCompile>
     <ClCompile Include="src\world\world.cpp">
@@ -78,6 +78,12 @@
     <ClCompile Include="src\collision\collision.cpp">
       <Filter>File di origine\collision</Filter>
     </ClCompile>
+    <ClCompile Include="src\textRenderer\textRenderer.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\timer\timer.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\glad\glad.h">
@@ -104,7 +110,7 @@
     <ClInclude Include="src\player\player.h">
       <Filter>File di origine\player</Filter>
     </ClInclude>
-    <ClInclude Include="src\texture\texture.h">
+    <ClInclude Include="src\spriteTexture\spriteTexture.h">
       <Filter>File di origine\texture</Filter>
     </ClInclude>
     <ClInclude Include="src\world\world.h">
@@ -128,10 +134,25 @@
     <ClInclude Include="src\collision\collision.h">
       <Filter>File di origine\collision</Filter>
     </ClInclude>
+    <ClInclude Include="src\models\chest.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="src\textRenderer\textRenderer.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="src\timer\timer.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CG Project.rc">
       <Filter>File di risorse</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\glsl\spriteFragShader.glsl" />
+    <None Include="src\glsl\spriteVertexShader.glsl" />
+    <None Include="src\glsl\textFragShader.glsl" />
+    <None Include="src\glsl\textVertexShader.glsl" />
   </ItemGroup>
 </Project>

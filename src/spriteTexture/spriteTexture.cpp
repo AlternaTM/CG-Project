@@ -1,11 +1,11 @@
-#include "texture.h"
+#include "spriteTexture.h"
 
-Texture::Texture()
+SpriteTexture::SpriteTexture()
     : ID(0), width(0), height(0) {
     glGenTextures(1, &ID);
 }
 
-void Texture::generate(int width, int height, unsigned char* data) {
+void SpriteTexture::generate(int width, int height, unsigned char* data) {
     this->width = width;
     this->height = height;
 
@@ -22,6 +22,6 @@ void Texture::generate(int width, int height, unsigned char* data) {
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void Texture::bind() const {
+void SpriteTexture::bind() const {
     glBindTexture(GL_TEXTURE_2D, ID);
 }

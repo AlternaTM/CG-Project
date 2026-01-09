@@ -3,9 +3,9 @@
 
 #include <iostream>
 
-std::map<std::string, Texture> ResourceManager::Textures;
+std::map<std::string, SpriteTexture> ResourceManager::Textures;
 
-Texture& ResourceManager::LoadTexture(const std::string& name,
+SpriteTexture& ResourceManager::LoadTexture(const std::string& name,
     const char* file) {
     int w, h, ch;
     stbi_set_flip_vertically_on_load(true);
@@ -14,7 +14,7 @@ Texture& ResourceManager::LoadTexture(const std::string& name,
         std::cerr << "FAILED TO LOAD TEXTURE: " << file << std::endl;
     }
 
-    Texture tex;
+    SpriteTexture tex;
     tex.generate(w, h, data);
     
     stbi_image_free(data);
@@ -23,7 +23,7 @@ Texture& ResourceManager::LoadTexture(const std::string& name,
     return Textures[name];
 }
 
-Texture& ResourceManager::GetTexture(const std::string& name) {
+SpriteTexture& ResourceManager::GetTexture(const std::string& name) {
     return Textures.at(name);
 }
 

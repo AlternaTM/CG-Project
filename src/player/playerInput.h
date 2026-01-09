@@ -10,6 +10,6 @@ class PlayerInput {
 private:
 public:
 	static void move(GLFWwindow* window, glm::vec3& pos, float speed, float dt);
-	static void updateMouse(GLFWwindow* window, glm::vec3& mousePos);
 	static void interact(GLFWwindow* window, Player& pl,std::vector<Chest>& chests);
+	static void updateMouse(GLFWwindow* window, glm::vec2 cameraPos, glm::vec3 playerPos, glm::vec3& aimPos, float& aimRotation);
 };

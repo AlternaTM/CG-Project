@@ -13,7 +13,7 @@ SpriteRenderer::~SpriteRenderer() {
     glDeleteBuffers(1, &EBO);
 }
 
-void SpriteRenderer::Draw(Texture& texture,
+void SpriteRenderer::Draw(SpriteTexture& texture,
     const glm::vec2& position,
     const glm::vec2& size,
     float rotation,

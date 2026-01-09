@@ -108,7 +108,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(ProjectDir)lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);glfw3.lib;irrKlang.lib</AdditionalDependencies>
+      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);glfw3.lib;assimp-vc143-mt.lib;freetype.lib;irrKlang.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -139,7 +139,9 @@
     <ClCompile Include="src\resourceManager\resourceManager.cpp" />
     <ClCompile Include="src\spriteRenderer\spriteRenderer.cpp" />
     <ClCompile Include="src\stb\stb_image.cpp" />
-    <ClCompile Include="src\texture\texture.cpp" />
+    <ClCompile Include="src\textRenderer\textRenderer.cpp" />
+    <ClCompile Include="src\spriteTexture\spriteTexture.cpp" />
+    <ClCompile Include="src\timer\timer.cpp" />
     <ClCompile Include="src\world\world.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -148,6 +150,7 @@
     <ClInclude Include="include\GLFW\glfw3.h" />
     <ClInclude Include="include\GLFW\glfw3native.h" />
     <ClInclude Include="include\KHR\khrplatform.h" />
+    <ClInclude Include="src\models\chest.h" />
     <ClInclude Include="src\chest\chest.h" />
     <ClInclude Include="src\collision\collision.h" />
     <ClInclude Include="src\player\player.h" />
@@ -156,12 +159,20 @@
     <ClInclude Include="src\shader\shader.h" />
     <ClInclude Include="src\spriteRenderer\spriteRenderer.h" />
     <ClInclude Include="src\stb\stb_image.h" />
-    <ClInclude Include="src\texture\texture.h" />
+    <ClInclude Include="src\textRenderer\textRenderer.h" />
+    <ClInclude Include="src\spriteTexture\spriteTexture.h" />
+    <ClInclude Include="src\timer\timer.h" />
     <ClInclude Include="src\world\world.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CG Project.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\glsl\spriteFragShader.glsl" />
+    <None Include="src\glsl\spriteVertexShader.glsl" />
+    <None Include="src\glsl\textFragShader.glsl" />
+    <None Include="src\glsl\textVertexShader.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

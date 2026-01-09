@@ -15,6 +15,8 @@
 #include "camera/camera.h"
 #include "resourceManager/resourceManager.h"
 #include "spriteRenderer/spriteRenderer.h"
+#include "textRenderer/textRenderer.h"
+#include "timer/timer.h"
 
 
 #include "chest/chest.h"
@@ -72,12 +74,13 @@ int main(void)
 		return -1;
 	}
 
+    glDisable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     Shader spriteShader(
-        "./src/vertexShader.glsl",
-        "./src/fragmentShader.glsl"
+        "src/glsl/spriteVertexShader.glsl",
+        "src/glsl/spriteFragShader.glsl"
     );
 
     glm::mat4 projection = glm::ortho(
@@ -103,6 +106,7 @@ int main(void)
     ResourceManager::LoadTexture("player", "assets/textures/teddybear.png");
     ResourceManager::LoadTexture("world", "assets/textures/wood.jpeg");
     ResourceManager::LoadTexture("chest", "assets/textures/chest.png");
+    ResourceManager::LoadTexture("arrow", "assets/textures/arrow.png");
 
     // Avvio motore audio
     irrklang::ISoundEngine* engine = irrklang::createIrrKlangDevice();
@@ -123,7 +127,12 @@ int main(void)
     chests.push_back(Chest(-5.0f, -5.0f));
 
     // ------------------- Player -------------------
-    Player player;
+    Player player(camera);
+
+    Timer timer;
+    TextRenderer textRenderer(SCR_WIDTH, SCR_HEIGHT);
+
+    textRenderer.LoadFont("./assets/fonts/PressStart2P-Regular.ttf", 48);
 
 
     float lastTime = (float)glfwGetTime();
@@ -133,10 +142,10 @@ int main(void)
         float dt = now - lastTime;
         lastTime = now;
 
-        PlayerInput::move(window, player.position, player.speed, dt);
-        PlayerInput::updateMouse(window, player.mousePosition);
-        PlayerInput::interact(window, player, chests);
+        
 
+        player.update(dt, window);
+        PlayerInput::interact(window, player, chests);
         camera.follow(player.position);
 
         glClearColor(0.08f, 0.08f, 0.10f, 1.0f);
@@ -172,6 +181,24 @@ int main(void)
         
 
        
+        renderer.Draw(
+            ResourceManager::GetTexture("arrow"),
+            player.aimPosition,
+            { 1.0f, 1.0f },     
+            player.aimRotation,    
+            camera.getViewMatrix()
+        );
+
+        timer.update(dt);
+
+        int min = timer.getMinutes();
+        int sec = timer.getSeconds();
+
+        char buffer[6];
+        sprintf_s(buffer, "%02d:%02d", min, sec);
+
+        textRenderer.RenderText(buffer, 20.0f, SCR_HEIGHT - 70.0f, 0.7f, { 1.0f, 1.0f, 1.0f });
+
         glfwSwapBuffers(window);
         glfwPollEvents();
     }

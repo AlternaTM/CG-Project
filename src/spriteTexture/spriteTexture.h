@@ -2,12 +2,12 @@
 
 #include <glad/glad.h>
 
-class Texture {
+class SpriteTexture {
 public:
     unsigned int ID;
     int width, height;
 
-    Texture();
+    SpriteTexture();
     void generate(int width, int height, unsigned char* data);
     void bind() const;
 };

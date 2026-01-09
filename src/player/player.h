@@ -4,13 +4,18 @@
 #include <GLFW/glfw3.h>
 #include <string>
 
+#include "camera/camera.h"
+
 class Player {
 public:
     glm::vec3 position;
-    glm::vec3 mousePosition;
     float speed;
     glm::vec2 size;
-    Player();
+    Camera& camera;
+    glm::vec3 aimPosition;
+    float aimRotation;
+
+    Player(Camera& camera);
 
     void update(float dt, GLFWwindow* window);
 };
