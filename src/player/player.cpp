@@ -8,7 +8,13 @@ Player::Player(Camera& camera)
 }
 
 void Player::update(float dt, GLFWwindow* window) {
-    PlayerInput::move(window, *this, speed, dt);
-
-    PlayerInput::updateMouse(window, camera.getCameraPosition(), position, aimPosition, aimRotation);
+    currentState->update(*this, dt, window);
 }
+
+
+
+
+
+
+
+

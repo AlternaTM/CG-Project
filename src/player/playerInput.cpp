@@ -5,18 +5,26 @@
 
 #include "playerInput.h"
 
-void PlayerInput::move(GLFWwindow* window, Player& pl, float speed, float dt)
+bool PlayerInput::move(GLFWwindow* window, Player& pl, float speed, float dt)
 {
-    if (pl.status == Player::STATUS::PLAYING) {
-        if (glfwGetKey(window, GLFW_KEY_W)) pl.position.y += speed * dt;
-        if (glfwGetKey(window, GLFW_KEY_S)) pl.position.y -= speed * dt;
-        if (glfwGetKey(window, GLFW_KEY_A)) pl.position.x -= speed * dt;
-        if (glfwGetKey(window, GLFW_KEY_D)) pl.position.x += speed * dt;
-
+    bool moved = false;
+    if (glfwGetKey(window, GLFW_KEY_W)) {
+        pl.position.y += speed * dt;
+    } 
+    if (glfwGetKey(window, GLFW_KEY_S)) {
+        pl.position.y -= speed * dt;
+    }
+    if (glfwGetKey(window, GLFW_KEY_A)) {
+        pl.position.x -= speed * dt;
+    }
+    if (glfwGetKey(window, GLFW_KEY_D)) {
+        pl.position.x += speed * dt;
+    }
+    if (moved) {
         pl.position.x = glm::clamp(pl.position.x, -15.5f, 15.5f);
         pl.position.y = glm::clamp(pl.position.y, -8.5f, 8.5f);
     }
-
+    return moved;
 }
 
 void PlayerInput::updateMouse(GLFWwindow* window, glm::vec2 cameraPos, glm::vec3 playerPos, glm::vec3& aimPos, float& aimRotation)
@@ -41,24 +49,21 @@ void PlayerInput::updateMouse(GLFWwindow* window, glm::vec2 cameraPos, glm::vec3
 }
 
 void PlayerInput::interact(GLFWwindow* window,Player& pl,std::vector<Chest>& chests) {
-    static bool wasPressed = false;
 
+    static bool wasPressed = false;
     bool isPressed = glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS;
+    
 
     if (isPressed && !wasPressed)
     {
-        if (pl.status == Player::STATUS::PLAYING) {
 
-            for (size_t i = chests.size(); i-- > 0;) {
-                if (CollisionChecker::check_collision(pl, chests[i])) {
-                    chests.erase(chests.begin() + i);
-                    pl.status = Player::STATUS::REWARD;
-                }
+        for (size_t i = chests.size(); i-- > 0;) {
+            if (CollisionChecker::check_collision(pl, chests[i])) {
+                chests.erase(chests.begin() + i);
+                pl.status = Player::STATUS::REWARD;
             }
         }
-        else if(pl.status == Player::STATUS::REWARD){
-            pl.status = Player::STATUS::PLAYING;
-        }
+        //  pl.status = Player::STATUS::PLAYING;
 
     }
 
