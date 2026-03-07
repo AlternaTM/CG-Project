@@ -5,7 +5,14 @@
 #include <string>
 
 #include "camera/camera.h"
+#include "playerinput.h"
+
 class Player;
+
+enum class State {
+    InGame,
+    Looting
+};
 
 class PlayerState {
 public:
@@ -16,16 +23,27 @@ public:
     virtual void exit(Player& player) {}
 };
 
+class PlayingState : public PlayerState {
+public:
+    static PlayingState* instance();
+    void enter(Player& player) override;
+    void update(Player& player, float dt, GLFWwindow* window) override;
+};
+
+
+class LootingState : public PlayerState {
+public:
+    static LootingState* instance();
+    void enter(Player& player) override;
+    void update(Player& player, float dt, GLFWwindow* window) override;
+};
+
 
 
 class Player {
 public:
-    enum class STATUS {
-        PLAYING,
-        REWARD
-    };
+    State state;
 
-    STATUS status;
     glm::vec3 position;
     float speed;
     glm::vec2 size;
@@ -33,78 +51,13 @@ public:
     glm::vec3 aimPosition;
     float aimRotation;
 
-
-
     Player(Camera& camera);
 
     void update(float dt, GLFWwindow* window);
-
-private:
-    class RunningState;
-    class IdleState;
-    class LootingState;
-    class MenuState;
-
-
-    class RunningState : public PlayerState {
-    public:
-        void update(Player& player, float dt, GLFWwindow* window) {
-            bool moved = PlayerInput::move(window, player, player.speed, dt);
-
-            PlayerInput::updateMouse(window, player.camera.getCameraPosition(), player.position, player.aimPosition, player.aimRotation);
-            if (moved == false)
-                player.currentState = &player.idleState;
-        }
-    };
-    class LootingState : public PlayerState {
-    public:
-        void update(Player& player, float dt, GLFWwindow* window) {
-            static bool wasPressed = false;
-            bool isPressed = glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS;
-
-
-            if (isPressed && !wasPressed)
-            {
-                player.status = Player::STATUS::PLAYING;
-            }
-
-            wasPressed = isPressed;
-        }
-    };
-
-    class IdleState : public PlayerState {
-    public:
-        void update(Player& player, float dt, GLFWwindow* window) {
-            bool moved = PlayerInput::move(window, player, player.speed, dt);
-
-            PlayerInput::updateMouse(window, player.camera.getCameraPosition(), player.position, player.aimPosition, player.aimRotation);
-            if (moved == true)
-                player.currentState = &player.runningState;
-        }
-    };
-
-    class MenuState : public PlayerState {
-    public:
-        void update(Player& player, float dt, GLFWwindow* window) {
-            static bool wasPressed = false;
-            bool isPressed = glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS;
-
-
-            if (isPressed && !wasPressed)
-            {
-                player.status = Player::STATUS::PLAYING;
-            }
-
-            wasPressed = isPressed;
-        }
-    };
-
-
-    RunningState runningState;
-    IdleState idleState; 
-    LootingState lootingState;
-    MenuState menuState;
-
+    void set_state(PlayerState* state);
     PlayerState* currentState;
+   
 };
+
+
 

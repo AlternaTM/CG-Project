@@ -2,8 +2,32 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include <iostream>
-
+#include <stdio.h>
 #include "playerInput.h"
+#include "player.h"
+
+
+std::unordered_map<int, bool> PlayerInput::wasPressed = {};
+
+void PlayerInput::register_input(int l) {
+    wasPressed.insert({ l, false });
+}
+bool PlayerInput::isPressed(GLFWwindow* window, int l) {
+    return glfwGetKey(window, l);
+}
+bool PlayerInput::isKeyJustPressed(GLFWwindow* window, int l) {
+    auto it = wasPressed.find(l);
+    if (it == wasPressed.end()) {
+        std::cout << "Tasto " << l << " non registrato!" << std::endl;
+        return false;
+    }
+    return  (!it->second && glfwGetKey(window, l));
+}
+void PlayerInput::update_input(GLFWwindow* window) {//questo va chiamato DOPO che si sono fatti tutti i controlli, perché aggiorna il valore passato
+    for (auto& pair : wasPressed) {
+        pair.second = glfwGetKey(window, pair.first) == GLFW_PRESS;
+    }
+}
 
 bool PlayerInput::move(GLFWwindow* window, Player& pl, float speed, float dt)
 {
@@ -49,23 +73,14 @@ void PlayerInput::updateMouse(GLFWwindow* window, glm::vec2 cameraPos, glm::vec3
 }
 
 void PlayerInput::interact(GLFWwindow* window,Player& pl,std::vector<Chest>& chests) {
-
-    static bool wasPressed = false;
-    bool isPressed = glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS;
-    
-
-    if (isPressed && !wasPressed)
-    {
-
+    if (PlayerInput::isKeyJustPressed(window, GLFW_KEY_E)) {
         for (size_t i = chests.size(); i-- > 0;) {
             if (CollisionChecker::check_collision(pl, chests[i])) {
                 chests.erase(chests.begin() + i);
-                pl.status = Player::STATUS::REWARD;
+                pl.set_state(LootingState::instance());
+
             }
         }
-        //  pl.status = Player::STATUS::PLAYING;
-
     }
 
-    wasPressed = isPressed;
 }
