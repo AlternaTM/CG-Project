@@ -1,6 +1,7 @@
 #pragma once
 #include <glm/glm.hpp>
 #include <string>
+#include "camera/camera3D.h"
 
 // Forward declarations
 class Model;
@@ -31,4 +32,6 @@ public:
     const glm::vec3& getRotation() const;
     const glm::vec3& getPivot() const;
     void render(const glm::mat4& view, const glm::mat4& projection);
+
+    static void render_chest(Camera3D& camera3D, glm::mat4& projection3D, ModelRenderer& chest, ModelRenderer& chest_lid, float dt);
 };

@@ -36,8 +36,6 @@
 //#include <filesystem>
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-void render_chest(Camera3D& camera3D, glm::mat4& projection3D, ModelRenderer& chest, ModelRenderer& chest_lid, float dt);
-
 
 // settings
 const unsigned int SCR_WIDTH = 1920;
@@ -141,6 +139,7 @@ int main(void)
         return 0; // error starting up the engine
 
     // Avvio BGM looped (da cambiare la musica)
+    engine->setSoundVolume(0.3f);
     engine->play2D("assets/audio/bgm.wav", true);
 
 
@@ -256,7 +255,7 @@ int main(void)
         glEnable(GL_DEPTH_TEST);
         
         if (player.state == State::Looting) {
-            render_chest(camera3D, projection3D, chest, chest_lid, dt);
+            ModelRenderer::render_chest(camera3D, projection3D, chest, chest_lid, dt);
         }
         
         //============= FINE RENDER LOOP ==============
@@ -281,35 +280,3 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 }
 
 
-void render_chest(Camera3D& camera3D, glm::mat4& projection3D,ModelRenderer& chest, ModelRenderer& chest_lid, float dt) {
-    
-    static float angle = 0.0f;
-    angle += 20.0f * dt;
-
-    camera3D.position = glm::vec3(0.0f, 2.0f, 8.0f);
-    camera3D.target = glm::vec3(0.0f);
-    camera3D.up = glm::vec3(0, 1, 0);
-    chest.setRotation(glm::vec3(0, angle, 0));
-    chest_lid.setRotation(glm::vec3(0, angle, 0));
-    glm::mat4 view = glm::lookAt(camera3D.position, camera3D.target, camera3D.up);
-
-
-
-    Shader& shader = *chest.shader;
-    shader.use();
-    shader.setVec3("viewPos", camera3D.position);
-
-    // Luce principale
-    shader.setVec3("lightPos1", glm::vec3(2, 2, 2));
-    shader.setVec3("lightColor1", glm::vec3(1, 1, 1));
-
-    // Luce sopra-destra
-    shader.setVec3("lightPos2", glm::vec3(5, 8, 5));
-    shader.setVec3("lightColor2", glm::vec3(0.6f, 0.6f, 0.7f));
-
-    shader.setMat4("view", view);
-    shader.setMat4("projection", projection3D);
-
-    chest.render(camera3D.getViewMatrix(), projection3D);
-    chest_lid.render(camera3D.getViewMatrix(), projection3D);
-}
