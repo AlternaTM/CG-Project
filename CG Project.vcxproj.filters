@@ -43,6 +43,9 @@
     <Filter Include="File di origine\models\modelRenderer">
       <UniqueIdentifier>{29390c40-43e6-4cb3-b1fd-e9aba02edf32}</UniqueIdentifier>
     </Filter>
+    <Filter Include="File di origine\enemy">
+      <UniqueIdentifier>{3bb90eca-f1c9-4775-91c3-e54405293d18}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\player\player.cpp">
@@ -95,6 +98,9 @@
     </ClCompile>
     <ClCompile Include="src\models\modelHelper.cpp">
       <Filter>File di origine\models</Filter>
+    </ClCompile>
+    <ClCompile Include="src\enemy\enemy.cpp">
+      <Filter>File di origine\enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -169,6 +175,9 @@
     </ClInclude>
     <ClInclude Include="src\models\modelHelper.h">
       <Filter>File di origine\models</Filter>
+    </ClInclude>
+    <ClInclude Include="src\enemy\enemy.h">
+      <Filter>File di origine\enemy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

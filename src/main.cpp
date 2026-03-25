@@ -25,6 +25,8 @@
 #include "collision/collision.h"
 #include "camera/camera3D.h"
 #include "models/modelHelper.h"
+#include "enemy/enemy.h"
+
 
 #include <irrKlang/irrKlang.h>
 #include <ft2build.h>
@@ -132,6 +134,7 @@ int main(void)
     ResourceManager::LoadTexture("world", "assets/textures/wood.jpeg");
     ResourceManager::LoadTexture("chest", "assets/textures/chest.png");
     ResourceManager::LoadTexture("arrow", "assets/textures/arrow.png");
+    ResourceManager::LoadTexture("enemy", "assets/textures/enemy.png");
 
     // Avvio motore audio
     irrklang::ISoundEngine* engine = irrklang::createIrrKlangDevice();
@@ -183,6 +186,12 @@ int main(void)
     textRenderer.LoadFont("./assets/fonts/PressStart2P-Regular.ttf", 48);
 
 
+
+    // ------------------- Enemy -------------------
+    EnemyManager enemyManager;
+    enemyManager.spawn_enemy(4);
+
+
     float lastTime = (float)glfwGetTime();
 
     while (!glfwWindowShouldClose(window)) {
@@ -212,6 +221,8 @@ int main(void)
         );
 
         chestManager.render(renderer, camera);
+
+        enemyManager.render(renderer, camera);
 
         renderer.Draw(
             ResourceManager::GetTexture("player"),
