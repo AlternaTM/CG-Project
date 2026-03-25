@@ -1,4 +1,4 @@
-#include <GLFW/glfw3.h>
+
 #include <glm/gtc/matrix_transform.hpp>
 
 #include <iostream>
@@ -72,15 +72,6 @@ void PlayerInput::updateMouse(GLFWwindow* window, glm::vec2 cameraPos, glm::vec3
     aimPos = playerPos + glm::vec3(dir * 1.0f, 0.0f);
 }
 
-void PlayerInput::interact(GLFWwindow* window,Player& pl,std::vector<Chest>& chests) {
-    if (PlayerInput::isKeyJustPressed(window, GLFW_KEY_E)) {
-        for (size_t i = chests.size(); i-- > 0;) {
-            if (CollisionChecker::check_collision(pl, chests[i])) {
-                chests.erase(chests.begin() + i);
-                pl.set_state(LootingState::instance());
-
-            }
-        }
-    }
+void PlayerInput::interact(GLFWwindow* window,Player& pl) {
 
 }

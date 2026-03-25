@@ -1,6 +1,7 @@
 #pragma once
 
 #include <glm/vec3.hpp>
+#define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 #include <vector>
 #include "../chest/chest.h"
@@ -20,6 +21,6 @@ public:
 	static bool isKeyJustPressed(GLFWwindow* window, int l);
 	static void update_input(GLFWwindow* window);
 	static bool move(GLFWwindow* window, Player& pl, float speed, float dt);
-	static void interact(GLFWwindow* window, Player& pl,std::vector<Chest>& chests);
+	static void interact(GLFWwindow* window, Player& pl);
 	static void updateMouse(GLFWwindow* window, glm::vec2 cameraPos, glm::vec3 playerPos, glm::vec3& aimPos, float& aimRotation);
 };

@@ -146,9 +146,7 @@ int main(void)
 
 
     //----------------chest---------------------
-    std::vector<Chest> chests;
-    chests.push_back(Chest(5.0f, 5.0f));
-    chests.push_back(Chest(-5.0f, -5.0f));
+    ChestManager chestManager = ChestManager(2);
 
 
     Shader chestShader("src/glsl/modelVertexShader.glsl", "src/glsl/modelFragShader.glsl");
@@ -195,7 +193,9 @@ int main(void)
         
 
         player.update(dt, window);
-        PlayerInput::interact(window, player, chests);
+
+        chestManager.interact(window, player);
+
         camera.follow(player.position);
 
         glClearColor(0.08f, 0.08f, 0.10f, 1.0f);
@@ -211,17 +211,7 @@ int main(void)
             camera.getViewMatrix()
         );
 
-
-        for (size_t i = 0; i < chests.size(); i++) {
-            renderer.Draw(
-                ResourceManager::GetTexture("chest"),
-                chests[i].position,
-                chests[i].size,
-                0.0f,
-                camera.getViewMatrix()
-            );
-        }
-
+        chestManager.render(renderer, camera);
 
         renderer.Draw(
             ResourceManager::GetTexture("player"),
