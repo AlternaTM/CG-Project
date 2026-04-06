@@ -35,3 +35,20 @@ void EnemyManager::render(SpriteRenderer& renderer, Camera& camera) {
         );
     }
 }
+
+
+void EnemyManager::update(Player& player, float delta) {
+    for (Enemy& e : enemys) {
+        if (e.state == EnemyState::Moving) {
+            glm::vec2 direction = player.position - e.position;
+            float length = sqrt(direction.x * direction.x + direction.y * direction.y);
+            if (length > 0.0f) {
+                direction.x /= length;
+                direction.y /= length;
+            }
+
+            e.position.x += direction.x * ENEMY_SPEED *delta;
+            e.position.y += direction.y * ENEMY_SPEED *delta;
+        }
+    }
+}

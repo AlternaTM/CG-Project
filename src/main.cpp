@@ -207,6 +207,9 @@ int main(void)
 
         camera.follow(player.position);
 
+        if(player.state != State::Looting)
+            enemyManager.update(player, dt);
+
         glClearColor(0.08f, 0.08f, 0.10f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 

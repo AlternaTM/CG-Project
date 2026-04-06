@@ -9,6 +9,8 @@ enum class EnemyState {
     Attacking
 };
 
+const float ENEMY_SPEED = 1;
+
 class Enemy {
 public:
     EnemyState state;
@@ -24,5 +26,6 @@ private:
 
 public: 
     void spawn_enemy(int n);
+    void update(Player& player,float delta);
     void render(SpriteRenderer& renderer, Camera& camera);
 };
