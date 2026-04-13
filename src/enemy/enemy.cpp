@@ -24,7 +24,7 @@ void EnemyManager::spawn_enemy(int n) {
         enemys.emplace_back();
 }
 
-void EnemyManager::render(SpriteRenderer& renderer, Camera& camera) {
+void EnemyManager::render(SpriteRenderer& renderer, FigRenderer& figRenderer, Camera& camera) {
     for (const Enemy& e : enemys) {
         renderer.Draw(
             ResourceManager::GetTexture("enemy"),
@@ -33,8 +33,20 @@ void EnemyManager::render(SpriteRenderer& renderer, Camera& camera) {
             0.0f,
             camera.getViewMatrix()
         );
+        drawlife(figRenderer, camera,e.position);
     }
+
+    
 }
+
+void EnemyManager::drawlife(FigRenderer& figRenderer, Camera& camera, const glm::vec2& pos) {
+    glm::vec2 fPos = pos + glm::vec2(-0.5,0.6f);
+
+    figRenderer.drawRect(fPos, glm::vec2(1.0f, 0.2f),camera.getViewMatrix());
+}
+
+
+
 
 
 void EnemyManager::update(Player& player, float delta) {
@@ -52,3 +64,7 @@ void EnemyManager::update(Player& player, float delta) {
         }
     }
 }
+
+
+
+

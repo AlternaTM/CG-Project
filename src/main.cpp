@@ -26,7 +26,7 @@
 #include "camera/camera3D.h"
 #include "models/modelHelper.h"
 #include "enemy/enemy.h"
-
+#include "figureRenderer/figureRenderer.h"
 
 #include <irrKlang/irrKlang.h>
 #include <ft2build.h>
@@ -102,6 +102,17 @@ int main(void)
     spriteShader.setMat4("uProj", projection);
     spriteShader.setInt("uTexture", 0);
 
+    Shader rectShader(
+        "shaders/rect/rectVert.glsl",
+        "shaders/rect/rectFrag.glsl"
+    );
+
+    rectShader.use();
+    rectShader.setMat4("uProj", projection);
+
+    FigRenderer figRenderer(rectShader);
+    if (!figRenderer.init())
+        return 1;
 
 
     // ========== SETUP 3D ===============
@@ -225,7 +236,7 @@ int main(void)
 
         chestManager.render(renderer, camera);
 
-        enemyManager.render(renderer, camera);
+        enemyManager.render(renderer, figRenderer, camera);
 
         renderer.Draw(
             ResourceManager::GetTexture("player"),
