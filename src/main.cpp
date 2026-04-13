@@ -199,8 +199,8 @@ int main(void)
 
 
     // ------------------- Enemy -------------------
-    EnemyManager enemyManager;
-    enemyManager.spawn_enemy(4);
+    EnemyManager* enemyManager = EnemyManager::get_instance();
+    enemyManager->spawn_enemy(4);
 
 
     float lastTime = (float)glfwGetTime();
@@ -219,7 +219,7 @@ int main(void)
         camera.follow(player.position);
 
         if(player.state != State::Looting)
-            enemyManager.update(player, dt);
+            enemyManager->update(player, dt);
 
         glClearColor(0.08f, 0.08f, 0.10f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -236,7 +236,7 @@ int main(void)
 
         chestManager.render(renderer, camera);
 
-        enemyManager.render(renderer, figRenderer, camera);
+        enemyManager->render(renderer, figRenderer, camera);
 
         renderer.Draw(
             ResourceManager::GetTexture("player"),

@@ -3,8 +3,11 @@
 #include <random>
 
 Enemy::Enemy() {
-	state = EnemyState::Moving;
+    static uint32_t count = 0;
+    ID = count++;
 
+	state = EnemyState::Moving;
+    life = 255;
 
     static std::mt19937 gen(std::random_device{}());
     std::uniform_real_distribution<float> dist(-5.0f, 5.0f);
@@ -17,15 +20,45 @@ Enemy::Enemy() {
     size = glm::vec2(1.0f,1.0f);
 }
 
+void Enemy::make_damage(uint8_t damage) {
+    life -= damage;
+    if (life <= 0)
+        EnemyManager::get_instance()->remove_enemy(this->ID); //QUI MUORE L'OGGETTO; NON FARE NULLA DOPO QUESTA RIGA
+}
 
+uint8_t Enemy::get_life() {
+    return life;
+}
+
+EnemyManager* EnemyManager::_INSTACE = nullptr;
+
+
+EnemyManager* EnemyManager::get_instance() {
+    if (_INSTACE == nullptr) {
+        _INSTACE = new EnemyManager();
+    }
+    return _INSTACE;
+}
 
 void EnemyManager::spawn_enemy(int n) {
-    for(int i =0; i<n;i++)
+
+    for (int i = 0; i < n; i++) {
         enemys.emplace_back();
+
+    }
+        
+}
+
+void EnemyManager::remove_enemy(uint32_t ID) {
+    enemys.erase(
+        std::remove_if(enemys.begin(), enemys.end(),
+            [ID](const Enemy& e) { return e.ID == ID; }),
+        enemys.end()
+    );
 }
 
 void EnemyManager::render(SpriteRenderer& renderer, FigRenderer& figRenderer, Camera& camera) {
-    for (const Enemy& e : enemys) {
+    for ( Enemy& e : enemys) {
         renderer.Draw(
             ResourceManager::GetTexture("enemy"),
             e.position,
@@ -33,16 +66,18 @@ void EnemyManager::render(SpriteRenderer& renderer, FigRenderer& figRenderer, Ca
             0.0f,
             camera.getViewMatrix()
         );
-        drawlife(figRenderer, camera,e.position);
+        drawlife(figRenderer, camera,e.position, e.get_life());
     }
 
     
 }
 
-void EnemyManager::drawlife(FigRenderer& figRenderer, Camera& camera, const glm::vec2& pos) {
+void EnemyManager::drawlife(FigRenderer& figRenderer, Camera& camera, const glm::vec2& pos,const uint8_t life) {
     glm::vec2 fPos = pos + glm::vec2(-0.5,0.6f);
 
-    figRenderer.drawRect(fPos, glm::vec2(1.0f, 0.2f),camera.getViewMatrix());
+    float bar = life / 255.0f;
+
+    figRenderer.drawRect(fPos, glm::vec2(bar, 0.2f),camera.getViewMatrix());
 }
 
 
