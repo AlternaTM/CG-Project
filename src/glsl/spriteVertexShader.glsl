@@ -9,8 +9,11 @@ uniform mat4 uModel;
 uniform mat4 uView;
 uniform mat4 uProj;
 
+uniform vec2 uUVOffset;
+uniform vec2 uUVSize;
+
 void main()
 {
-    vTex = aTex;
+    vTex = aTex * uUVSize + uUVOffset;
     gl_Position = uProj * uView * uModel * vec4(aPos, 1.0);
 }

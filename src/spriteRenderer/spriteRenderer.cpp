@@ -17,7 +17,10 @@ void SpriteRenderer::Draw(SpriteTexture& texture,
     const glm::vec2& position,
     const glm::vec2& size,
     float rotation,
-    const glm::mat4& view) {
+    const glm::mat4& view,
+    const glm::vec2& UVOffset,
+    const glm::vec2& UVSize
+) {
     shader.use();
 
     glm::mat4 model(1.0f);
@@ -27,6 +30,8 @@ void SpriteRenderer::Draw(SpriteTexture& texture,
 
     shader.setMat4("uModel", model);
     shader.setMat4("uView", view);
+    shader.setVec2("uUVOffset", UVOffset);
+    shader.setVec2("uUVSize", UVSize);
 
     glActiveTexture(GL_TEXTURE0);
     texture.bind();
