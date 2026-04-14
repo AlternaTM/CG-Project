@@ -15,19 +15,13 @@ void PlayingState::update(Player& player, float dt, GLFWwindow* window) {
 
     PlayerInput::updateMouse(window, player.camera.getCameraPosition(), player.position, player.aimPosition, player.aimRotation);
     
-
-    timer += dt;
-    if (timer >= frame_duration) {
-        timer = 0;
-        actual_frame = (actual_frame + 1) % total_frame;
-    }
-
-
+    if(moved)
+        update_anim(dt);
 }
 
 glm::vec2 PlayingState::get_offset() {
     if(moved)
-        return { actual_frame * (1.0f / total_frame) ,0.0f };
+        return Animable::get_offset();
     return { 0.0f,0.0f };
 }
 

@@ -7,6 +7,7 @@
 
 #include "camera/camera.h"
 #include "playerinput.h"
+#include "animSystem/animSystem.h"
 
 class Player;
 
@@ -16,34 +17,37 @@ enum class State {
     Dead
 };
 
-class PlayerState {
+class PlayerState : public Renderable{
 public:
     virtual ~PlayerState() = default;
 
     virtual void enter(Player& player) {}
     virtual void update(Player& player, float dt, GLFWwindow* window) = 0;
     virtual void exit(Player& player) {}
-    virtual glm::vec2 get_offset() {
+    virtual glm::vec2 get_offset() override {
         return { 0.0f,0.0f };
     }
-    virtual glm::vec2 get_size() {
+    virtual glm::vec2 get_size() override {
         return { 0.5f,1.0f };
     }
+
 };
 
-class PlayingState : public PlayerState {
+class PlayingState : public PlayerState, public Animable {
 private:
     bool moved = false;
+    PlayingState() {
+        tot_frame = 2;
+        max_frame = 2;
+        frame_duration = 0.1f;
+
+    }
 public:
-    const uint8_t total_frame = 2;
-    uint8_t actual_frame = 0;
-    float timer = 0.0f;
-    float frame_duration = 0.1f;
-
-
     static PlayingState* instance();
     void enter(Player& player) override;
     void update(Player& player, float dt, GLFWwindow* window) override;
+    void on_animation_end() override {}
+
     glm::vec2 get_offset() override;
 };
 
@@ -57,7 +61,7 @@ public:
 
 
 
-class Player {
+class Player : Renderable {
 public:
     State state;
 
@@ -76,8 +80,8 @@ public:
     void set_state(PlayerState* state);
     PlayerState* currentState;
 
-    glm::vec2 get_offset();
-    glm::vec2 get_size();
+    glm::vec2 get_offset() override;
+    glm::vec2 get_size() override;
    
 };
 

@@ -46,6 +46,9 @@
     <Filter Include="File di origine\enemy">
       <UniqueIdentifier>{3bb90eca-f1c9-4775-91c3-e54405293d18}</UniqueIdentifier>
     </Filter>
+    <Filter Include="File di origine\animSystem">
+      <UniqueIdentifier>{b3cd7455-fd71-4b43-b6d8-17cd9fd8fe7d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\player\player.cpp">
@@ -184,6 +187,9 @@
     </ClInclude>
     <ClInclude Include="src\figureRenderer\figureRenderer.h">
       <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="src\animSystem\animSystem.h">
+      <Filter>File di origine\animSystem</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

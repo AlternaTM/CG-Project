@@ -150,6 +150,7 @@
     <ClCompile Include="src\world\world.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\animSystem\animSystem.h" />
     <ClInclude Include="src\camera\camera.h" />
     <ClInclude Include="include\glad\glad.h" />
     <ClInclude Include="include\GLFW\glfw3.h" />
