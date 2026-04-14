@@ -9,11 +9,26 @@ PlayingState* PlayingState::instance() {
 }
 
 void PlayingState::enter(Player& player) {player.state = State::InGame;}
+
 void PlayingState::update(Player& player, float dt, GLFWwindow* window) {
-    bool moved = PlayerInput::move(window, player, player.speed, dt);
+    moved = PlayerInput::move(window, player, player.speed, dt);
 
     PlayerInput::updateMouse(window, player.camera.getCameraPosition(), player.position, player.aimPosition, player.aimRotation);
     
+
+    timer += dt;
+    if (timer >= frame_duration) {
+        timer = 0;
+        actual_frame = (actual_frame + 1) % total_frame;
+    }
+
+
+}
+
+glm::vec2 PlayingState::get_offset() {
+    if(moved)
+        return { actual_frame * (1.0f / total_frame) ,0.0f };
+    return { 0.0f,0.0f };
 }
 
 
@@ -44,6 +59,8 @@ Player::Player(Camera& camera)
 
 void Player::update(float dt, GLFWwindow* window) {
     currentState->update(*this, dt, window);
+
+
 }
 void Player::set_state(PlayerState* state) {
     currentState->exit(*this);
@@ -52,6 +69,15 @@ void Player::set_state(PlayerState* state) {
 }
 
 
+glm::vec2 Player::get_offset() {
+    return currentState->get_offset();
+    //return { actual_frame * (1.0f / total_frame) ,0.0f };
+}
+
+
+glm::vec2 Player::get_size() {
+    return currentState->get_size()                                                                                                                                                                                                                                                                               ;
+}
 
 
 

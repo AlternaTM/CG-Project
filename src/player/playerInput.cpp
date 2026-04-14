@@ -33,15 +33,19 @@ bool PlayerInput::move(GLFWwindow* window, Player& pl, float speed, float dt)
 {
     bool moved = false;
     if (glfwGetKey(window, GLFW_KEY_W)) {
+        moved = true;
         pl.position.y += speed * dt;
     } 
     if (glfwGetKey(window, GLFW_KEY_S)) {
+        moved = true;
         pl.position.y -= speed * dt;
     }
     if (glfwGetKey(window, GLFW_KEY_A)) {
+        moved = true;
         pl.position.x -= speed * dt;
     }
     if (glfwGetKey(window, GLFW_KEY_D)) {
+        moved = true;
         pl.position.x += speed * dt;
     }
     if (moved) {

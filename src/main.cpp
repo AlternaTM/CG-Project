@@ -141,7 +141,7 @@ int main(void)
     SpriteRenderer renderer(spriteShader);
 
     // Carico le textures
-    ResourceManager::LoadTexture("player", "assets/textures/teddybear.png");
+    ResourceManager::LoadTexture("player", "assets/textures/teddyAnim.png");
     ResourceManager::LoadTexture("world", "assets/textures/wood.jpeg");
     ResourceManager::LoadTexture("chest", "assets/textures/chest.png");
     ResourceManager::LoadTexture("arrow", "assets/textures/arrow.png");
@@ -243,7 +243,9 @@ int main(void)
             player.position,
             player.size,
             0.0f,
-            camera.getViewMatrix()
+            camera.getViewMatrix(),
+            player.get_offset(),
+            player.get_size()
         );
         
 
