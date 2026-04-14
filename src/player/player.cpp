@@ -25,6 +25,9 @@ glm::vec2 PlayingState::get_offset() {
     return { 0.0f,0.0f };
 }
 
+void PlayingState::hit(uint8_t* pl, uint8_t damage) {
+    *pl -= damage;
+}
 
 
 LootingState* LootingState::instance() {
@@ -73,6 +76,8 @@ glm::vec2 Player::get_size() {
     return currentState->get_size()                                                                                                                                                                                                                                                                               ;
 }
 
-
+void Player::hit(uint8_t damage) {
+    currentState->hit(&life,damage);
+}
 
 

@@ -31,6 +31,8 @@ public:
         return { 0.5f,1.0f };
     }
 
+    virtual void hit(uint8_t* player,uint8_t damage) {}
+
 };
 
 class PlayingState : public PlayerState, public Animable {
@@ -49,6 +51,8 @@ public:
     void on_animation_end() override {}
 
     glm::vec2 get_offset() override;
+
+    void hit(uint8_t* player, uint8_t damage) override;
 };
 
 
@@ -62,6 +66,7 @@ public:
 
 
 class Player : Renderable {
+
 public:
     State state;
 
@@ -82,7 +87,10 @@ public:
 
     glm::vec2 get_offset() override;
     glm::vec2 get_size() override;
-   
+
+    void hit(uint8_t damage);
+protected:
+    uint8_t life = 255;
 };
 
 
