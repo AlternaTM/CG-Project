@@ -216,7 +216,7 @@ int main(void)
 
         chestManager.interact(window, player);
 
-        camera.follow(player.position);
+        camera.follow(*player.get_pos());
 
         if(player.state != State::Looting)
             enemyManager->update(player, dt);
@@ -240,12 +240,12 @@ int main(void)
 
         renderer.Draw(
             ResourceManager::GetTexture("player"),
-            player.position,
-            player.size,
+            *player.get_pos(),
+            *player.get_size(),
             0.0f,
             camera.getViewMatrix(),
             player.get_offset(),
-            player.get_size()
+            player.get_frame_size()
         );
         
 

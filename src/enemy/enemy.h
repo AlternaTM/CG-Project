@@ -5,6 +5,9 @@
 #include "collision/collision.h"
 #include "figureRenderer/figureRenderer.h"
 
+class Player;
+
+
 enum class EnemyState {
     Moving,
     Attacking

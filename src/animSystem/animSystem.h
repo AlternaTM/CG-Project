@@ -6,7 +6,7 @@ class Renderable {
 public:
 	virtual ~Renderable() = default;
 	virtual glm::vec2 get_offset() = 0;
-	virtual glm::vec2 get_size() = 0;
+	virtual glm::vec2 get_frame_size() = 0;
 };
 
 
@@ -27,7 +27,7 @@ public:
 	glm::vec2 get_offset() {
 		return { actual_frame * (1.0f / tot_frame) ,0.0f };
 	}
-	glm::vec2 get_size() {
+	glm::vec2 get_frame_size() {
 		return { 1.0f / tot_frame,1.0f };
 	}
 

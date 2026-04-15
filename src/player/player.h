@@ -8,6 +8,7 @@
 #include "camera/camera.h"
 #include "playerinput.h"
 #include "animSystem/animSystem.h"
+#include "entity.h"
 
 class Player;
 
@@ -27,7 +28,7 @@ public:
     virtual glm::vec2 get_offset() override {
         return { 0.0f,0.0f };
     }
-    virtual glm::vec2 get_size() override {
+    virtual glm::vec2 get_frame_size() override {
         return { 0.5f,1.0f };
     }
 
@@ -65,14 +66,11 @@ public:
 
 
 
-class Player : Renderable {
+class Player : Renderable, public Entity  {
 
 public:
     State state;
-
-    glm::vec3 position;
     float speed;
-    glm::vec2 size;
     Camera& camera;
     glm::vec3 aimPosition;
     float aimRotation;
@@ -86,7 +84,7 @@ public:
     PlayerState* currentState;
 
     glm::vec2 get_offset() override;
-    glm::vec2 get_size() override;
+    glm::vec2 get_frame_size() override;
 
     void hit(uint8_t damage);
 protected:

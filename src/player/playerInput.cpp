@@ -31,26 +31,27 @@ void PlayerInput::update_input(GLFWwindow* window) {//questo va chiamato DOPO ch
 
 bool PlayerInput::move(GLFWwindow* window, Player& pl, float speed, float dt)
 {
+    glm::vec3* pl_pos = pl.get_pos();
     bool moved = false;
     if (glfwGetKey(window, GLFW_KEY_W)) {
         moved = true;
-        pl.position.y += speed * dt;
+        pl_pos->y += speed * dt;
     } 
     if (glfwGetKey(window, GLFW_KEY_S)) {
         moved = true;
-        pl.position.y -= speed * dt;
+        pl_pos->y -= speed * dt;
     }
     if (glfwGetKey(window, GLFW_KEY_A)) {
         moved = true;
-        pl.position.x -= speed * dt;
+        pl_pos->x -= speed * dt;
     }
     if (glfwGetKey(window, GLFW_KEY_D)) {
         moved = true;
-        pl.position.x += speed * dt;
+        pl_pos->x += speed * dt;
     }
     if (moved) {
-        pl.position.x = glm::clamp(pl.position.x, -15.5f, 15.5f);
-        pl.position.y = glm::clamp(pl.position.y, -8.5f, 8.5f);
+        pl_pos->x = glm::clamp(pl_pos->x, -15.5f, 15.5f);
+        pl_pos->y = glm::clamp(pl_pos->y, -8.5f, 8.5f);
     }
     return moved;
 }

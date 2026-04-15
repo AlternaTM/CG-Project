@@ -8,15 +8,14 @@
 #include "camera/camera.h"
 #include "spriteRenderer/spriteRenderer.h"
 #include "collision/collision.h"
+#include "player/player.h"
 
-class Player;
-class PlayerInput;
 
-class Chest {
+
+class Entity;
+
+class Chest : public Entity{
 public:
-    glm::vec3 position;
-    glm::vec2 size;
-
     Chest(float x,float y);
 };
 

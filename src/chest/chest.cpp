@@ -3,8 +3,13 @@
 #include <random>
 
 
+
 Chest::Chest(float x, float y) 
-:position(x,y,0),size(0.50f,0.50f) {
+{
+    Entity::get_pos()->x = x;
+    Entity::get_pos()->y = y;
+    Entity::get_size()->x = 0.50f;
+    Entity::get_size()->y = 0.50f;
 }
 
 
@@ -13,8 +18,8 @@ void ChestManager::render(SpriteRenderer& renderer, Camera& camera) {
     for (size_t i = 0; i < chests.size(); i++) {
         renderer.Draw(
             ResourceManager::GetTexture("chest"),
-            chests[i].position,
-            chests[i].size,
+            *chests[i].get_pos(),
+            *chests[i].get_size(),
             0.0f,
             camera.getViewMatrix()
         );

@@ -191,6 +191,9 @@
     <ClInclude Include="src\animSystem\animSystem.h">
       <Filter>File di origine\animSystem</Filter>
     </ClInclude>
+    <ClInclude Include="src\entity.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CG Project.rc">

@@ -1,6 +1,7 @@
 #pragma once
-#include "player/player.h"
+#include "entity.h"
 #include "chest/chest.h"
+#include "enemy/enemy.h"
 #include <glm/glm.hpp>
 
 class Player;
@@ -9,7 +10,7 @@ class Chest;
 class CollisionChecker
 {
 public:
-	static bool check_collision(const Player& pl, const Chest& chest);
+	static bool check_collision(Entity& e1, Entity& e2);
 };
 
 	
