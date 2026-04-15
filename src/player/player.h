@@ -65,6 +65,12 @@ public:
 };
 
 
+class DeadState : public PlayerState {
+public: 
+    static DeadState* instance();
+    void enter(Player& player) override;
+    void update(Player& player, float dt, GLFWwindow* window) override;
+};
 
 class Player : Renderable, public Entity  {
 

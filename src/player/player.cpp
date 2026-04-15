@@ -41,7 +41,20 @@ void LootingState::update(Player& player, float dt, GLFWwindow* window) {
         player.set_state(PlayingState::instance());
     }
 }
+//DeadState ---------------------------------
 
+DeadState* DeadState::instance() {
+    static DeadState inst;
+    return &inst;
+}
+
+void DeadState::enter(Player& player) {
+
+}
+
+void DeadState::update(Player& player, float dt, GLFWwindow* window) {
+
+}
 
 //Player ---------------------------------
 
