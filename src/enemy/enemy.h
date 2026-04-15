@@ -34,6 +34,14 @@ public:
     virtual void exit(Enemy&) override;
 };
 
+
+class AttachingState : public EnemyState {
+    static AttachingState* instance();
+    virtual void enter(Enemy&) override;
+    virtual void update(Enemy&, float dt) override;
+    virtual void exit(Enemy&) override;
+};
+
 // ============= ENEMY ==================================
 
 class Enemy : public Renderable, public Entity {

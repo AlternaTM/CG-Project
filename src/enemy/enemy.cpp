@@ -29,7 +29,32 @@ void MovingState::update(Enemy& e, float dt) {
 
     e.get_pos()->x += direction.x * ENEMY_SPEED * dt;
     e.get_pos()->y += direction.y * ENEMY_SPEED * dt;
+
+
+    
 }
+
+//  ============= AttachingState ==================================
+
+AttachingState* AttachingState::instance() {
+    static AttachingState inst; 
+    return &inst;
+}
+
+void AttachingState::enter(Enemy& e) {
+
+}
+
+void AttachingState::update(Enemy& e,float dt) {
+
+}
+
+void AttachingState::exit(Enemy& e) {
+
+}
+
+
+
 
 //  ============= ENEMY ==================================
 
