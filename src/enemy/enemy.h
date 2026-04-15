@@ -4,6 +4,8 @@
 #include <vector>
 #include "collision/collision.h"
 #include "figureRenderer/figureRenderer.h"
+#include "animSystem/animSystem.h"
+#include "entity.h"
 
 class Player;
 
@@ -15,17 +17,18 @@ enum class EnemyState {
 
 const float ENEMY_SPEED = 1;
 
-class Enemy {
+class Enemy : public Renderable, public Entity {
 private: 
     uint8_t life;
 public:
     uint32_t ID;
     EnemyState state;
-    glm::vec3 position;
-    glm::vec2 size;
     Enemy();
     void make_damage(uint8_t damage);
     uint8_t get_life();
+
+    glm::vec2 get_offset() override;
+    glm::vec2 get_frame_size() override;
 };
 
 
@@ -42,6 +45,7 @@ public:
     void remove_enemy(uint32_t ID);
     void update(Player& player,float delta);
     void render(SpriteRenderer& renderer, FigRenderer& figRenderer, Camera& camera);
+
 };
 
 
