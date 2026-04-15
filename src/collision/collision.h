@@ -11,6 +11,7 @@ class CollisionChecker
 {
 public:
 	static bool check_collision(Entity& e1, Entity& e2);
+	static float distance(Entity& e1, Entity& e2);
 };
 
 	
