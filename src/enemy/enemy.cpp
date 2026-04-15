@@ -1,6 +1,7 @@
 #include "enemy.h"
 #include "resourceManager/resourceManager.h"
 #include <random>
+#include "collision/collision.h"
 
 Player* EnemyManager::_PLAYER = nullptr;
 
@@ -30,8 +31,11 @@ void MovingState::update(Enemy& e, float dt) {
     e.get_pos()->x += direction.x * ENEMY_SPEED * dt;
     e.get_pos()->y += direction.y * ENEMY_SPEED * dt;
 
-
+    //std::cout << CollisionChecker::distance(e, *EnemyManager::_PLAYER) << std::endl;
     
+    if (CollisionChecker::distance(e, *EnemyManager::_PLAYER) < e.ATTACK_DISTANCE) {
+        e.change_state(AttachingState::instance());
+    }
 }
 
 //  ============= AttachingState ==================================
@@ -46,7 +50,9 @@ void AttachingState::enter(Enemy& e) {
 }
 
 void AttachingState::update(Enemy& e,float dt) {
-
+    if (CollisionChecker::distance(e, *EnemyManager::_PLAYER) >= e.ATTACK_DISTANCE) {
+        e.change_state(MovingState::instance());
+    }
 }
 
 void AttachingState::exit(Enemy& e) {
@@ -85,6 +91,11 @@ void Enemy::make_damage(uint8_t damage) {
         EnemyManager::get_instance()->remove_enemy(this->ID); //QUI MUORE L'OGGETTO; NON FARE NULLA DOPO QUESTA RIGA
 }
 
+void Enemy::change_state(EnemyState* new_state) {
+    currentState->exit(*this);
+    currentState = new_state;
+    currentState->enter(*this);
+}
 
 void Enemy::update(Enemy& e, float dt) {
     currentState->update(e, dt);
