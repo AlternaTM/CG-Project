@@ -2,11 +2,44 @@
 #include "resourceManager/resourceManager.h"
 #include <random>
 
+Player* EnemyManager::_PLAYER = nullptr;
+
+//  ============= MovingState ==================================
+
+MovingState* MovingState::instance() {
+    static MovingState inst;
+    return &inst;
+}
+
+void MovingState::enter(Enemy& e) {
+
+}
+
+void MovingState::exit(Enemy& e) {
+
+}
+
+void MovingState::update(Enemy& e, float dt) {
+    glm::vec2 direction = (*EnemyManager::_PLAYER->get_pos()) - (*e.get_pos());
+    float length = sqrt(direction.x * direction.x + direction.y * direction.y);
+    if (length > 0.0f) {
+        direction.x /= length;
+        direction.y /= length;
+    }
+
+    e.get_pos()->x += direction.x * ENEMY_SPEED * dt;
+    e.get_pos()->y += direction.y * ENEMY_SPEED * dt;
+}
+
+//  ============= ENEMY ==================================
+
+
 Enemy::Enemy() {
     static uint32_t count = 0;
     ID = count++;
 
-	state = EnemyState::Moving;
+	//state = EnemyState::Moving;
+    currentState = MovingState::instance();
     life = 255;
 
     static std::mt19937 gen(std::random_device{}());
@@ -25,6 +58,11 @@ void Enemy::make_damage(uint8_t damage) {
     life -= damage;
     if (life <= 0)
         EnemyManager::get_instance()->remove_enemy(this->ID); //QUI MUORE L'OGGETTO; NON FARE NULLA DOPO QUESTA RIGA
+}
+
+
+void Enemy::update(Enemy& e, float dt) {
+    currentState->update(e, dt);
 }
 
 uint8_t Enemy::get_life() {
@@ -101,19 +139,13 @@ void EnemyManager::drawlife(FigRenderer& figRenderer, Camera& camera, const glm:
 
 void EnemyManager::update(Player& player, float delta) {
     for (Enemy& e : enemys) {
-        if (e.state == EnemyState::Moving) {
-            glm::vec2 direction = *(player.get_pos()) - *e.get_pos();
-            float length = sqrt(direction.x * direction.x + direction.y * direction.y);
-            if (length > 0.0f) {
-                direction.x /= length;
-                direction.y /= length;
-            }
 
-            e.get_pos()->x += direction.x * ENEMY_SPEED * delta;
-            e.get_pos()->y += direction.y * ENEMY_SPEED *delta;
-        }
+        e.update(e, delta);
+        
     }
 }
+
+
 
 
 
