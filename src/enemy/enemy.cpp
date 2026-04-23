@@ -7,10 +7,6 @@ Player* EnemyManager::_PLAYER = nullptr;
 
 //  ============= MovingState ==================================
 
-MovingState* MovingState::instance() {
-    static MovingState inst;
-    return &inst;
-}
 
 void MovingState::enter(Enemy& e) {
 
@@ -34,16 +30,15 @@ void MovingState::update(Enemy& e, float dt) {
     //std::cout << CollisionChecker::distance(e, *EnemyManager::_PLAYER) << std::endl;
     
     if (CollisionChecker::distance(e, *EnemyManager::_PLAYER) < e.ATTACK_DISTANCE) {
-        e.change_state(AttachingState::instance());
+        e.change_state(&(e.attachingState));
     }
+    flipped = direction.x < 0.0f;
+    update_anim(dt);
 }
+
 
 //  ============= AttachingState ==================================
 
-AttachingState* AttachingState::instance() {
-    static AttachingState inst; 
-    return &inst;
-}
 
 void AttachingState::enter(Enemy& e) {
 
@@ -51,8 +46,10 @@ void AttachingState::enter(Enemy& e) {
 
 void AttachingState::update(Enemy& e,float dt) {
     if (CollisionChecker::distance(e, *EnemyManager::_PLAYER) >= e.ATTACK_DISTANCE) {
-        e.change_state(MovingState::instance());
+        e.change_state(&(e.movingState));
     }
+
+    update_anim(dt);
 }
 
 void AttachingState::exit(Enemy& e) {
@@ -70,7 +67,21 @@ Enemy::Enemy() {
     ID = count++;
 
 	//state = EnemyState::Moving;
-    currentState = MovingState::instance();
+
+    Enemy::attachingState.tot_framex = 13;
+    Enemy::attachingState.tot_rows = 4;
+    Enemy::attachingState.frame_duration = 0.15f;
+    Enemy::attachingState.y_offset = 3;
+    Enemy::attachingState.max_frame = 10;
+
+
+    Enemy::movingState.tot_framex = 13;
+    Enemy::movingState.tot_rows = 4;
+    Enemy::movingState.frame_duration = 0.8f;
+    Enemy::movingState.y_offset = 0;
+    Enemy::movingState.max_frame = 10;
+
+    currentState = &(Enemy::movingState);
     life = 255;
 
     static std::mt19937 gen(std::random_device{}());
@@ -85,6 +96,7 @@ Enemy::Enemy() {
     *Entity::get_size() = glm::vec2(1.0f, 1.0f);
 }
 
+
 void Enemy::make_damage(uint8_t damage) {
     life -= damage;
     if (life <= 0)
@@ -97,8 +109,8 @@ void Enemy::change_state(EnemyState* new_state) {
     currentState->enter(*this);
 }
 
-void Enemy::update(Enemy& e, float dt) {
-    currentState->update(e, dt);
+void Enemy::update( float dt) {
+    currentState->update(*this, dt);
 }
 
 uint8_t Enemy::get_life() {
@@ -106,11 +118,11 @@ uint8_t Enemy::get_life() {
 }
 
 glm::vec2 Enemy::get_frame_size() {
-    return { 1.0f,1.0f };
+    return currentState->get_frame_size();
 }
 
 glm::vec2 Enemy::get_offset() {
-    return { 0.0f,0.0f };
+    return currentState->get_offset();
 }
 
 
@@ -130,32 +142,34 @@ EnemyManager* EnemyManager::get_instance() {
 void EnemyManager::spawn_enemy(int n) {
 
     for (int i = 0; i < n; i++) {
-        enemys.emplace_back();
+        enemys.push_back(new Enemy());
 
     }
         
 }
 
 void EnemyManager::remove_enemy(uint32_t ID) {
-    enemys.erase(
-        std::remove_if(enemys.begin(), enemys.end(),
-            [ID](const Enemy& e) { return e.ID == ID; }),
-        enemys.end()
-    );
+    auto it = std::find_if(enemys.begin(), enemys.end(),
+        [ID](Enemy* e) { return e->ID == ID; });
+
+    if (it != enemys.end()) {
+        delete* it;
+        enemys.erase(it);
+    }
 }
 
 void EnemyManager::render(SpriteRenderer& renderer, FigRenderer& figRenderer, Camera& camera) {
-    for ( Enemy& e : enemys) {
+    for ( Enemy* e : enemys) {
         renderer.Draw(
             ResourceManager::GetTexture("enemy"),
-            *e.get_pos(),
-            *e.get_size(),
+            *e->get_pos(),
+            *e->get_size(),
             0.0f,
             camera.getViewMatrix(),
-            e.get_offset(),
-            e.get_frame_size()
+            e->get_offset(),
+            e->get_frame_size()
         );
-        drawlife(figRenderer, camera, *e.get_pos(), e.get_life());
+        drawlife(figRenderer, camera, *e->get_pos(), e->get_life());
     }
 
     
@@ -174,9 +188,9 @@ void EnemyManager::drawlife(FigRenderer& figRenderer, Camera& camera, const glm:
 
 
 void EnemyManager::update(Player& player, float delta) {
-    for (Enemy& e : enemys) {
+    for (Enemy* e : enemys) {
 
-        e.update(e, delta);
+        e->update(delta);
         
     }
 }

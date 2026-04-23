@@ -40,7 +40,7 @@ class PlayingState : public PlayerState, public Animable {
 private:
     bool moved = false;
     PlayingState() {
-        tot_frame = 2;
+        tot_framex = 2;
         max_frame = 2;
         frame_duration = 0.1f;
 
