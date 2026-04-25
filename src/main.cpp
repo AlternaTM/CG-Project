@@ -200,7 +200,7 @@ int main(void)
 
     // ------------------- Enemy -------------------
     EnemyManager* enemyManager = EnemyManager::get_instance();
-    enemyManager->spawn_enemy(4);
+    enemyManager->spawn_enemy(1);
     EnemyManager::_PLAYER = &player;
 
     float lastTime = (float)glfwGetTime();

@@ -48,11 +48,17 @@ void AttachingState::enter(Enemy& e) {
 }
 
 void AttachingState::update(Enemy& e,float dt) {
+    static uint8_t last_frame = 0;
     if (CollisionChecker::distance(e, *EnemyManager::_PLAYER) >= e.ATTACK_DISTANCE) {
         e.change_state(&(e.movingState));
     }
 
     update_anim(dt);
+    if (actual_frame == 6 && last_frame != 6) {
+        EnemyManager::_PLAYER->hit(e.BASE_DAMAGE);
+    }
+
+     last_frame = actual_frame;
 }
 
 void AttachingState::exit(Enemy& e) {

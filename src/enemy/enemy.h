@@ -69,6 +69,7 @@ private:
 
 public:
     float ATTACK_DISTANCE = 0.9f;
+    uint8_t BASE_DAMAGE = 5;
     MovingState movingState;
     AttachingState attachingState;
     EnemyState* currentState;

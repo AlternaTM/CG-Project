@@ -26,6 +26,7 @@ glm::vec2 PlayingState::get_offset() {
 }
 
 void PlayingState::hit(uint8_t* pl, uint8_t damage) {
+    //std::cout << "Damage given" << std::endl;
     *pl -= damage;
 }
 
