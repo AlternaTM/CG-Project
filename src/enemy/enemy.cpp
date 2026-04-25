@@ -41,7 +41,10 @@ void MovingState::update(Enemy& e, float dt) {
 
 
 void AttachingState::enter(Enemy& e) {
-
+    if (EnemyManager::_PLAYER->get_pos()->x < e.get_pos()->x)
+        flipped = true;
+    else
+        flipped = false;
 }
 
 void AttachingState::update(Enemy& e,float dt) {
