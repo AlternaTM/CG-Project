@@ -25,6 +25,7 @@ public:
 
 	virtual ~Animable() = default;
 	virtual void on_animation_end() = 0;
+	
 
 
 	glm::vec2 get_offset() {
@@ -51,6 +52,9 @@ public:
 			}
 		}
 	}
+
+
+
 
 };
 

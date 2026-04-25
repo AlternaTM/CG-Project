@@ -81,8 +81,6 @@ public:
 
     void change_state(EnemyState*);
 
-    Enemy& operator=(const Enemy& other);
-    Enemy& operator=(Enemy&& other) noexcept;
 
     glm::vec2 get_offset() override;
     glm::vec2 get_frame_size() override;
