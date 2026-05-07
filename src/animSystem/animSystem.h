@@ -12,9 +12,9 @@ public:
 
 
 class Animable : public Renderable{
-private:
 	float timer = 0.0f;
 public:
+	
 	uint8_t tot_framex; //totale dei frame presenti nel png su x
 	uint8_t tot_rows = 1; //totale dei frame presenti nel png su x
 	uint8_t max_frame; //massimo frame a cui deve arrivare questa animazione su x
@@ -37,6 +37,11 @@ public:
 	glm::vec2 get_frame_size() {
 		float w = 1.0f / tot_framex;
 		return { flipped ? -w : w, 1.0f / tot_rows };
+	}
+
+	void reset_anim() {
+		timer = 0.0f;
+		actual_frame = 0;
 	}
 
 	virtual void update_anim(float delta) {
