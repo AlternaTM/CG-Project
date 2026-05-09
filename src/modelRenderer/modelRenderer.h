@@ -31,7 +31,8 @@ public:
     const glm::vec3& getScale() const;
     const glm::vec3& getRotation() const;
     const glm::vec3& getPivot() const;
-    void render(const glm::mat4& view, const glm::mat4& projection);
+    void render(const glm::mat4& view, const glm::mat4& projection, const glm::mat4* parentMatrix = nullptr);
 
     static void render_chest(Camera3D& camera3D, glm::mat4& projection3D, ModelRenderer& chest, ModelRenderer& chest_lid, float dt);
+    glm::mat4 getModelMatrix() const;
 };
