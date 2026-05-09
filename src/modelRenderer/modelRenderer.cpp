@@ -79,12 +79,28 @@ glm::mat4 ModelRenderer::getModelMatrix() const {
 //METODI STATICI DI SUPPORTO
 void ModelRenderer::render_chest(Camera3D& camera3D, glm::mat4& projection3D, ModelRenderer& chest, ModelRenderer& chest_lid, float dt) {
     static float angle = 0.0f;
-    //angle += 20.0f * dt;
+    static float rotate = 0.0f;
+    static glm::vec2 pos = { 0.57f,0.0f };
+    if (angle > 95.0f) {
+        angle = 0.0f;
+    }
+    angle += 20.0f * dt;
 
-    chest.setRotation(glm::vec3(0, 20.0f, 0));
+    float t = angle / 95.0f;
 
-    chest_lid.setPosition(glm::vec3(0, 1.0f, -1.0f));
-    chest_lid.setRotation(glm::vec3(-90.0f, 0.0f, 0));
+
+    
+    pos.x = glm::mix(0.65f, 0.85f, t);
+    pos.y = glm::mix(0.0f, 0.90f, t);
+    
+    rotate = glm::mix(0.0f, 360.0f, t);
+
+    chest.setRotation(glm::vec3(0, rotate, 0));
+
+    chest_lid.setPosition(glm::vec3(0, pos.x, -pos.y)); //0.0 - 0.95f - -0.85f
+    //chest_lid.setPosition(glm::vec3(0, 0.0, 0.0));
+   
+    chest_lid.setRotation(glm::vec3(-angle, 0.0f, 0));
     
     glm::mat4 view = camera3D.getViewMatrix();
 
@@ -100,8 +116,15 @@ void ModelRenderer::render_chest(Camera3D& camera3D, glm::mat4& projection3D, Mo
 
     // Luce sopra-destra
     shader.setVec3("lightPos2", glm::vec3(5, 8, 5));
-    shader.setVec3("lightColor2", glm::vec3(0.6f, 0.6f, 0.7f));
+    shader.setVec3("lightColor2", glm::vec3(0.6f, 0.6f, 0.6f));
 
+
+    // Luce dentro
+    shader.setVec3("lightInside", glm::vec3(0, 0.5f, 0));
+    shader.setVec3("lightColorInside", glm::vec3(6.0f, 4.0f, 0.0f));
+
+    shader.setFloat("attLinear", 0.09f);
+    shader.setFloat("attQuadratic", 0.032f);
 
     glm::mat4 chestWorld = chest.getModelMatrix();
 
