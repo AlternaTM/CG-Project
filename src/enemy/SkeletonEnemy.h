@@ -13,7 +13,4 @@ public:
     void        init_states()               override;
     void        on_target_in_range()        override;
     void        on_target_out_of_range()    override;
-
-
-
 };

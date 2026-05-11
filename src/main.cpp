@@ -146,6 +146,7 @@ int main(void)
     ResourceManager::LoadTexture("chest", "assets/textures/chest.png");
     ResourceManager::LoadTexture("arrow", "assets/textures/arrow.png");
     ResourceManager::LoadTexture("skeleton", "assets/textures/skelSheet.png");
+    ResourceManager::LoadTexture("mago", "assets/textures/magoSheet.png");
 
     // Avvio motore audio
     irrklang::ISoundEngine* engine = irrklang::createIrrKlangDevice();
@@ -200,7 +201,7 @@ int main(void)
 
     // ------------------- Enemy -------------------
     EnemyManager* enemyManager = EnemyManager::get_instance();
-    enemyManager->spawn_enemy(1);
+    enemyManager->spawn_enemy(EnemyTipe::Skeleton,1);
     EnemyManager::_PLAYER = &player;
 
     float lastTime = (float)glfwGetTime();

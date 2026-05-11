@@ -111,6 +111,9 @@
     <ClCompile Include="src\enemy\SkeletonEnemy.cpp">
       <Filter>File di origine\enemy</Filter>
     </ClCompile>
+    <ClCompile Include="src\enemy\MageEnemy.cpp">
+      <Filter>File di origine\enemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\glad\glad.h">
@@ -198,6 +201,9 @@
       <Filter>File di intestazione</Filter>
     </ClInclude>
     <ClInclude Include="src\enemy\SkeletonEnemy.h">
+      <Filter>File di origine\enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="src\enemy\MageEnemy.h">
       <Filter>File di origine\enemy</Filter>
     </ClInclude>
   </ItemGroup>

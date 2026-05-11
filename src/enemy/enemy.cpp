@@ -3,6 +3,7 @@
 #include <random>
 #include "collision/collision.h"
 #include "SkeletonEnemy.h"
+#include "MageEnemy.h"
 Player* EnemyManager::_PLAYER = nullptr;
 
 
@@ -150,16 +151,18 @@ EnemyManager* EnemyManager::get_instance() {
     return _INSTACE;
 }
 
-void EnemyManager::spawn_enemy(int n) {
+void EnemyManager::spawn_enemy(EnemyTipe type, int n) {
 
     for (int i = 0; i < n; i++) {
         Enemy* e = nullptr;
-        e = new SkeletonEnemy();
+        switch (type) {
+            case EnemyTipe::Skeleton: e = new SkeletonEnemy(); break;
+            case EnemyTipe::Mage: e = new MageEnemy(); break;
+        }
+        
 
         if (e != nullptr)
             enemys.push_back(e);
-        //enemys.push_back(new Enemy()); 
-        //TODO: fai uno spawn di enemy
 
     }
         
@@ -197,7 +200,7 @@ void EnemyManager::drawlife(FigRenderer& figRenderer, Camera& camera, const glm:
 
     float bar = life / 255.0f;
     bar *= 0.5f;
-    figRenderer.drawRect(fPos, glm::vec2(bar, 0.05f),camera.getViewMatrix());
+    figRenderer.drawRect(fPos, glm::vec2(bar, 0.05f),0,camera.getViewMatrix());
 }
 
 void EnemyManager::update(Player& player, float delta) {

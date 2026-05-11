@@ -16,6 +16,11 @@ class Enemy;
 
 const float ENEMY_SPEED = 1;
 
+enum EnemyTipe
+{
+    Skeleton,
+    Mage
+};
 
 class EnemyState : public Renderable{
 public: 
@@ -61,6 +66,8 @@ public:
         return Animable::get_offset();
     }
 };
+
+
 
 // ============= ENEMY ==================================
 
@@ -110,7 +117,7 @@ private:
 public: 
     static Player* _PLAYER;
     static EnemyManager* get_instance();
-    void spawn_enemy(int n);
+    void spawn_enemy(EnemyTipe type, int n);
     void remove_enemy(uint32_t ID);
     void update(Player& player,float delta);
     void render(SpriteRenderer& renderer, FigRenderer& figRenderer, Camera& camera);
