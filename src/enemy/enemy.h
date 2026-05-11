@@ -47,7 +47,8 @@ public:
 };
 
 
-class AttachingState : public EnemyState, public Animable {
+class MeleeAttackState : public EnemyState, public Animable {
+    uint8_t last_frame = 0;
 public:
     virtual void enter(Enemy&) override;
     virtual void update(Enemy&, float dt) override;
@@ -64,31 +65,36 @@ public:
 // ============= ENEMY ==================================
 
 class Enemy : public Renderable, public Entity {
-private: 
-    uint8_t life;
+protected:
+    EnemyState* currentState = nullptr;
 
+    uint8_t life;
 public:
-    float ATTACK_DISTANCE = 0.9f;
-    uint8_t BASE_DAMAGE = 5;
-    MovingState movingState;
-    AttachingState attachingState;
-    EnemyState* currentState;
     uint32_t ID;
+
+    virtual float       get_attack_distance() const = 0;
+    virtual uint8_t     get_base_damage()     const = 0;
+    virtual std::string get_texture_name()    const = 0;
+    virtual void init_states() = 0;
+    virtual void change_state(EnemyState* new_state);
+
+
     Enemy();
 
     void make_damage(uint8_t damage);
     void update(float dt);
     uint8_t get_life();
 
-    void change_state(EnemyState*);
 
 
     glm::vec2 get_offset() override;
     glm::vec2 get_frame_size() override;
+
+    virtual void on_target_in_range() = 0;
+    virtual void on_target_out_of_range() = 0;
+
+    virtual ~Enemy() = default;
 };
-
-
-
 
 
 // ============= ENEMY MANAGER ==================================

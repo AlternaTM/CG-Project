@@ -2,8 +2,9 @@
 #include "resourceManager/resourceManager.h"
 #include <random>
 #include "collision/collision.h"
-
+#include "SkeletonEnemy.h"
 Player* EnemyManager::_PLAYER = nullptr;
+
 
 //  ============= MovingState ==================================
 
@@ -29,9 +30,10 @@ void MovingState::update(Enemy& e, float dt) {
 
     //std::cout << CollisionChecker::distance(e, *EnemyManager::_PLAYER) << std::endl;
     
-    if (CollisionChecker::distance(e, *EnemyManager::_PLAYER) < e.ATTACK_DISTANCE) {
-        e.change_state(&(e.attachingState));
+    if (CollisionChecker::distance(e, *EnemyManager::_PLAYER) < e.get_attack_distance()) {
+        e.on_target_in_range(); 
     }
+
     flipped = direction.x < 0.0f;
     update_anim(dt);
 }
@@ -40,7 +42,7 @@ void MovingState::update(Enemy& e, float dt) {
 //  ============= AttachingState ==================================
 
 
-void AttachingState::enter(Enemy& e) {
+void MeleeAttackState::enter(Enemy& e) {
     reset_anim();
     if (EnemyManager::_PLAYER->get_pos()->x < e.get_pos()->x)
         flipped = true;
@@ -48,21 +50,20 @@ void AttachingState::enter(Enemy& e) {
         flipped = false;
 }
 
-void AttachingState::update(Enemy& e,float dt) {
-    static uint8_t last_frame = 0;
-    if (CollisionChecker::distance(e, *EnemyManager::_PLAYER) >= e.ATTACK_DISTANCE) {
-        e.change_state(&(e.movingState));
+void MeleeAttackState::update(Enemy& e,float dt) {
+    if (CollisionChecker::distance(e, *EnemyManager::_PLAYER) >= e.get_attack_distance()) {
+        e.on_target_out_of_range();
     }
 
     update_anim(dt);
     if (actual_frame == 6 && last_frame != 6) {
-        EnemyManager::_PLAYER->hit(e.BASE_DAMAGE);
+        EnemyManager::_PLAYER->hit(e.get_base_damage());
     }
 
      last_frame = actual_frame;
 }
 
-void AttachingState::exit(Enemy& e) {
+void MeleeAttackState::exit(Enemy& e) {
 
 }
 
@@ -77,7 +78,7 @@ Enemy::Enemy() {
     ID = count++;
 
 	//state = EnemyState::Moving;
-
+    /*
     Enemy::attachingState.tot_framex = 13;
     Enemy::attachingState.tot_rows = 4;
     Enemy::attachingState.frame_duration = 0.15f;
@@ -90,10 +91,10 @@ Enemy::Enemy() {
     Enemy::movingState.frame_duration = 0.8f;
     Enemy::movingState.y_offset = 0;
     Enemy::movingState.max_frame = 10;
-
+    
     currentState = &(Enemy::movingState);
     life = 255;
-
+    */
     static std::mt19937 gen(std::random_device{}());
     std::uniform_real_distribution<float> dist(-5.0f, 5.0f);
 
@@ -152,7 +153,13 @@ EnemyManager* EnemyManager::get_instance() {
 void EnemyManager::spawn_enemy(int n) {
 
     for (int i = 0; i < n; i++) {
-        enemys.push_back(new Enemy());
+        Enemy* e = nullptr;
+        e = new SkeletonEnemy();
+
+        if (e != nullptr)
+            enemys.push_back(e);
+        //enemys.push_back(new Enemy()); 
+        //TODO: fai uno spawn di enemy
 
     }
         
@@ -171,7 +178,7 @@ void EnemyManager::remove_enemy(uint32_t ID) {
 void EnemyManager::render(SpriteRenderer& renderer, FigRenderer& figRenderer, Camera& camera) {
     for ( Enemy* e : enemys) {
         renderer.Draw(
-            ResourceManager::GetTexture("enemy"),
+            ResourceManager::GetTexture(e->get_texture_name()),
             *e->get_pos(),
             *e->get_size(),
             0.0f,
@@ -186,22 +193,16 @@ void EnemyManager::render(SpriteRenderer& renderer, FigRenderer& figRenderer, Ca
 }
 
 void EnemyManager::drawlife(FigRenderer& figRenderer, Camera& camera, const glm::vec2& pos,const uint8_t life) {
-    glm::vec2 fPos = pos + glm::vec2(-0.5,0.6f);
+    glm::vec2 fPos = pos + glm::vec2(-0.25f,0.3f);
 
     float bar = life / 255.0f;
-
-    figRenderer.drawRect(fPos, glm::vec2(bar, 0.2f),camera.getViewMatrix());
+    bar *= 0.5f;
+    figRenderer.drawRect(fPos, glm::vec2(bar, 0.05f),camera.getViewMatrix());
 }
-
-
-
-
 
 void EnemyManager::update(Player& player, float delta) {
     for (Enemy* e : enemys) {
-
         e->update(delta);
-        
     }
 }
 

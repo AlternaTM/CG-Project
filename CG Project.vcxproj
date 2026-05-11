@@ -134,6 +134,7 @@
     <ClCompile Include="src\chest\chest.cpp" />
     <ClCompile Include="src\collision\collision.cpp" />
     <ClCompile Include="src\enemy\enemy.cpp" />
+    <ClCompile Include="src\enemy\SkeletonEnemy.cpp" />
     <ClCompile Include="src\figureRenderer\figureRenderer.cpp" />
     <ClCompile Include="src\glad.c" />
     <ClCompile Include="src\main.cpp" />
@@ -158,6 +159,7 @@
     <ClInclude Include="include\KHR\khrplatform.h" />
     <ClInclude Include="src\camera\camera3D.h" />
     <ClInclude Include="src\enemy\enemy.h" />
+    <ClInclude Include="src\enemy\SkeletonEnemy.h" />
     <ClInclude Include="src\entity.h" />
     <ClInclude Include="src\figureRenderer\figureRenderer.h" />
     <ClInclude Include="src\modelRenderer\modelRenderer.h" />

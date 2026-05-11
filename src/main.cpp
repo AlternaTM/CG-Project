@@ -145,7 +145,7 @@ int main(void)
     ResourceManager::LoadTexture("world", "assets/textures/wood.jpeg");
     ResourceManager::LoadTexture("chest", "assets/textures/chest.png");
     ResourceManager::LoadTexture("arrow", "assets/textures/arrow.png");
-    ResourceManager::LoadTexture("enemy", "assets/textures/skelSheet.png");
+    ResourceManager::LoadTexture("skeleton", "assets/textures/skelSheet.png");
 
     // Avvio motore audio
     irrklang::ISoundEngine* engine = irrklang::createIrrKlangDevice();
