@@ -1,6 +1,8 @@
 #pragma once
 #include "enemy.h"
 
+class MageEnemy;
+// =============== STATE FOR MAGE =====================
 
 class RangedAttackState : public EnemyState, public Animable {
 private:
@@ -23,13 +25,26 @@ public:
 };
 
 
+class PreAttackState : public WaitingState {
+public:
+    PreAttackState(float time_to_wait, EnemyState* state) : WaitingState(time_to_wait, state) {
+
+    }
+    void enter(Enemy& e) override;
+};
+
+
+
+// =============== MAGE =====================
+
 class MageEnemy : public Enemy {
 private:
     RangedAttackState attackState;
     MovingState movingState;
-    WaitingState waitingState;
+    PreAttackState preAttackState;
 public:
     MageEnemy();
+    glm::vec2 saved_target;
     float       get_attack_distance() const override { return 0.9f; }
     uint8_t     get_base_damage()     const override { return 5; }
     std::string get_texture_name()    const override { return "mago"; }

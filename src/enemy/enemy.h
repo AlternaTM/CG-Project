@@ -57,8 +57,13 @@ private:
     float timer = 0.0f; 
     float time_to_wait = 0.0f;
     EnemyState* state_to_go;
+    
 public:
     WaitingState(float time_to_wait, EnemyState* state);
+
+    bool follow_player_dir = false;
+    bool follow_player_dir_at_start = false;
+
     virtual void enter(Enemy&) override;
     virtual void update(Enemy&, float dt) override;
     virtual void exit(Enemy&) override;

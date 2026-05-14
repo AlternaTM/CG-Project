@@ -81,6 +81,14 @@ WaitingState::WaitingState(float time_to_waite, EnemyState* sta) {
 
 void WaitingState::enter(Enemy& e) {
     timer = 0;
+    if (follow_player_dir_at_start) {
+        if (EnemyManager::_PLAYER->get_pos()->x < e.get_pos()->x) {
+            flipped = true;
+        }
+        else {
+            flipped = false;
+        }
+    }
 }
 
 void WaitingState::exit(Enemy& e) {
@@ -89,12 +97,15 @@ void WaitingState::exit(Enemy& e) {
 
 void WaitingState::update(Enemy& e, float dt) {
     timer += dt;
-    if (EnemyManager::_PLAYER->get_pos()->x < e.get_pos()->x) {
-        flipped = true;
+    if (follow_player_dir) {
+        if (EnemyManager::_PLAYER->get_pos()->x < e.get_pos()->x) {
+            flipped = true;
+        }
+        else {
+            flipped = false;
+        }
     }
-    else {
-        flipped = false;
-    }
+
     update_anim(dt);
     if (timer > time_to_wait) {
         e.change_state(state_to_go);
