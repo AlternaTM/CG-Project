@@ -4,6 +4,8 @@
 #include "collision/collision.h"
 #include "SkeletonEnemy.h"
 #include "MageEnemy.h"
+#include "mageBullet/mageCast.h"
+
 Player* EnemyManager::_PLAYER = nullptr;
 
 
@@ -69,7 +71,36 @@ void MeleeAttackState::exit(Enemy& e) {
 }
 
 
+// ============= WaitingState ==================================
 
+WaitingState::WaitingState(float time_to_waite, EnemyState* sta) {
+    time_to_wait = time_to_waite;
+    state_to_go = sta;
+}
+
+
+void WaitingState::enter(Enemy& e) {
+    timer = 0;
+}
+
+void WaitingState::exit(Enemy& e) {
+
+}
+
+void WaitingState::update(Enemy& e, float dt) {
+    timer += dt;
+    if (EnemyManager::_PLAYER->get_pos()->x < e.get_pos()->x) {
+        flipped = true;
+    }
+    else {
+        flipped = false;
+    }
+    update_anim(dt);
+    if (timer > time_to_wait) {
+        e.change_state(state_to_go);
+    }
+
+}
 
 //  ============= ENEMY ==================================
 
@@ -78,24 +109,6 @@ Enemy::Enemy() {
     static uint32_t count = 0;
     ID = count++;
 
-	//state = EnemyState::Moving;
-    /*
-    Enemy::attachingState.tot_framex = 13;
-    Enemy::attachingState.tot_rows = 4;
-    Enemy::attachingState.frame_duration = 0.15f;
-    Enemy::attachingState.y_offset = 3;
-    Enemy::attachingState.max_frame = 10;
-
-
-    Enemy::movingState.tot_framex = 13;
-    Enemy::movingState.tot_rows = 4;
-    Enemy::movingState.frame_duration = 0.8f;
-    Enemy::movingState.y_offset = 0;
-    Enemy::movingState.max_frame = 10;
-    
-    currentState = &(Enemy::movingState);
-    life = 255;
-    */
     static std::mt19937 gen(std::random_device{}());
     std::uniform_real_distribution<float> dist(-5.0f, 5.0f);
 
@@ -192,7 +205,6 @@ void EnemyManager::render(SpriteRenderer& renderer, FigRenderer& figRenderer, Ca
         drawlife(figRenderer, camera, *e->get_pos(), e->get_life());
     }
 
-    
 }
 
 void EnemyManager::drawlife(FigRenderer& figRenderer, Camera& camera, const glm::vec2& pos,const uint8_t life) {

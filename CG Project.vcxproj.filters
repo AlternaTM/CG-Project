@@ -49,6 +49,12 @@
     <Filter Include="File di origine\animSystem">
       <UniqueIdentifier>{b3cd7455-fd71-4b43-b6d8-17cd9fd8fe7d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="File di origine\enemy\mage">
+      <UniqueIdentifier>{297f0e3f-4d54-43b4-98d9-0d90d81fcff4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="File di origine\enemy\sleketon">
+      <UniqueIdentifier>{349c6f4c-6440-4073-99fb-82776ca5471e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\player\player.cpp">
@@ -108,11 +114,14 @@
     <ClCompile Include="src\figureRenderer\figureRenderer.cpp">
       <Filter>File di origine</Filter>
     </ClCompile>
-    <ClCompile Include="src\enemy\SkeletonEnemy.cpp">
-      <Filter>File di origine\enemy</Filter>
-    </ClCompile>
     <ClCompile Include="src\enemy\MageEnemy.cpp">
-      <Filter>File di origine\enemy</Filter>
+      <Filter>File di origine\enemy\mage</Filter>
+    </ClCompile>
+    <ClCompile Include="src\enemy\SkeletonEnemy.cpp">
+      <Filter>File di origine\enemy\sleketon</Filter>
+    </ClCompile>
+    <ClCompile Include="src\enemy\mageBullet\mageCast.cpp">
+      <Filter>File di origine\enemy\mage</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -200,11 +209,14 @@
     <ClInclude Include="src\entity.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
-    <ClInclude Include="src\enemy\SkeletonEnemy.h">
-      <Filter>File di origine\enemy</Filter>
-    </ClInclude>
     <ClInclude Include="src\enemy\MageEnemy.h">
-      <Filter>File di origine\enemy</Filter>
+      <Filter>File di origine\enemy\mage</Filter>
+    </ClInclude>
+    <ClInclude Include="src\enemy\SkeletonEnemy.h">
+      <Filter>File di origine\enemy\sleketon</Filter>
+    </ClInclude>
+    <ClInclude Include="src\enemy\mageBullet\mageCast.h">
+      <Filter>File di origine\enemy\mage</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -221,5 +233,7 @@
     <None Include="src\glsl\modelVertexShader.glsl" />
     <None Include="shaders\rect\rectFrag.glsl" />
     <None Include="shaders\rect\rectVert.glsl" />
+    <None Include="shaders\cast\castFrag.glsl" />
+    <None Include="shaders\cast\castVert.glsl" />
   </ItemGroup>
 </Project>

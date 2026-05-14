@@ -134,6 +134,7 @@
     <ClCompile Include="src\chest\chest.cpp" />
     <ClCompile Include="src\collision\collision.cpp" />
     <ClCompile Include="src\enemy\enemy.cpp" />
+    <ClCompile Include="src\enemy\mageBullet\mageCast.cpp" />
     <ClCompile Include="src\enemy\MageEnemy.cpp" />
     <ClCompile Include="src\enemy\SkeletonEnemy.cpp" />
     <ClCompile Include="src\figureRenderer\figureRenderer.cpp" />
@@ -160,6 +161,7 @@
     <ClInclude Include="include\KHR\khrplatform.h" />
     <ClInclude Include="src\camera\camera3D.h" />
     <ClInclude Include="src\enemy\enemy.h" />
+    <ClInclude Include="src\enemy\mageBullet\mageCast.h" />
     <ClInclude Include="src\enemy\MageEnemy.h" />
     <ClInclude Include="src\enemy\SkeletonEnemy.h" />
     <ClInclude Include="src\entity.h" />
@@ -187,6 +189,8 @@
     <ResourceCompile Include="CG Project.rc" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="shaders\cast\castFrag.glsl" />
+    <None Include="shaders\cast\castVert.glsl" />
     <None Include="shaders\rect\rectFrag.glsl" />
     <None Include="shaders\rect\rectVert.glsl" />
     <None Include="src\glsl\modelFragShader.glsl" />

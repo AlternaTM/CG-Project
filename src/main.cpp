@@ -27,6 +27,7 @@
 #include "models/modelHelper.h"
 #include "enemy/enemy.h"
 #include "figureRenderer/figureRenderer.h"
+#include "enemy/mageBullet/mageCast.h"
 
 #include <irrKlang/irrKlang.h>
 #include <ft2build.h>
@@ -110,9 +111,22 @@ int main(void)
     rectShader.use();
     rectShader.setMat4("uProj", projection);
 
-    FigRenderer figRenderer(rectShader);
-    if (!figRenderer.init())
+    FigRenderer figRectRenderer(rectShader);
+    if (!figRectRenderer.init())
         return 1;
+
+    Shader castShader(
+        "shaders/cast/castVert.glsl",
+        "shaders/cast/castFrag.glsl"
+    );
+
+    castShader.use();
+    castShader.setMat4("uProj", projection);
+
+    FigRenderer figCastRenderer(castShader);
+    if (!figCastRenderer.init()) {
+        return 1;
+    }
 
 
     // ========== SETUP 3D ===============
@@ -201,8 +215,11 @@ int main(void)
 
     // ------------------- Enemy -------------------
     EnemyManager* enemyManager = EnemyManager::get_instance();
-    enemyManager->spawn_enemy(EnemyTipe::Skeleton,1);
+    enemyManager->spawn_enemy(EnemyTipe::Mage,1);
     EnemyManager::_PLAYER = &player;
+
+    CastManager* castManager = CastManager::get_instance();
+
 
     float lastTime = (float)glfwGetTime();
 
@@ -219,8 +236,13 @@ int main(void)
 
         camera.follow(*player.get_pos());
 
-        if(player.state != State::Looting)
+        if (player.state != State::Looting) {
             enemyManager->update(player, dt);
+            castManager->update(dt);
+        }
+            
+
+
 
         glClearColor(0.08f, 0.08f, 0.10f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -237,7 +259,7 @@ int main(void)
 
         chestManager.render(renderer, camera);
 
-        enemyManager->render(renderer, figRenderer, camera);
+        enemyManager->render(renderer, figRectRenderer,camera);
 
         renderer.Draw(
             ResourceManager::GetTexture("player"),
@@ -258,6 +280,8 @@ int main(void)
             player.aimRotation,    
             camera.getViewMatrix()
         );
+
+        castManager->render(figCastRenderer, camera);
 
         timer.update(dt);
 

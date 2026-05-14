@@ -1,4 +1,5 @@
 ﻿#include "figureRenderer.h"
+#include <GLFW/glfw3.h>
 
 FigRenderer::FigRenderer(Shader& shader):shader(shader) {
 	
@@ -57,14 +58,14 @@ void FigRenderer::drawRect(const glm::vec2& pos, const glm::vec2& size, const gl
     glBindVertexArray(0);
 }
 
-void FigRenderer::drawRect(const glm::vec2& pos, const glm::vec2& size,
-    float angle, const glm::mat4& view, const glm::vec4& color) {
+void FigRenderer::drawRect(const glm::vec2& pos, const glm::vec2& size, float angle, const glm::mat4& view, const glm::vec4& color) {
     shader.use();
     shader.setVec2("uPosition", pos);
     shader.setVec2("uSize", size);
     shader.setFloat("uAngle", angle); 
     shader.setMat4("uView", view);
     shader.setVec4("uColor", color);
+    shader.setFloat("uTime",(float) glfwGetTime());
 
     glBindVertexArray(m_VAO);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);

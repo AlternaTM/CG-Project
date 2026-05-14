@@ -24,8 +24,10 @@ public:
 
 
 class MageEnemy : public Enemy {
-    MovingState movingState;
+private:
     RangedAttackState attackState;
+    MovingState movingState;
+    WaitingState waitingState;
 public:
     MageEnemy();
     float       get_attack_distance() const override { return 0.9f; }

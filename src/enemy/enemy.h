@@ -8,6 +8,7 @@
 #include "entity.h"
 #include <glm/glm.hpp>
 
+
 class Player;
 class Enemy;
 
@@ -51,6 +52,26 @@ public:
     }
 };
 
+class WaitingState : public EnemyState, public Animable {
+private: 
+    float timer = 0.0f; 
+    float time_to_wait = 0.0f;
+    EnemyState* state_to_go;
+public:
+    WaitingState(float time_to_wait, EnemyState* state);
+    virtual void enter(Enemy&) override;
+    virtual void update(Enemy&, float dt) override;
+    virtual void exit(Enemy&) override;
+    void on_animation_end() override {}
+    glm::vec2 get_frame_size() override {
+        return Animable::get_frame_size();
+    }
+    glm::vec2 get_offset() override {
+        return Animable::get_offset();
+    }
+};
+
+
 
 class MeleeAttackState : public EnemyState, public Animable {
     uint8_t last_frame = 0;
@@ -75,7 +96,7 @@ class Enemy : public Renderable, public Entity {
 protected:
     EnemyState* currentState = nullptr;
 
-    uint8_t life;
+    uint8_t life = 255;
 public:
     uint32_t ID;
 
@@ -113,7 +134,6 @@ private:
     static EnemyManager* _INSTACE;
     std::vector<Enemy *> enemys;
     void drawlife(FigRenderer& figRenderer, Camera& camera,const glm::vec2& pos, const uint8_t life);
-    
 public: 
     static Player* _PLAYER;
     static EnemyManager* get_instance();
