@@ -2,7 +2,7 @@
 #include <glm/glm.hpp>
 
 class Entity {
-private: 
+protected: 
 	glm::vec3 pos = { 0.0f,0.0f,0.0f };
 	glm::vec2 size = { 1.0f,1.0f };
 public: 

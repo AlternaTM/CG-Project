@@ -15,7 +15,7 @@ void Cast::render(FigRenderer& figRenderer,const glm::mat4& view) {
 		size,
 		angle,
 		view,
-		glm::vec4(1.0f, 0.0f, 0.0f, 1.0f) // rosso
+		base_color // rosso
 	);
 }
 
@@ -38,13 +38,14 @@ void CastManager::update(float dt) {
 	
 }
 
-void CastManager::spawn(glm::vec2 start, glm::vec2 target, glm::vec2 size, float ttl) {
+Cast* CastManager::spawn(glm::vec2 start, glm::vec2 target, glm::vec2 size, float ttl, const glm::vec4& color) {
 	glm::vec2 dir = glm::normalize(target - start);
 
 	float angle = atan2(dir.y, dir.x);
-	Cast* c = new Cast(start, size, ttl, angle);
+	Cast* c = new Cast(start, size, ttl, angle, color);
 
 	casts.push_back(c);
+	return c;
 }
 
 void CastManager::render(FigRenderer& figRenderer, Camera& camera) {

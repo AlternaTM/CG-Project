@@ -1,5 +1,6 @@
 #pragma once
 #include "enemy.h"
+#include "mageBullet/mageCast.h"
 
 class MageEnemy;
 // =============== STATE FOR MAGE =====================
@@ -26,11 +27,14 @@ public:
 
 
 class PreAttackState : public WaitingState {
+private:
+    Cast* notify_cast;
 public:
-    PreAttackState(float time_to_wait, EnemyState* state) : WaitingState(time_to_wait, state) {
+    PreAttackState(float time_to_wait, EnemyState* state) : WaitingState(time_to_wait, state), notify_cast(nullptr) {
 
     }
-    void enter(Enemy& e) override;
+    void enter(Enemy& e)    override;
+    void exit(Enemy& e)     override;
 };
 
 
@@ -45,7 +49,7 @@ private:
 public:
     MageEnemy();
     glm::vec2 saved_target;
-    float       get_attack_distance() const override { return 0.9f; }
+    float       get_attack_distance() const override { return 3.5f; }
     uint8_t     get_base_damage()     const override { return 5; }
     std::string get_texture_name()    const override { return "mago"; }
     void        init_states()               override;

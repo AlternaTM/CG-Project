@@ -215,7 +215,8 @@ int main(void)
 
     // ------------------- Enemy -------------------
     EnemyManager* enemyManager = EnemyManager::get_instance();
-    enemyManager->spawn_enemy(EnemyTipe::Mage,1);
+    enemyManager->spawn_enemy(EnemyTipe::Mage,3);
+    enemyManager->spawn_enemy(EnemyTipe::Skeleton, 20);
     EnemyManager::_PLAYER = &player;
 
     CastManager* castManager = CastManager::get_instance();

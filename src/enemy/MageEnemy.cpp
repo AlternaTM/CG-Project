@@ -21,7 +21,8 @@ void RangedAttackState::enter(Enemy& e) {
         glm::vec2(e.get_pos()->x, e.get_pos()->y), 
         me->saved_target,
         glm::vec2(20.0f, 0.5f), 
-        2.0f
+        2.0f,
+        glm::vec4(0.7f, 0.0f, 0.3f, 0.97f)
     );
 }
 
@@ -44,10 +45,26 @@ void RangedAttackState::on_animation_end() {
 
 void PreAttackState::enter(Enemy& e) {
     WaitingState::enter(e);
-    std::cout << "test" << std::endl;
     MageEnemy* em = dynamic_cast<MageEnemy*>(&e);
     em->saved_target = *EnemyManager::_PLAYER->get_pos();
+
+    notify_cast = CastManager::get_instance()->spawn(
+        glm::vec2(e.get_pos()->x, e.get_pos()->y),
+        em->saved_target,
+        glm::vec2(20.0f, 0.5f),
+        30.0f,
+        glm::vec4(1.0f, 0.0f, 0.0f, 0.3f)
+    );
 }
+void PreAttackState::exit(Enemy& e) {
+    WaitingState::exit(e);
+    if (notify_cast != nullptr) {
+        CastManager::get_instance()->remove_cast(notify_cast);
+    }
+
+    notify_cast = nullptr;
+}
+
 
 // ====================================
 
@@ -82,6 +99,9 @@ void MageEnemy::init_states() {
     preAttackState.follow_player_dir_at_start = true;
 
     currentState = &movingState;
+
+    size.x = 2.0f;
+    size.y = 2.0f;
 }
 
 void MageEnemy::on_target_in_range() { change_state(&preAttackState); }
