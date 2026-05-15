@@ -55,6 +55,9 @@
     <Filter Include="File di origine\enemy\sleketon">
       <UniqueIdentifier>{349c6f4c-6440-4073-99fb-82776ca5471e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="File di origine\game">
+      <UniqueIdentifier>{2f1659c0-24f7-4cc3-8e2d-47097147db57}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\player\player.cpp">
@@ -122,6 +125,9 @@
     </ClCompile>
     <ClCompile Include="src\enemy\mageBullet\mageCast.cpp">
       <Filter>File di origine\enemy\mage</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\game.cpp">
+      <Filter>File di origine\game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -217,6 +223,9 @@
     </ClInclude>
     <ClInclude Include="src\enemy\mageBullet\mageCast.h">
       <Filter>File di origine\enemy\mage</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game\game.h">
+      <Filter>File di origine\game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

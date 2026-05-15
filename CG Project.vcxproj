@@ -138,6 +138,7 @@
     <ClCompile Include="src\enemy\MageEnemy.cpp" />
     <ClCompile Include="src\enemy\SkeletonEnemy.cpp" />
     <ClCompile Include="src\figureRenderer\figureRenderer.cpp" />
+    <ClCompile Include="src\game\game.cpp" />
     <ClCompile Include="src\glad.c" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\modelRenderer\modelRenderer.cpp" />
@@ -166,6 +167,7 @@
     <ClInclude Include="src\enemy\SkeletonEnemy.h" />
     <ClInclude Include="src\entity.h" />
     <ClInclude Include="src\figureRenderer\figureRenderer.h" />
+    <ClInclude Include="src\game\game.h" />
     <ClInclude Include="src\modelRenderer\modelRenderer.h" />
     <ClInclude Include="src\models\chest.h" />
     <ClInclude Include="src\chest\chest.h" />

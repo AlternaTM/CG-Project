@@ -33,6 +33,8 @@
 #include <ft2build.h>
 #include <vector>
 
+#include "game/game.h"
+
 
 #include FT_FREETYPE_H
 
@@ -175,7 +177,7 @@ int main(void)
 
 
     //----------------chest---------------------
-    ChestManager chestManager = ChestManager(2);
+    //ChestManager chestManager = ChestManager(2);
 
 
     Shader chestShader("src/glsl/modelVertexShader.glsl", "src/glsl/modelFragShader.glsl");
@@ -203,8 +205,11 @@ int main(void)
         chest_top + (lid_height / 4) ,  
         0.0f                           
     ));
+
+
+
+
     // ------------------- Player -------------------
-    Player player(camera);
 
     Timer timer;
     TextRenderer textRenderer(SCR_WIDTH, SCR_HEIGHT);
@@ -212,36 +217,33 @@ int main(void)
     textRenderer.LoadFont("./assets/fonts/PressStart2P-Regular.ttf", 48);
 
 
+    //------------------- GAME -------------------
+    
 
-    // ------------------- Enemy -------------------
-    EnemyManager* enemyManager = EnemyManager::get_instance();
-    enemyManager->spawn_enemy(EnemyTipe::Mage,3);
-    enemyManager->spawn_enemy(EnemyTipe::Skeleton, 20);
-    EnemyManager::_PLAYER = &player;
-
-    CastManager* castManager = CastManager::get_instance();
-
+    Game::init(
+        window,
+        camera,
+        &renderer,
+        &figRectRenderer,
+        &figCastRenderer
+    );
+    Game* game = Game::get_instance();
 
     float lastTime = (float)glfwGetTime();
 
+
+
+
+    //------------------- CICLO ------------------- 
     while (!glfwWindowShouldClose(window)) {
         float now = (float)glfwGetTime();
         float dt = now - lastTime;
         lastTime = now;
 
         
+        game->update(dt);
 
-        player.update(dt, window);
-
-        chestManager.interact(window, player);
-
-        camera.follow(*player.get_pos());
-
-        if (player.state != State::Looting) {
-            enemyManager->update(player, dt);
-            castManager->update(dt);
-        }
-            
+        camera.follow(*game->get_player()->get_pos());
 
 
 
@@ -258,31 +260,7 @@ int main(void)
             camera.getViewMatrix()
         );
 
-        chestManager.render(renderer, camera);
-
-        enemyManager->render(renderer, figRectRenderer,camera);
-
-        renderer.Draw(
-            ResourceManager::GetTexture("player"),
-            *player.get_pos(),
-            *player.get_size(),
-            0.0f,
-            camera.getViewMatrix(),
-            player.get_offset(),
-            player.get_frame_size()
-        );
-        
-
-       
-        renderer.Draw(
-            ResourceManager::GetTexture("arrow"),
-            player.aimPosition,
-            { 1.0f, 1.0f },     
-            player.aimRotation,    
-            camera.getViewMatrix()
-        );
-
-        castManager->render(figCastRenderer, camera);
+        game->render();
 
         timer.update(dt);
 
@@ -297,7 +275,7 @@ int main(void)
         // ============ RENDERING 3D ============
         glEnable(GL_DEPTH_TEST);
         
-        if (player.state == State::Looting) {
+        if (game->get_player()->state == State::Looting) {
             ModelRenderer::render_chest(camera3D, projection3D, chest, chest_lid, dt);
         }
         
