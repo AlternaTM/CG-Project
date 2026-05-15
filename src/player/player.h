@@ -14,7 +14,6 @@ class Player;
 
 enum class State {
     InGame,
-    Looting,
     Dead
 };
 
@@ -56,13 +55,6 @@ public:
     void hit(uint8_t* player, uint8_t damage) override;
 };
 
-
-class LootingState : public PlayerState {
-public:
-    static LootingState* instance();
-    void enter(Player& player) override;
-    void update(Player& player, float dt, GLFWwindow* window) override;
-};
 
 
 class DeadState : public PlayerState {

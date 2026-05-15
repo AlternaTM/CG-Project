@@ -31,17 +31,6 @@ void PlayingState::hit(uint8_t* pl, uint8_t damage) {
 }
 
 
-LootingState* LootingState::instance() {
-    static LootingState inst;
-    return &inst;
-}
-void LootingState::enter(Player& player) {player.state = State::Looting;}
-void LootingState::update(Player& player, float dt, GLFWwindow* window) {
-
-    if (PlayerInput::isKeyJustPressed(window, GLFW_KEY_E)) {
-        player.set_state(PlayingState::instance());
-    }
-}
 //DeadState ---------------------------------
 
 DeadState* DeadState::instance() {
