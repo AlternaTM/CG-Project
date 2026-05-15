@@ -1,6 +1,7 @@
 #include "game.h"
 #include "../enemy/mageBullet/mageCast.h"
 #include "../resourceManager/resourceManager.h"
+#include "../modelRenderer/modelRenderer.h"
 // ================== InGameState ==========================
 void InGameState::enter(Game& game) {
 
@@ -26,15 +27,23 @@ void LootingGameState::enter(Game& game) {
 
 }
 void LootingGameState::update(Game& game, float dt) {
-
-	game.get_player()->update(dt, game.get_window());
-
-	//game.get_CastManager()->update(dt);
-	//game.get_enemyManager()->update(*game.get_player(), dt);
-
+	if (PlayerInput::isKeyJustPressed(game.get_window(), GLFW_KEY_E)) {
+		game.switch_state(GameStateType::InGame);
+	}
 }
 void LootingGameState::exit(Game& game) {
 
+}
+
+void LootingGameState::render3d(Game& game,float dt) {
+	
+	ModelRenderer::render_chest(
+		*game.get_camera3D(),
+		game.get_projection3D(),
+		*game.get_chest_part()[0],
+		*game.get_chest_part()[1],
+		dt
+	);
 }
 
 // ================== GAME MANAGER ==========================
@@ -42,7 +51,16 @@ void LootingGameState::exit(Game& game) {
 Game* Game::_INSTANCE = nullptr;
 
 
-Game::Game(GLFWwindow* window, Camera& camera, SpriteRenderer* renderer, FigRenderer* figRectRenderer, FigRenderer* figCastRenderer)
+Game::Game(
+	GLFWwindow* window, 
+	Camera& camera, 
+	SpriteRenderer* renderer, 
+	FigRenderer* figRectRenderer, 
+	FigRenderer* figCastRenderer,
+	Camera3D* camera3D,
+	const glm::mat4 projection3D,
+	const std::array<ModelRenderer*, 2>& chest_part
+)
 	: 
 	player(camera), 
 	castManager(CastManager::get_instance()),
@@ -52,13 +70,34 @@ Game::Game(GLFWwindow* window, Camera& camera, SpriteRenderer* renderer, FigRend
 	renderer(renderer),
 	enemyManager(EnemyManager::get_instance()),
 	figRectRenderer(figRectRenderer),
-	window(window)
+	window(window),
+	camera3D(camera3D),
+	projection3D(projection3D),
+	chest_part(chest_part)
 {
 	game_state = &inGameState;
 }
 
-void Game::init(GLFWwindow* window, Camera& camera, SpriteRenderer* renderer, FigRenderer* figRectRenderer, FigRenderer* figCastRenderer) {
-	static Game game(window,camera,renderer,figRectRenderer,figCastRenderer);
+void Game::init(
+	GLFWwindow* window, 
+	Camera& camera, 
+	SpriteRenderer* renderer, 
+	FigRenderer* figRectRenderer, 
+	FigRenderer* figCastRenderer,
+	Camera3D* camera3D,
+	const glm::mat4 projection3D,
+	const std::array<ModelRenderer*, 2>& chest_part
+) {
+	static Game game(
+		window,
+		camera,
+		renderer,
+		figRectRenderer,
+		figCastRenderer,
+		camera3D,
+		projection3D,
+		chest_part
+	);
 
 	
 
@@ -72,10 +111,12 @@ void Game::init(GLFWwindow* window, Camera& camera, SpriteRenderer* renderer, Fi
 
 void Game::update(float dt) {
 	game_state->update(*this, dt);
-	chestManager.interact(window, player);
+	if (chestManager.interact(window, player)) {
+		this->switch_state(GameStateType::Looting);
+	}
 }
 
-void Game::render() {
+void Game::render2d() {
 	enemyManager->render(*renderer, *figRectRenderer, camera);
 
 	chestManager.render(*renderer, camera);
@@ -99,6 +140,10 @@ void Game::render() {
 		player.aimRotation,
 		camera.getViewMatrix()
 	);
+}
+
+void Game::render3d(float dt) {
+	game_state->render3d(*this,dt);
 }
 
 void Game::switch_state(GameStateType state) {
@@ -139,4 +184,17 @@ EnemyManager* Game::get_enemyManager() {
 Game* Game::get_instance() {
 	assert(_INSTANCE != nullptr);
 	return _INSTANCE;
+}
+
+
+Camera3D* Game::get_camera3D() {
+	return camera3D;
+}
+const glm::mat4 Game::get_projection3D() {
+	return projection3D;
+}
+
+
+std::array<ModelRenderer*, 2>& Game::get_chest_part() {
+	return chest_part;
 }

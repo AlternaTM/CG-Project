@@ -225,7 +225,10 @@ int main(void)
         camera,
         &renderer,
         &figRectRenderer,
-        &figCastRenderer
+        &figCastRenderer,
+        &camera3D,
+        projection3D,
+        {&chest, &chest_lid}
     );
     Game* game = Game::get_instance();
 
@@ -260,7 +263,7 @@ int main(void)
             camera.getViewMatrix()
         );
 
-        game->render();
+        game->render2d();
 
         timer.update(dt);
 
@@ -275,9 +278,7 @@ int main(void)
         // ============ RENDERING 3D ============
         glEnable(GL_DEPTH_TEST);
         
-        if (game->get_player()->state == State::Looting) {
-            ModelRenderer::render_chest(camera3D, projection3D, chest, chest_lid, dt);
-        }
+        game->render3d(dt);
         
         //============= FINE RENDER LOOP ==============
         PlayerInput::update_input(window);

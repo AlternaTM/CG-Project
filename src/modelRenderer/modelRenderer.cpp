@@ -77,7 +77,7 @@ glm::mat4 ModelRenderer::getModelMatrix() const {
 
 
 //METODI STATICI DI SUPPORTO
-void ModelRenderer::render_chest(Camera3D& camera3D, glm::mat4& projection3D, ModelRenderer& chest, ModelRenderer& chest_lid, float dt) {
+void ModelRenderer::render_chest(Camera3D& camera3D,const glm::mat4& projection3D, ModelRenderer& chest, ModelRenderer& chest_lid, float dt) {
     static float angle = 0.0f;
     static float rotate = 0.0f;
     static glm::vec2 pos = { 0.57f,0.0f };

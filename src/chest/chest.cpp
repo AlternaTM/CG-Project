@@ -27,15 +27,18 @@ void ChestManager::render(SpriteRenderer& renderer, Camera& camera) {
 }
 
 
-void ChestManager::interact(GLFWwindow* window, Player& pl) {
+bool ChestManager::interact(GLFWwindow* window, Player& pl) {
+    
     if (PlayerInput::isKeyJustPressed(window, GLFW_KEY_E)) {
         for (size_t i = chests.size(); i-- > 0;) {
             if (CollisionChecker::check_collision(pl, chests[i])) {
                 chests.erase(chests.begin() + i);
-                pl.set_state(LootingState::instance());
+                //pl.set_state(LootingState::instance());
+                return true;
             }
         }
     }
+    return false;
 }
 
 

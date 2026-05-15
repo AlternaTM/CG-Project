@@ -26,6 +26,6 @@ private:
 
 public: 
     ChestManager(int n);
-    void interact(GLFWwindow* window, Player& pl);
+    bool interact(GLFWwindow* window, Player& pl);
     void render(SpriteRenderer& renderer, Camera& camera);
 };
