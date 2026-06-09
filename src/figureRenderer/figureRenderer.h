@@ -2,13 +2,34 @@
 #include <string>
 #include "shader/shader.h"
 #include <glm/glm.hpp>
+#include <vector>
+
+struct Vertex2D {
+	glm::vec2 pos;
+	glm::vec2 uv;
+};
+
+
+class Mesh2D {
+public: 
+	GLuint vao = 0;
+	GLuint vbo = 0;
+	GLuint ebo = 0;
+	uint32_t indexCount = 0;
+
+	void create(const std::vector<Vertex2D>& vertices, const std::vector<uint32_t>& indices);
+
+
+	void destroy();
+};
+
 
 class FigRenderer {
 public:
 	FigRenderer(Shader& shader);
 	~FigRenderer();
 
-	bool init(const std::string& vertPath, const std::string& fragPath);
+	
 
 	void drawRect(
 		const glm::vec2& pos,
@@ -24,6 +45,13 @@ public:
 		const glm::vec4& color = glm::vec4(1, 0, 0, 1)
 	);
 	bool init();
+
+	void draw(
+		const Mesh2D& mesh,
+		const glm::mat4& transform,
+		const glm::mat4& view,
+		const glm::vec4& color = glm::vec4(1, 0, 0, 1)
+	);
 private:
 	Shader& shader;
 	unsigned int m_VAO = 0;

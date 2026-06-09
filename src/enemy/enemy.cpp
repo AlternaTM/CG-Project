@@ -5,6 +5,7 @@
 #include "SkeletonEnemy.h"
 #include "MageEnemy.h"
 #include "mageBullet/mageCast.h"
+#include <glm/gtc/matrix_transform.hpp>
 
 Player* EnemyManager::_PLAYER = nullptr;
 
@@ -223,7 +224,31 @@ void EnemyManager::drawlife(FigRenderer& figRenderer, Camera& camera, const glm:
 
     float bar = life / 255.0f;
     bar *= 0.5f;
-    figRenderer.drawRect(fPos, glm::vec2(bar, 0.05f),0,camera.getViewMatrix());
+
+    std::vector<Vertex2D> vertices = {
+        {{-0.5f, -0.5f}, {0.0f, 0.0f}},
+        {{ 0.5f, -0.5f}, {1.0f, 0.0f}},
+        {{ 0.5f,  0.5f}, {1.0f, 1.0f}},
+        {{-0.5f,  0.5f}, {0.0f, 1.0f}},
+    };
+
+    std::vector<uint32_t> indices = {
+        0, 1, 2,
+        2, 3, 0
+    };
+
+    Mesh2D mesh;
+    mesh.create(vertices, indices);
+
+    glm::mat4 model = glm::mat4(1.0f);
+
+    model = glm::translate(model, glm::vec3(fPos.x + 0.25f, fPos.y, 0.0f));
+    //model = glm::rotate(model, angle, glm::vec3(0, 0, 1));
+    model = glm::scale(model, glm::vec3(bar, 0.05f, 1.0f));
+    
+    figRenderer.draw(mesh, model, camera.getViewMatrix());
+
+    //figRenderer.drawRect(fPos, glm::vec2(bar, 0.05f),0,camera.getViewMatrix());
 }
 
 void EnemyManager::update(Player& player, float delta) {

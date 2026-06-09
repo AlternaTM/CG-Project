@@ -1,4 +1,4 @@
-#include "MageEnemy.h"
+#include "astroEnemy.h"
 
 #include "SkeletonEnemy.h"
 
