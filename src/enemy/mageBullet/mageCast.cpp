@@ -8,41 +8,6 @@ void Cast::update(float dt) {
 }
 void Cast::render(FigRenderer& figRenderer,const glm::mat4& view) {
 
-	/*
-	if (!meshReady) {
-		std::vector<Vertex2D> vertices = {
-			{{-0.5f, -0.5f}, {0.0f, 0.0f}},
-			{{ 0.5f, -0.5f}, {1.0f, 0.0f}},
-			{{ 0.5f,  0.5f}, {1.0f, 1.0f}},
-			{{-0.5f,  0.5f}, {0.0f, 1.0f}},
-		};
-		std::vector<uint32_t> indices = { 0, 1, 2, 2, 3, 0 };
-		mesh.create(vertices, indices);
-		meshReady = true;
-	}
-
-	float elapsed = initialttl - ttl;
-	float maxLength = size.x; //8.0f;
-	float speed = 12.0f;
-	float beamWidth = size.y;//0.28f;
-
-
-	float currentLength = glm::min(elapsed * speed, maxLength);
-
-
-
-	glm::vec2 forward = glm::vec2(cos(angle), sin(angle));
-	glm::vec2 beamCenter = start_pos + forward * (currentLength * 0.5f);
-
-	glm::mat4 model = glm::mat4(1.0f);
-	model = glm::translate(model, glm::vec3(beamCenter, 0.0f));
-	model = glm::rotate(model, angle, glm::vec3(0.0f, 0.0f, 1.0f));
-	model = glm::scale(model, glm::vec3(currentLength, beamWidth, 1.0f));
-
-	figRenderer.draw(mesh, model, view, base_color);
-	*/
-
-
 	figRenderer.draw(mesh, model, view, base_color);
 }
 
@@ -79,10 +44,19 @@ void CastManager::add(Cast* cast) {
 	casts.push_back(cast);
 }
 
-void CastManager::render(FigRenderer& figRenderer, Camera& camera) {
+void CastManager::render(FigRenderer& castRenderer, FigRenderer& astroRenderer, Camera& camera) {
 
 	for (Cast* c : casts) {
-		c->render(figRenderer,camera.getViewMatrix());
+		switch (c->get_type()) {
+			case CASTTYPE::MageCast:
+				c->render(castRenderer, camera.getViewMatrix());
+				break;
+			case CASTTYPE::AstroCast:
+				c->render(astroRenderer, camera.getViewMatrix());
+				break;
+		}
+		
+		
 	}
 }
 

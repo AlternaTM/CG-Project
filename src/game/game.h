@@ -81,6 +81,7 @@ private:
 	//TOOL
 	FigRenderer* figRectRenderer;
 	FigRenderer* figCastRenderer;
+	FigRenderer* figAstroCastRenderer;
 	SpriteRenderer* renderer;
 	EnemyManager* enemyManager;
 
@@ -92,6 +93,7 @@ private:
 		SpriteRenderer* renderer,
 		FigRenderer* figRectRenderer,
 		FigRenderer* figCastRenderer,
+		FigRenderer* figAstroCastRenderer,
 		Camera3D* camera3D,
 		const glm::mat4 projection3D,
 		const std::array<ModelRenderer*, 2>& chest_part
@@ -104,6 +106,7 @@ public:
 		SpriteRenderer* renderer, 
 		FigRenderer* figRectRenderer, 
 		FigRenderer* figCastRenderer,
+		FigRenderer* figAstroCastRenderer,
 		Camera3D* camera3D,
 		const glm::mat4 projection3D,
 		const std::array<ModelRenderer*, 2>& chest_part

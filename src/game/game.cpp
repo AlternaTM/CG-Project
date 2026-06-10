@@ -57,6 +57,7 @@ Game::Game(
 	SpriteRenderer* renderer, 
 	FigRenderer* figRectRenderer, 
 	FigRenderer* figCastRenderer,
+	FigRenderer* figAstroRenderer,
 	Camera3D* camera3D,
 	const glm::mat4 projection3D,
 	const std::array<ModelRenderer*, 2>& chest_part
@@ -70,6 +71,7 @@ Game::Game(
 	renderer(renderer),
 	enemyManager(EnemyManager::get_instance()),
 	figRectRenderer(figRectRenderer),
+	figAstroCastRenderer(figAstroRenderer),
 	window(window),
 	camera3D(camera3D),
 	projection3D(projection3D),
@@ -84,6 +86,7 @@ void Game::init(
 	SpriteRenderer* renderer, 
 	FigRenderer* figRectRenderer, 
 	FigRenderer* figCastRenderer,
+	FigRenderer* figAstroCastRenderer,
 	Camera3D* camera3D,
 	const glm::mat4 projection3D,
 	const std::array<ModelRenderer*, 2>& chest_part
@@ -94,6 +97,7 @@ void Game::init(
 		renderer,
 		figRectRenderer,
 		figCastRenderer,
+		figAstroCastRenderer,
 		camera3D,
 		projection3D,
 		chest_part
@@ -101,8 +105,9 @@ void Game::init(
 
 	
 
-	game.enemyManager->spawn_enemy(EnemyTipe::Mage, 1);
+	//game.enemyManager->spawn_enemy(EnemyTipe::Mage, 1);
 	game.enemyManager->spawn_enemy(EnemyTipe::Skeleton, 10);
+	game.enemyManager->spawn_enemy(EnemyTipe::Astro, 1);
 	EnemyManager::_PLAYER = game.get_player();
 
 	_INSTANCE = &game;
@@ -131,7 +136,7 @@ void Game::render2d() {
 		player.get_frame_size()
 	);
 
-	castManager->render(*figCastRenderer, camera);
+	castManager->render(*figCastRenderer, *figAstroCastRenderer, camera);
 
 	(*renderer).Draw(
 		ResourceManager::GetTexture("arrow"),

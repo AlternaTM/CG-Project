@@ -130,6 +130,19 @@ int main(void)
         return 1;
     }
 
+    Shader astroCastShader(
+        "shaders/astroCast/astroVert.glsl",
+        "shaders/astroCast/astroFrag.glsl"
+    );
+
+    astroCastShader.use();
+    astroCastShader.setMat4("uProj", projection);
+
+    FigRenderer figAstroRenderer(astroCastShader);
+    if (!figAstroRenderer.init()) {
+        return 1;
+    }
+
 
     // ========== SETUP 3D ===============
 
@@ -226,6 +239,7 @@ int main(void)
         &renderer,
         &figRectRenderer,
         &figCastRenderer,
+        &figAstroRenderer,
         &camera3D,
         projection3D,
         {&chest, &chest_lid}

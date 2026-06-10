@@ -61,6 +61,15 @@
     <Filter Include="File di origine\enemy\astro">
       <UniqueIdentifier>{1654510a-2a20-4061-a45d-8bca919aa47b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="shaders">
+      <UniqueIdentifier>{1bd92c6b-d9b5-49e0-9061-a05ccaf2fa53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shaders\astroCast">
+      <UniqueIdentifier>{dd389a45-a953-41c4-abf2-afb189f1a74c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shaders\mageCast">
+      <UniqueIdentifier>{39fe5676-302b-46d1-9e49-eda416b567c2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\player\player.cpp">
@@ -131,6 +140,9 @@
     </ClCompile>
     <ClCompile Include="src\game\game.cpp">
       <Filter>File di origine\game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\enemy\astroEnemy.cpp">
+      <Filter>File di origine\enemy\astro</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -230,6 +242,9 @@
     <ClInclude Include="src\game\game.h">
       <Filter>File di origine\game</Filter>
     </ClInclude>
+    <ClInclude Include="src\enemy\astroEnemy.h">
+      <Filter>File di origine\enemy\astro</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CG Project.rc">
@@ -245,7 +260,17 @@
     <None Include="src\glsl\modelVertexShader.glsl" />
     <None Include="shaders\rect\rectFrag.glsl" />
     <None Include="shaders\rect\rectVert.glsl" />
-    <None Include="shaders\cast\castFrag.glsl" />
-    <None Include="shaders\cast\castVert.glsl" />
+    <None Include="shaders\astroCast\astroFrag.glsl">
+      <Filter>shaders\astroCast</Filter>
+    </None>
+    <None Include="shaders\astroCast\astroVert.glsl">
+      <Filter>shaders\astroCast</Filter>
+    </None>
+    <None Include="shaders\cast\castFrag.glsl">
+      <Filter>shaders\mageCast</Filter>
+    </None>
+    <None Include="shaders\cast\castVert.glsl">
+      <Filter>shaders\mageCast</Filter>
+    </None>
   </ItemGroup>
 </Project>

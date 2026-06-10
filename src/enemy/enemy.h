@@ -20,7 +20,8 @@ const float ENEMY_SPEED = 1;
 enum EnemyTipe
 {
     Skeleton,
-    Mage
+    Mage,
+    Astro
 };
 
 class EnemyState : public Renderable{

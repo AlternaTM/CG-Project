@@ -233,7 +233,7 @@ void MageEnemy::spawn_cast(glm::mat4 model, const glm::vec4& color) {
     mesh.create(vertices, indices);
 
 
-    cast = new Cast(mesh, model, color);
+    cast = new Cast(mesh, model, CASTTYPE::MageCast, color);
 
     CastManager::get_instance()->add(cast);
 }

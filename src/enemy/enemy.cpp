@@ -4,6 +4,7 @@
 #include "collision/collision.h"
 #include "SkeletonEnemy.h"
 #include "MageEnemy.h"
+#include "astroEnemy.h" 
 #include "mageBullet/mageCast.h"
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -183,6 +184,7 @@ void EnemyManager::spawn_enemy(EnemyTipe type, int n) {
         switch (type) {
             case EnemyTipe::Skeleton: e = new SkeletonEnemy(); break;
             case EnemyTipe::Mage: e = new MageEnemy(); break;
+            case EnemyTipe::Astro: e = new AstroEnemy(); break;
         }
         
 
