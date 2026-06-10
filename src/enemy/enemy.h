@@ -74,6 +74,13 @@ public:
     glm::vec2 get_offset() override {
         return Animable::get_offset();
     }
+
+    float get_timer() {
+        return timer;
+    }
+    float get_time_to_wait() {
+        return time_to_wait;
+    }
 };
 
 

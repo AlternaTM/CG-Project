@@ -9,20 +9,17 @@
 class Cast {
 private:
 	Mesh2D mesh;
-	glm::vec2 start_pos;
-	glm::vec2 size;
-	float ttl;
-	float angle;
+	glm::mat4 model;
 	glm::vec4 base_color;
-	bool meshReady = false;
-	float initialttl;
 public:
-	Cast(glm::vec2 start_pos, glm::vec2 size, float ttl, float angle, const glm::vec4& base_color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f))
-		:start_pos(start_pos), size(size), ttl(ttl),initialttl(ttl), angle(angle), base_color(base_color) {
+
+	Cast(Mesh2D mesh,glm::mat4 model, const glm::vec4& base_color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f))
+		:mesh(mesh), model(model), base_color(base_color) {
 	};
 	~Cast();
 	void update(float dt);
 	void render(FigRenderer& figRenderer,const glm::mat4& view);
+	void update_model(glm::mat4 model);
 };
 
 // MANAGER

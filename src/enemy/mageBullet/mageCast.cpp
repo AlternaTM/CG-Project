@@ -4,11 +4,11 @@
 //cats
 
 void Cast::update(float dt) {
-	ttl -= dt;
+
 }
 void Cast::render(FigRenderer& figRenderer,const glm::mat4& view) {
 
-
+	/*
 	if (!meshReady) {
 		std::vector<Vertex2D> vertices = {
 			{{-0.5f, -0.5f}, {0.0f, 0.0f}},
@@ -40,8 +40,16 @@ void Cast::render(FigRenderer& figRenderer,const glm::mat4& view) {
 	model = glm::scale(model, glm::vec3(currentLength, beamWidth, 1.0f));
 
 	figRenderer.draw(mesh, model, view, base_color);
+	*/
 
+
+	figRenderer.draw(mesh, model, view, base_color);
 }
+
+void Cast::update_model(glm::mat4 model) {
+	Cast::model = model;
+}
+
 
 Cast::~Cast() {
 	mesh.destroy();

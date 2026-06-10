@@ -1,9 +1,8 @@
 #include "MageEnemy.h"
 
-#include "SkeletonEnemy.h"
 
 #include "mageBullet/mageCast.h"
-
+#include <glm/gtc/matrix_transform.hpp>
 
 // ============ RangedAttackState
 
@@ -17,12 +16,33 @@ void RangedAttackState::enter(Enemy& e) {
     else {
         flipped = false;
     }
+    start_time = (float)glfwGetTime();
+    ttl = 2.0f;
+    glm::vec2 start = glm::vec2(e.get_pos()->x, e.get_pos()->y);
+    glm::vec2 size = glm::vec2(20.0f, 0.5f);
+    glm::vec2 dir = glm::normalize(me->saved_target - start);
+    float angle = atan2(dir.y, dir.x);
+
+
+    float elapsed = 0.0f;
+    float maxLength = size.x; //8.0f;
+    float speed = 12.0f;
+    float beamWidth = size.y;//0.28f;
+
+
+    float currentLength = glm::min(elapsed * speed, maxLength);
+
+    glm::vec2 forward = glm::vec2(cos(angle), sin(angle));
+    glm::vec2 beamCenter = start + forward * (currentLength * 0.5f);
+
+    glm::mat4 model = glm::mat4(1.0f);
+    model = glm::translate(model, glm::vec3(beamCenter, 0.0f));
+    model = glm::rotate(model, angle, glm::vec3(0.0f, 0.0f, 1.0f));
+    model = glm::scale(model, glm::vec3(currentLength, beamWidth, 1.0f));
+
 
     me->spawn_cast(
-        glm::vec2(e.get_pos()->x, e.get_pos()->y),
-        me->saved_target,
-        glm::vec2(20.0f, 0.5f),
-        2.0f,
+        model,
         glm::vec4(0.7f, 0.0f, 0.3f, 0.97f)
     );
 
@@ -30,6 +50,32 @@ void RangedAttackState::enter(Enemy& e) {
 
 void RangedAttackState::update(Enemy& e,float dt) {
     MageEnemy* me = dynamic_cast<MageEnemy*>(&e);
+    ttl -= dt;
+
+     glm::vec2 start = glm::vec2(e.get_pos()->x, e.get_pos()->y);
+    glm::vec2 size = glm::vec2(20.0f, 0.5f);
+    glm::vec2 dir = glm::normalize(me->saved_target - start);
+    float angle = atan2(dir.y, dir.x);
+
+
+    float elapsed = start_time - ttl;
+    float maxLength = size.x; //8.0f;
+    float speed = 12.0f;
+    float beamWidth = size.y;//0.28f;
+
+
+    float currentLength = glm::min(elapsed * speed, maxLength);
+
+    glm::vec2 forward = glm::vec2(cos(angle), sin(angle));
+    glm::vec2 beamCenter = start + forward * (currentLength * 0.5f);
+
+    glm::mat4 model = glm::mat4(1.0f);
+    model = glm::translate(model, glm::vec3(beamCenter, 0.0f));
+    model = glm::rotate(model, angle, glm::vec3(0.0f, 0.0f, 1.0f));
+    model = glm::scale(model, glm::vec3(currentLength, beamWidth, 1.0f));
+
+    me->get_cast()->update_model(model);
+
     update_anim(dt);
 }
 
@@ -54,14 +100,66 @@ void PreAttackState::enter(Enemy& e) {
     MageEnemy* em = dynamic_cast<MageEnemy*>(&e);
     em->saved_target = *EnemyManager::_PLAYER->get_pos();
 
+    start_time = (float)glfwGetTime();
+
+    glm::vec2 start = glm::vec2(e.get_pos()->x, e.get_pos()->y);
+    glm::vec2 size = glm::vec2(20.0f, 0.5f);
+    glm::vec2 dir = glm::normalize(em->saved_target - start);
+    float angle = atan2(dir.y, dir.x);
+
+
+    float elapsed = 0.0f;
+    float maxLength = size.x; //8.0f;
+    float speed = 12.0f;
+    float beamWidth = size.y;//0.28f;
+
+
+    float currentLength = glm::min(elapsed * speed, maxLength);
+
+    glm::vec2 forward = glm::vec2(cos(angle), sin(angle));
+    glm::vec2 beamCenter = start + forward * (currentLength * 0.5f);
+
+    glm::mat4 model = glm::mat4(1.0f);
+    model = glm::translate(model, glm::vec3(beamCenter, 0.0f));
+    model = glm::rotate(model, angle, glm::vec3(0.0f, 0.0f, 1.0f));
+    model = glm::scale(model, glm::vec3(currentLength, beamWidth, 1.0f));
+
+
     em->spawn_cast(
-        glm::vec2(e.get_pos()->x, e.get_pos()->y),
-        em->saved_target,
-        glm::vec2(20.0f, 0.5f),
-        30.0f,
+        model,
         glm::vec4(1.0f, 0.0f, 0.0f, 0.3f)
     );
 }
+
+void PreAttackState::update(Enemy& e,float dt) {
+    WaitingState::update(e, dt);
+    MageEnemy* em = dynamic_cast<MageEnemy*>(&e);
+    glm::vec2 start = glm::vec2(e.get_pos()->x, e.get_pos()->y);
+    glm::vec2 size = glm::vec2(20.0f, 0.5f);
+    glm::vec2 dir = glm::normalize(em->saved_target - start);
+    float angle = atan2(dir.y, dir.x);
+
+
+    float elapsed = (float)glfwGetTime() - start_time;
+    float maxLength = size.x; //8.0f;
+    float speed = 12.0f;
+    float beamWidth = size.y;//0.28f;
+
+
+    float currentLength = glm::min(elapsed * speed, maxLength);
+
+    glm::vec2 forward = glm::vec2(cos(angle), sin(angle));
+    glm::vec2 beamCenter = start + forward * (currentLength * 0.5f);
+
+    glm::mat4 model = glm::mat4(1.0f);
+    model = glm::translate(model, glm::vec3(beamCenter, 0.0f));
+    model = glm::rotate(model, angle, glm::vec3(0.0f, 0.0f, 1.0f));
+    model = glm::scale(model, glm::vec3(currentLength, beamWidth, 1.0f));
+
+    em->get_cast()->update_model(model);
+}
+
+
 void PreAttackState::exit(Enemy& e) {
     WaitingState::exit(e);
     MageEnemy* em = dynamic_cast<MageEnemy*>(&e);
@@ -120,13 +218,22 @@ void MageEnemy::on_target_out_of_range() { change_state(&endAttackDelay); }
 
 
 
-void MageEnemy::spawn_cast(glm::vec2 start, glm::vec2 target, glm::vec2 size, float ttl, const glm::vec4& color) {
-    glm::vec2 dir = glm::normalize(target - start);
+void MageEnemy::spawn_cast(glm::mat4 model, const glm::vec4& color) {
 
-    float angle = atan2(dir.y, dir.x);
     remove_cast();
 
-    cast = new Cast(start, size, ttl, angle, color);
+    Mesh2D mesh;
+    std::vector<Vertex2D> vertices = {
+            {{-0.5f, -0.5f}, {0.0f, 0.0f}},
+            {{ 0.5f, -0.5f}, {1.0f, 0.0f}},
+            {{ 0.5f,  0.5f}, {1.0f, 1.0f}},
+            {{-0.5f,  0.5f}, {0.0f, 1.0f}},
+    };
+    std::vector<uint32_t> indices = { 0, 1, 2, 2, 3, 0 };
+    mesh.create(vertices, indices);
+
+
+    cast = new Cast(mesh, model, color);
 
     CastManager::get_instance()->add(cast);
 }

@@ -58,6 +58,9 @@
     <Filter Include="File di origine\game">
       <UniqueIdentifier>{2f1659c0-24f7-4cc3-8e2d-47097147db57}</UniqueIdentifier>
     </Filter>
+    <Filter Include="File di origine\enemy\astro">
+      <UniqueIdentifier>{1654510a-2a20-4061-a45d-8bca919aa47b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\player\player.cpp">
