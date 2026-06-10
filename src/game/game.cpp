@@ -101,8 +101,8 @@ void Game::init(
 
 	
 
-	game.enemyManager->spawn_enemy(EnemyTipe::Mage, 3);
-	game.enemyManager->spawn_enemy(EnemyTipe::Skeleton, 20);
+	game.enemyManager->spawn_enemy(EnemyTipe::Mage, 1);
+	game.enemyManager->spawn_enemy(EnemyTipe::Skeleton, 10);
 	EnemyManager::_PLAYER = game.get_player();
 
 	_INSTANCE = &game;

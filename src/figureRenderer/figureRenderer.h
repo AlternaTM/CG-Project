@@ -30,13 +30,6 @@ public:
 	~FigRenderer();
 
 	
-
-	void drawRect(
-		const glm::vec2& pos,
-		const glm::vec2& size,
-		const glm::mat4& view,
-		const glm::vec4& color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f)
-	);
 	void drawRect(
 		const glm::vec2& pos, 
 		const glm::vec2& size,

@@ -13,6 +13,9 @@ public:
     uint8_t start_pos;
     uint8_t end_pos;
     uint8_t duration;
+
+
+
     virtual void enter(Enemy&) override;
     virtual void update(Enemy&, float dt) override;
     virtual void exit(Enemy&) override;
@@ -28,9 +31,9 @@ public:
 
 class PreAttackState : public WaitingState {
 private:
-    Cast* notify_cast;
+
 public:
-    PreAttackState(float time_to_wait, EnemyState* state) : WaitingState(time_to_wait, state), notify_cast(nullptr) {
+    PreAttackState(float time_to_wait, EnemyState* state) : WaitingState(time_to_wait, state) {
 
     }
     void enter(Enemy& e)    override;
@@ -46,6 +49,8 @@ private:
     RangedAttackState attackState;
     MovingState movingState;
     PreAttackState preAttackState;
+    WaitingState endAttackDelay;
+    Cast* cast;
 public:
     MageEnemy();
     glm::vec2 saved_target;
@@ -55,4 +60,8 @@ public:
     void        init_states()               override;
     void        on_target_in_range()        override;
     void        on_target_out_of_range()    override;
+
+
+    void spawn_cast(glm::vec2 start, glm::vec2 target, glm::vec2 size, float ttl, const glm::vec4& color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+    void remove_cast();
 };
