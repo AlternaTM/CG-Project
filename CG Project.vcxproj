@@ -193,7 +193,11 @@
     <ResourceCompile Include="CG Project.rc" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="shaders\asteroid3d\ast3dFrag.glsl" />
+    <None Include="shaders\asteroid3d\ast3dVertex.glsl" />
     <None Include="shaders\astroCast\astroFrag.glsl" />
+    <None Include="shaders\astroCast\astroShadowFrag.glsl" />
+    <None Include="shaders\astroCast\astroShadowVert.glsl" />
     <None Include="shaders\astroCast\astroVert.glsl" />
     <None Include="shaders\cast\castFrag.glsl" />
     <None Include="shaders\cast\castVert.glsl" />

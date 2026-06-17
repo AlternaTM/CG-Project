@@ -26,9 +26,12 @@ public:
 
 class FigRenderer {
 public:
-	FigRenderer(Shader& shader);
+
+	FigRenderer(const char* vertexPath, const char* fragmentPath);
 	~FigRenderer();
 
+	FigRenderer(FigRenderer&&) = default;
+	FigRenderer& operator=(FigRenderer&&) = default;
 	
 	void drawRect(
 		const glm::vec2& pos, 
@@ -37,7 +40,7 @@ public:
 		const glm::mat4& view,
 		const glm::vec4& color = glm::vec4(1, 0, 0, 1)
 	);
-	bool init();
+	bool init(const glm::mat4& projection);
 
 	void draw(
 		const Mesh2D& mesh,
@@ -46,7 +49,7 @@ public:
 		const glm::vec4& color = glm::vec4(1, 0, 0, 1)
 	);
 private:
-	Shader& shader;
+	Shader shader;
 	unsigned int m_VAO = 0;
 	unsigned int m_VBO = 0;
 	unsigned int m_EBO = 0;

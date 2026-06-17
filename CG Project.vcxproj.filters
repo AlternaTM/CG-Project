@@ -70,6 +70,9 @@
     <Filter Include="shaders\mageCast">
       <UniqueIdentifier>{39fe5676-302b-46d1-9e49-eda416b567c2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="shaders\aster3d">
+      <UniqueIdentifier>{9ab9a4d9-0317-42db-b681-222754e1166c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\player\player.cpp">
@@ -271,6 +274,18 @@
     </None>
     <None Include="shaders\cast\castVert.glsl">
       <Filter>shaders\mageCast</Filter>
+    </None>
+    <None Include="shaders\astroCast\astroShadowFrag.glsl">
+      <Filter>shaders\astroCast</Filter>
+    </None>
+    <None Include="shaders\astroCast\astroShadowVert.glsl">
+      <Filter>shaders\astroCast</Filter>
+    </None>
+    <None Include="shaders\asteroid3d\ast3dFrag.glsl">
+      <Filter>shaders\aster3d</Filter>
+    </None>
+    <None Include="shaders\asteroid3d\ast3dVertex.glsl">
+      <Filter>shaders\aster3d</Filter>
     </None>
   </ItemGroup>
 </Project>

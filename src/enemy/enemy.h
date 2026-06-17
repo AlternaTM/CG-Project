@@ -145,6 +145,7 @@ class EnemyManager {
 private:
     EnemyManager() {}
     static EnemyManager* _INSTACE;
+    
     std::vector<Enemy *> enemys;
     void drawlife(FigRenderer& figRenderer, Camera& camera,const glm::vec2& pos, const uint8_t life);
 public: 

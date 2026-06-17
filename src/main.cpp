@@ -105,43 +105,9 @@ int main(void)
     spriteShader.setMat4("uProj", projection);
     spriteShader.setInt("uTexture", 0);
 
-    Shader rectShader(
-        "shaders/rect/rectVert.glsl",
-        "shaders/rect/rectFrag.glsl"
-    );
 
-    rectShader.use();
-    rectShader.setMat4("uProj", projection);
 
-    FigRenderer figRectRenderer(rectShader);
-    if (!figRectRenderer.init())
-        return 1;
 
-    Shader castShader(
-        "shaders/cast/castVert.glsl",
-        "shaders/cast/castFrag.glsl"
-    );
-
-    castShader.use();
-    castShader.setMat4("uProj", projection);
-
-    FigRenderer figCastRenderer(castShader);
-    if (!figCastRenderer.init()) {
-        return 1;
-    }
-
-    Shader astroCastShader(
-        "shaders/astroCast/astroVert.glsl",
-        "shaders/astroCast/astroFrag.glsl"
-    );
-
-    astroCastShader.use();
-    astroCastShader.setMat4("uProj", projection);
-
-    FigRenderer figAstroRenderer(astroCastShader);
-    if (!figAstroRenderer.init()) {
-        return 1;
-    }
 
 
     // ========== SETUP 3D ===============
@@ -221,7 +187,6 @@ int main(void)
 
 
 
-
     // ------------------- Player -------------------
 
     Timer timer;
@@ -236,14 +201,13 @@ int main(void)
     Game::init(
         window,
         camera,
+        projection,
         &renderer,
-        &figRectRenderer,
-        &figCastRenderer,
-        &figAstroRenderer,
         &camera3D,
         projection3D,
         {&chest, &chest_lid}
     );
+    srand(time(0));
     Game* game = Game::get_instance();
 
     float lastTime = (float)glfwGetTime();

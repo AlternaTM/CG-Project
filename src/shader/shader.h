@@ -13,6 +13,8 @@ class Shader
 {
 public:
     unsigned int ID;
+
+
     // constructor generates the shader on the fly
     // ------------------------------------------------------------------------
     Shader(const char* vertexPath, const char* fragmentPath)
@@ -70,6 +72,24 @@ public:
         glDeleteShader(fragment);
 
     }
+
+    Shader(const Shader&) = delete;
+    Shader& operator=(const Shader&) = delete;
+
+    Shader(Shader&& other) noexcept : ID(other.ID) {
+        other.ID = 0; 
+    }
+
+    Shader& operator=(Shader&& other) noexcept {
+        if (this != &other) {
+            glDeleteProgram(ID);
+            ID = other.ID;
+            other.ID = 0;
+        }
+        return *this;
+    }
+
+    ~Shader() { glDeleteProgram(ID); }
     // activate the shader
     // ------------------------------------------------------------------------
     void use() const

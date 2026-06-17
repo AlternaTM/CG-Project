@@ -1,9 +1,11 @@
 #include "resourceManager.h"
 #include "../stb/stb_image.h"
 
+
 #include <iostream>
 
 std::map<std::string, SpriteTexture> ResourceManager::Textures;
+
 
 SpriteTexture& ResourceManager::LoadTexture(const std::string& name,
     const char* file) {
@@ -26,6 +28,11 @@ SpriteTexture& ResourceManager::LoadTexture(const std::string& name,
 SpriteTexture& ResourceManager::GetTexture(const std::string& name) {
     return Textures.at(name);
 }
+
+
+
+//============CLEAR
+
 
 void ResourceManager::Clear() {
     for (auto& it : Textures)

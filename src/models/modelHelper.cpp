@@ -4,17 +4,7 @@
 float ModelHelper::getMaxY(ModelRenderer& renderer) {
     float maxY = -FLT_MAX;
 
-    glm::mat4 transform = glm::mat4(1.0f);
-    transform = glm::translate(transform, renderer.getPosition());
-    transform = glm::scale(transform, renderer.getScale());
-
-    
-
-    transform = glm::translate(transform, renderer.getPivot());
-    transform = glm::rotate(transform, glm::radians(renderer.getRotation().x), glm::vec3(1, 0, 0));
-    transform = glm::rotate(transform, glm::radians(renderer.getRotation().y), glm::vec3(0, 1, 0));
-    transform = glm::rotate(transform, glm::radians(renderer.getRotation().z), glm::vec3(0, 0, 1));
-    transform = glm::translate(transform, -renderer.getPivot());
+    glm::mat4 transform = renderer.getModelMatrix();
 
     
     std::vector<Mesh>& meshes = renderer.model->meshes;
@@ -33,16 +23,7 @@ float ModelHelper::getMinY(ModelRenderer& renderer) {
     float minY = FLT_MAX;
 
 
-    glm::mat4 transform = glm::mat4(1.0f);
-    transform = glm::translate(transform, renderer.getPosition());
-    transform = glm::scale(transform, renderer.getScale());
-
-
-    transform = glm::translate(transform, renderer.getPivot());
-    transform = glm::rotate(transform, glm::radians(renderer.getRotation().x), glm::vec3(1, 0, 0));
-    transform = glm::rotate(transform, glm::radians(renderer.getRotation().y), glm::vec3(0, 1, 0));
-    transform = glm::rotate(transform, glm::radians(renderer.getRotation().z), glm::vec3(0, 0, 1));
-    transform = glm::translate(transform, -renderer.getPivot());
+    glm::mat4 transform = renderer.getModelMatrix();
 
 
     std::vector<Mesh>& meshes = renderer.model->meshes;
@@ -61,16 +42,7 @@ float ModelHelper::getMinZ(ModelRenderer& renderer) {
     float minZ = FLT_MAX;
 
 
-    glm::mat4 transform = glm::mat4(1.0f);
-    transform = glm::translate(transform, renderer.getPosition());
-    transform = glm::scale(transform, renderer.getScale());
-
-    
-    transform = glm::translate(transform, renderer.getPivot());
-    transform = glm::rotate(transform, glm::radians(renderer.getRotation().x), glm::vec3(1, 0, 0));
-    transform = glm::rotate(transform, glm::radians(renderer.getRotation().y), glm::vec3(0, 1, 0));
-    transform = glm::rotate(transform, glm::radians(renderer.getRotation().z), glm::vec3(0, 0, 1));
-    transform = glm::translate(transform, -renderer.getPivot());
+    glm::mat4 transform = renderer.getModelMatrix();
 
     std::vector<Mesh>& meshes = renderer.model->meshes;
     for (size_t i = 0; i < meshes.size(); i++) {
@@ -88,16 +60,7 @@ float ModelHelper::getMaxZ(ModelRenderer& renderer) {
     float maxZ = -FLT_MAX;
 
 
-    glm::mat4 transform = glm::mat4(1.0f);
-    transform = glm::translate(transform, renderer.getPosition());
-    transform = glm::scale(transform, renderer.getScale());
-
-
-    transform = glm::translate(transform, renderer.getPivot());
-    transform = glm::rotate(transform, glm::radians(renderer.getRotation().x), glm::vec3(1, 0, 0));
-    transform = glm::rotate(transform, glm::radians(renderer.getRotation().y), glm::vec3(0, 1, 0));
-    transform = glm::rotate(transform, glm::radians(renderer.getRotation().z), glm::vec3(0, 0, 1));
-    transform = glm::translate(transform, -renderer.getPivot());
+    glm::mat4 transform = renderer.getModelMatrix();
 
     std::vector<Mesh>& meshes = renderer.model->meshes;
     for (size_t i = 0; i < meshes.size(); i++) {

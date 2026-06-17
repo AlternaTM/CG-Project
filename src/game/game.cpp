@@ -7,10 +7,6 @@ void InGameState::enter(Game& game) {
 
 }
 void InGameState::update(Game& game, float dt) {
-
-
-
-
 	game.get_player()->update(dt,game.get_window());
 
 	game.get_CastManager()->update(dt);
@@ -44,6 +40,8 @@ void LootingGameState::render3d(Game& game,float dt) {
 		*game.get_chest_part()[1],
 		dt
 	);
+
+	
 }
 
 // ================== GAME MANAGER ==========================
@@ -55,9 +53,6 @@ Game::Game(
 	GLFWwindow* window, 
 	Camera& camera, 
 	SpriteRenderer* renderer, 
-	FigRenderer* figRectRenderer, 
-	FigRenderer* figCastRenderer,
-	FigRenderer* figAstroRenderer,
 	Camera3D* camera3D,
 	const glm::mat4 projection3D,
 	const std::array<ModelRenderer*, 2>& chest_part
@@ -65,13 +60,10 @@ Game::Game(
 	: 
 	player(camera), 
 	castManager(CastManager::get_instance()),
-	figCastRenderer(figCastRenderer),
 	camera(camera),
 	chestManager(2),
 	renderer(renderer),
 	enemyManager(EnemyManager::get_instance()),
-	figRectRenderer(figRectRenderer),
-	figAstroCastRenderer(figAstroRenderer),
 	window(window),
 	camera3D(camera3D),
 	projection3D(projection3D),
@@ -81,12 +73,10 @@ Game::Game(
 }
 
 void Game::init(
-	GLFWwindow* window, 
-	Camera& camera, 
-	SpriteRenderer* renderer, 
-	FigRenderer* figRectRenderer, 
-	FigRenderer* figCastRenderer,
-	FigRenderer* figAstroCastRenderer,
+	GLFWwindow* window,
+	Camera& camera,
+	const glm::mat4& projection,
+	SpriteRenderer* renderer,
 	Camera3D* camera3D,
 	const glm::mat4 projection3D,
 	const std::array<ModelRenderer*, 2>& chest_part
@@ -95,9 +85,6 @@ void Game::init(
 		window,
 		camera,
 		renderer,
-		figRectRenderer,
-		figCastRenderer,
-		figAstroCastRenderer,
 		camera3D,
 		projection3D,
 		chest_part
@@ -106,11 +93,38 @@ void Game::init(
 	
 
 	//game.enemyManager->spawn_enemy(EnemyTipe::Mage, 1);
+	game.init_renderers(projection);
+
+	game.castManager->init(&game.figCastRenderer, &game.figAstroCastRenderer, &game.figAstroShadowCastRenderer, &game.asteroidModelRenderer);
+
 	game.enemyManager->spawn_enemy(EnemyTipe::Skeleton, 10);
 	game.enemyManager->spawn_enemy(EnemyTipe::Astro, 1);
 	EnemyManager::_PLAYER = game.get_player();
 
+	
+
 	_INSTANCE = &game;
+}
+
+
+int Game::init_renderers(const glm::mat4& projection) {
+
+	if (!figRectRenderer.init(projection))
+		return 1;
+
+	if (!figCastRenderer.init(projection)) {
+		return 1;
+	}
+
+	if (!figAstroCastRenderer.init(projection)) {
+		return 1;
+	}
+
+	if (!figAstroShadowCastRenderer.init(projection)) {
+		return 1;
+	}
+
+	return 0;
 }
 
 
@@ -122,7 +136,7 @@ void Game::update(float dt) {
 }
 
 void Game::render2d() {
-	enemyManager->render(*renderer, *figRectRenderer, camera);
+	enemyManager->render(*renderer, figRectRenderer, camera);
 
 	chestManager.render(*renderer, camera);
 
@@ -136,7 +150,7 @@ void Game::render2d() {
 		player.get_frame_size()
 	);
 
-	castManager->render(*figCastRenderer, *figAstroCastRenderer, camera);
+	castManager->render(camera);
 
 	(*renderer).Draw(
 		ResourceManager::GetTexture("arrow"),
@@ -145,10 +159,13 @@ void Game::render2d() {
 		player.aimRotation,
 		camera.getViewMatrix()
 	);
+
+	
 }
 
 void Game::render3d(float dt) {
 	game_state->render3d(*this,dt);
+	castManager->render_asteroi3d(*camera3D,camera.getCameraPosition(),  projection3D);
 }
 
 void Game::switch_state(GameStateType state) {

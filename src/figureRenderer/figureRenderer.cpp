@@ -1,7 +1,7 @@
 ﻿#include "figureRenderer.h"
 #include <GLFW/glfw3.h>
 
-FigRenderer::FigRenderer(Shader& shader):shader(shader) {
+FigRenderer::FigRenderer(const char* vertexPath, const char* fragmentPath):shader(vertexPath, fragmentPath) {
 	
 }
 
@@ -11,7 +11,11 @@ FigRenderer::~FigRenderer() {
     if (m_EBO) glDeleteBuffers(1, &m_EBO);
 }
 
-bool FigRenderer::init() {
+bool FigRenderer::init(const glm::mat4& projection) {
+    shader.use();
+    shader.setMat4("uProj", projection);
+
+
     const float vertices[] = {
         0.0f, 0.0f,   
         1.0f, 0.0f,   

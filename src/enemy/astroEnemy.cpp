@@ -1,7 +1,7 @@
 #include "astroEnemy.h"
 
 
-#include "mageBullet/mageCast.h"
+
 #include <glm/gtc/matrix_transform.hpp>
 
 // ============ RangedAttackState
@@ -9,34 +9,93 @@
 void AstroAttackState::enter(Enemy& e) {
     owner = &e;
     reset_anim();
-    AstroEnemy* me = dynamic_cast<AstroEnemy*>(&e);
-    if (me->saved_target.x < e.get_pos()->x) {
+    AstroEnemy* em = dynamic_cast<AstroEnemy*>(&e);
+    if (em->saved_target.x < e.get_pos()->x) {
         flipped = true;
     }
     else {
         flipped = false;
     }
 
+    glm::vec2 start = glm::vec2(em->saved_target.x, em->saved_target.y);
+    glm::vec2 size = glm::vec2(3.0f, 2.2f);
 
 
+    glm::mat4 model = glm::mat4(1.0f);
+    model = glm::translate(model, glm::vec3(start, 0.0f));
+    //model = glm::rotate(model, angle, glm::vec3(0.0f, 0.0f, 1.0f));
+    model = glm::scale(model, glm::vec3(size.x, size.y, 1.0f));
+
+
+    em->spawn_cast(
+        model,
+        AstroShadowCast,
+        glm::vec4(0.0f, 0.0f, 0.0f, 0.4f)
+    );
+
+    // ASTEROIDE 3D 
+
+    em->spawn_asteroid();
+
+    Asteroid* asteroid = em->get_asteroid();
+    if (asteroid == nullptr) {
+        std::cerr << "Internal logic error on ASTERSPAWN3344" << std::endl;
+        return;
+    }
+
+    asteroid->get_pos()->z = -3.0f;
+    asteroid->get_pos()->x = em->saved_target.x;
+    asteroid->get_pos()->y = em->saved_target.y;
+
+
+    asteroid->set_scale(glm::vec3(0.2f));
+
+
+    asteroid->rotation_speed = glm::vec3(
+        25.0f + (rand() / (float)RAND_MAX) * (90.0f - 25.0f),
+        25.0f + (rand() / (float)RAND_MAX) * (90.0f - 25.0f),
+        25.0f + (rand() / (float)RAND_MAX) * (90.0f - 25.0f)
+    );
 
 }
 
 void AstroAttackState::update(Enemy& e, float dt) {
     AstroEnemy* me = dynamic_cast<AstroEnemy*>(&e);
+    elapsed += dt;
+    if (elapsed > 4.0f) {
+        elapsed = 0.0f;
+        me->on_target_out_of_range();
+    }
+
+
+    Asteroid* asteroid = me->get_asteroid();
+    if (asteroid == nullptr) {
+        std::cerr << "Internal logic error on ASTERSPAWN3345" << std::endl;
+        return;
+    }
+
+    float t = glm::clamp(elapsed / 4.0f, 0.0f, 1.0f);
+    float perc = glm::mix(me->saved_target.y + 8.0f, me->saved_target.y - 0.5f, t);
+
+    asteroid->set_rotation(asteroid->get_rotation() + asteroid->rotation_speed * dt);
+    asteroid->get_pos()->y = perc;
+
+
+
     update_anim(dt);
 }
 
 void AstroAttackState::exit(Enemy& e) {
     AstroEnemy* me = dynamic_cast<AstroEnemy*>(&e);
     me->remove_cast();
+    me->remove_asteroid();
     owner = nullptr;
 }
 
 
 void AstroAttackState::on_animation_end() {
-    if (owner)
-        owner->on_target_out_of_range();
+    //if (owner)
+    //    owner->on_target_out_of_range();
 }
 
 
@@ -53,7 +112,7 @@ void AstroPreAttackState::enter(Enemy& e) {
 
 
     glm::vec2 start = glm::vec2(em->saved_target.x, em->saved_target.y);
-    glm::vec2 size = glm::vec2(3.0f, 3.0f);
+    glm::vec2 size = glm::vec2(3.0f, 2.2f);
 
 
     glm::mat4 model = glm::mat4(1.0f);
@@ -61,10 +120,10 @@ void AstroPreAttackState::enter(Enemy& e) {
     //model = glm::rotate(model, angle, glm::vec3(0.0f, 0.0f, 1.0f));
     model = glm::scale(model, glm::vec3(size.x, size.y, 1.0f));
 
-    std::cout << "spawn" << std::endl;
 
     em->spawn_cast(
         model,
+        CASTTYPE::AstroCast,
         glm::vec4(1.0f, 0.0f, 0.0f, 0.3f)
     );
 
@@ -74,6 +133,11 @@ void AstroPreAttackState::exit(Enemy& e) {
     AstroEnemy* em = dynamic_cast<AstroEnemy*>(&e);
     em->remove_cast();
 }
+
+
+// ========================
+
+
 
 
 // ====================================
@@ -119,7 +183,7 @@ void AstroEnemy::on_target_out_of_range() { change_state(&waitingForEnemy); }
 
 
 
-void AstroEnemy::spawn_cast(glm::mat4 model, const glm::vec4& color) {
+void AstroEnemy::spawn_cast(glm::mat4 model, const CASTTYPE type, const glm::vec4& color) {
 
     remove_cast();
 
@@ -134,7 +198,7 @@ void AstroEnemy::spawn_cast(glm::mat4 model, const glm::vec4& color) {
     mesh.create(vertices, indices);
 
 
-    cast = new Cast(mesh, model, CASTTYPE::AstroCast, color);
+    cast = new Cast(mesh, model, type, color);
 
     CastManager::get_instance()->add(cast);
 }
@@ -145,4 +209,22 @@ void AstroEnemy::remove_cast() {
 
     delete cast;
     cast = nullptr;
+}
+
+void AstroEnemy::remove_asteroid() {
+    CastManager::get_instance()->remove_aster(asteroid);
+    delete asteroid;
+    asteroid = nullptr;
+
+}
+
+
+void AstroEnemy::spawn_asteroid() {
+    remove_asteroid();
+    asteroid = new Asteroid();
+    CastManager::get_instance()->add_aster(asteroid);
+}
+
+Asteroid* AstroEnemy::get_asteroid() {
+    return asteroid;
 }

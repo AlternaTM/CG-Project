@@ -4,7 +4,7 @@
 #include "../figureRenderer/figureRenderer.h"
 #include "../spriteRenderer/spriteRenderer.h"
 #include "../chest/chest.h"
-#include "../modelRenderer/modelRenderer.h"
+#include "modelRenderer/modelRenderer.h"
 #include <glm/glm.hpp>
 #include <array>
 class Game;
@@ -79,9 +79,12 @@ private:
 	ChestManager chestManager;
 
 	//TOOL
-	FigRenderer* figRectRenderer;
-	FigRenderer* figCastRenderer;
-	FigRenderer* figAstroCastRenderer;
+	FigRenderer figRectRenderer = FigRenderer("shaders/rect/rectVert.glsl","shaders/rect/rectFrag.glsl");
+	FigRenderer figCastRenderer = FigRenderer("shaders/cast/castVert.glsl", "shaders/cast/castFrag.glsl");
+	FigRenderer figAstroCastRenderer = FigRenderer("shaders/astroCast/astroVert.glsl","shaders/astroCast/astroFrag.glsl");
+	FigRenderer figAstroShadowCastRenderer = FigRenderer("shaders/astroCast/astroShadowVert.glsl", "shaders/astroCast/astroShadowFrag.glsl");;
+	ModelRenderer asteroidModelRenderer = ModelRenderer("assets/models/astro/asteroid.obj", "shaders/asteroid3d/ast3dVertex.glsl", "shaders/asteroid3d/ast3dFrag.glsl");
+
 	SpriteRenderer* renderer;
 	EnemyManager* enemyManager;
 
@@ -91,27 +94,25 @@ private:
 		GLFWwindow* window,
 		Camera& camera,
 		SpriteRenderer* renderer,
-		FigRenderer* figRectRenderer,
-		FigRenderer* figCastRenderer,
-		FigRenderer* figAstroCastRenderer,
 		Camera3D* camera3D,
 		const glm::mat4 projection3D,
 		const std::array<ModelRenderer*, 2>& chest_part
 	);
+
+	int init_renderers(const glm::mat4& projection);
 public: 
 	
 	static void init(
 		GLFWwindow* window, 
 		Camera& camera, 
+		const glm::mat4& projection,
 		SpriteRenderer* renderer, 
-		FigRenderer* figRectRenderer, 
-		FigRenderer* figCastRenderer,
-		FigRenderer* figAstroCastRenderer,
 		Camera3D* camera3D,
 		const glm::mat4 projection3D,
 		const std::array<ModelRenderer*, 2>& chest_part
 	);
 	void switch_state(GameStateType new_state);
+
 
 	void update(float dt);
 
