@@ -3,14 +3,15 @@
 #include <GLFW/glfw3.h>
 #include "modelRenderer/modelRenderer.h"
 #include <glm/gtc/quaternion.hpp>
+#include <algorithm>
 //cats
 
 void Cast::update(float dt) {
 
 }
-void Cast::render(FigRenderer& figRenderer,const glm::mat4& view) {
+void Cast::render(FigRenderer& figRenderer,const glm::mat4& view, const float uTime) {
 
-	figRenderer.draw(mesh, model, view, base_color);
+	figRenderer.draw(mesh, model, view, base_color, uTime);
 }
 
 void Cast::update_model(glm::mat4 model) {
@@ -74,13 +75,13 @@ void CastManager::render(Camera& camera) {
 		
 		switch (c->get_type()) {
 			case CASTTYPE::MageCast:
-				c->render(*castRenderer, camera.getViewMatrix());
+				c->render(*castRenderer, camera.getViewMatrix(), (float)glfwGetTime());
 				break;
 			case CASTTYPE::AstroCast:
-				c->render(*astroRenderer, camera.getViewMatrix());
+				c->render(*astroRenderer, camera.getViewMatrix(),  (float)glfwGetTime());
 				break;
 			case CASTTYPE::AstroShadowCast:
-				c->render(*astroShadowRenderer, camera.getViewMatrix());
+				c->render(*astroShadowRenderer, camera.getViewMatrix(), ( (float)glfwGetTime() - c->startTime) / 4.0f );
 				break;
 		}
 		

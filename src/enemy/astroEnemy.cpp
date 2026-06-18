@@ -1,8 +1,9 @@
 #include "astroEnemy.h"
-
+#include <GLFW/glfw3.h>
 
 
 #include <glm/gtc/matrix_transform.hpp>
+#include <random>
 
 // ============ RangedAttackState
 
@@ -36,26 +37,53 @@ void AstroAttackState::enter(Enemy& e) {
     // ASTEROIDE 3D 
 
     em->spawn_asteroid();
+    em->spawn_asteroid();
+    em->spawn_asteroid();
+    em->spawn_asteroid();
+    em->spawn_asteroid();
 
-    Asteroid* asteroid = em->get_asteroid();
-    if (asteroid == nullptr) {
-        std::cerr << "Internal logic error on ASTERSPAWN3344" << std::endl;
-        return;
+    std::vector<Asteroid*> asteroids = em->get_asteroid();
+    static std::mt19937 rng(std::random_device{}());
+
+    std::uniform_real_distribution<float> distX(-1.8f, 1.8f);
+    std::uniform_real_distribution<float> distY(-2.0f, 2.0f);
+    std::uniform_real_distribution<float> distS(0.1f, 0.25f);
+    std::uniform_real_distribution<float> distR(25.0f, 90.0f);
+
+    std::uniform_real_distribution<float> distAbs(0.5f, 1.0f);
+    std::bernoulli_distribution distSign(0.5);
+
+    bool flag = true; 
+    for (Asteroid* asteroid : asteroids) {
+        asteroid->get_pos()->z = -3.0f;
+        
+        if (flag) {
+            asteroid->get_pos()->x = em->saved_target.x;
+            asteroid->get_pos()->y = em->saved_target.y;
+            asteroid->set_scale(glm::vec3(0.55f));
+            flag = false;
+        }
+        else {
+
+            float randomx = distX(rng);
+            float randomy = distY(rng);
+            float randoms = distS(rng);
+            float val = distAbs(rng);
+            if (distSign(rng)) val = -val;
+
+
+            asteroid->get_pos()->x = em->saved_target.x + randomx;
+            asteroid->get_pos()->y = em->saved_target.y + randomy;
+            
+            asteroid->set_scale(glm::vec3(randoms));
+        }
+
+        asteroid->rotation_speed = glm::vec3(
+            distR(rng),
+            distR(rng),
+            distR(rng)
+        );
     }
-
-    asteroid->get_pos()->z = -3.0f;
-    asteroid->get_pos()->x = em->saved_target.x;
-    asteroid->get_pos()->y = em->saved_target.y;
-
-
-    asteroid->set_scale(glm::vec3(0.2f));
-
-
-    asteroid->rotation_speed = glm::vec3(
-        25.0f + (rand() / (float)RAND_MAX) * (90.0f - 25.0f),
-        25.0f + (rand() / (float)RAND_MAX) * (90.0f - 25.0f),
-        25.0f + (rand() / (float)RAND_MAX) * (90.0f - 25.0f)
-    );
 
 }
 
@@ -68,18 +96,17 @@ void AstroAttackState::update(Enemy& e, float dt) {
     }
 
 
-    Asteroid* asteroid = me->get_asteroid();
-    if (asteroid == nullptr) {
-        std::cerr << "Internal logic error on ASTERSPAWN3345" << std::endl;
-        return;
-    }
+    std::vector<Asteroid*> asteroids = me->get_asteroid();
+
 
     float t = glm::clamp(elapsed / 4.0f, 0.0f, 1.0f);
     float perc = glm::mix(me->saved_target.y + 8.0f, me->saved_target.y - 0.5f, t);
 
-    asteroid->set_rotation(asteroid->get_rotation() + asteroid->rotation_speed * dt);
-    asteroid->get_pos()->y = perc;
+    for (Asteroid* a : asteroids) {
+        a->set_rotation(a->get_rotation() + a->rotation_speed * dt);
+        a->get_pos()->y = perc;
 
+    }
 
 
     update_anim(dt);
@@ -143,33 +170,34 @@ void AstroPreAttackState::exit(Enemy& e) {
 // ====================================
 
 AstroEnemy::AstroEnemy()
-    :preAttackState(2.0f, &attackState), waitingForEnemy(1.0f, &preAttackState), cast(nullptr)
+    :preAttackState(2.0f, &attackState), waitingForEnemy(10.0f, &preAttackState), cast(nullptr), Enemy(EnemyTipe::Astro)
 {
     init_states();
+    size = glm::vec2(0.7f,0.7f);
     life = 255;
 }
 
 void AstroEnemy::init_states() {
-    attackState.tot_framex = 8;
-    attackState.tot_rows = 4;
-    attackState.frame_duration = 0.15f;
-    attackState.y_offset = 2;
-    attackState.max_frame = 8;
+    attackState.tot_framex = 6;
+    attackState.tot_rows = 1;
+    attackState.frame_duration = 0.40f;
+    attackState.y_offset = 0;
+    attackState.max_frame = 2;
 
 
-    preAttackState.tot_framex = 8;
-    preAttackState.tot_rows = 4;
-    preAttackState.frame_duration = 0.15f;
-    preAttackState.y_offset = 3;
-    preAttackState.max_frame = 8;
-    preAttackState.follow_player_dir_at_start = true;
+    preAttackState.tot_framex = 6;
+    preAttackState.tot_rows = 1;
+    preAttackState.frame_duration = 0.33f;
+    preAttackState.y_offset = 0;
+    preAttackState.max_frame = 6;
+    preAttackState.follow_player_dir_at_start = false;
 
 
-    waitingForEnemy.tot_framex = 8;
-    waitingForEnemy.tot_rows = 4;
-    waitingForEnemy.frame_duration = 0.15f;
-    waitingForEnemy.y_offset = 3;
-    waitingForEnemy.max_frame = 8;
+    waitingForEnemy.tot_framex = 6;
+    waitingForEnemy.tot_rows = 1;
+    waitingForEnemy.frame_duration = 10.0f;
+    waitingForEnemy.y_offset = 0;
+    waitingForEnemy.max_frame = 1;
     waitingForEnemy.follow_player_dir_at_start = true;
 
     currentState = &waitingForEnemy;
@@ -199,6 +227,7 @@ void AstroEnemy::spawn_cast(glm::mat4 model, const CASTTYPE type, const glm::vec
 
 
     cast = new Cast(mesh, model, type, color);
+    cast->startTime = (float)glfwGetTime();
 
     CastManager::get_instance()->add(cast);
 }
@@ -212,19 +241,26 @@ void AstroEnemy::remove_cast() {
 }
 
 void AstroEnemy::remove_asteroid() {
-    CastManager::get_instance()->remove_aster(asteroid);
-    delete asteroid;
-    asteroid = nullptr;
+    for (Asteroid* a : asteroids) {
+        if (a != nullptr) {
+            CastManager::get_instance()->remove_aster(a);
+        } 
+        delete a;
 
+    }
+    asteroids.clear();
 }
 
 
-void AstroEnemy::spawn_asteroid() {
-    remove_asteroid();
-    asteroid = new Asteroid();
+Asteroid* AstroEnemy::spawn_asteroid() {
+    Asteroid* asteroid = new Asteroid();
+    asteroids.push_back(asteroid);
     CastManager::get_instance()->add_aster(asteroid);
-}
-
-Asteroid* AstroEnemy::get_asteroid() {
     return asteroid;
 }
+
+
+const std::vector<Asteroid*>& AstroEnemy::get_asteroid() {
+    return asteroids;
+}
+

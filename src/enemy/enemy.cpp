@@ -118,7 +118,7 @@ void WaitingState::update(Enemy& e, float dt) {
 //  ============= ENEMY ==================================
 
 
-Enemy::Enemy() {
+Enemy::Enemy(EnemyTipe type):type(type) {
     static uint32_t count = 0;
     ID = count++;
 
@@ -192,7 +192,19 @@ void EnemyManager::spawn_enemy(EnemyTipe type, int n) {
             enemys.push_back(e);
 
     }
-        
+
+    auto priority = [](EnemyTipe type) -> int {
+        switch (type) {
+        case Astro:    return 0;
+        case Skeleton: return 1;
+        case Mage:     return 2;
+        default:       return 99;
+        }
+    };
+
+    std::sort(enemys.begin(), enemys.end(), [&priority](Enemy* a, Enemy* b) {
+        return priority(a->type) < priority(b->type);
+    });
 }
 
 void EnemyManager::remove_enemy(uint32_t ID) {
@@ -257,6 +269,8 @@ void EnemyManager::update(Player& player, float delta) {
     for (Enemy* e : enemys) {
         e->update(delta);
     }
+
+
 }
 
 

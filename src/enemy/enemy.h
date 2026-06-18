@@ -110,9 +110,10 @@ protected:
     EnemyState* currentState = nullptr;
 
     uint8_t life = 255;
+    
 public:
     uint32_t ID;
-
+    EnemyTipe type;
     virtual float       get_attack_distance() const = 0;
     virtual uint8_t     get_base_damage()     const = 0;
     virtual std::string get_texture_name()    const = 0;
@@ -120,7 +121,7 @@ public:
     virtual void change_state(EnemyState* new_state);
 
 
-    Enemy();
+    Enemy(EnemyTipe type);
 
     void make_damage(uint8_t damage);
     void update(float dt);

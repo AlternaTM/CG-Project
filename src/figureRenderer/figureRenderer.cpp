@@ -1,5 +1,5 @@
 ﻿#include "figureRenderer.h"
-#include <GLFW/glfw3.h>
+
 
 FigRenderer::FigRenderer(const char* vertexPath, const char* fragmentPath):shader(vertexPath, fragmentPath) {
 	
@@ -70,14 +70,15 @@ void FigRenderer::draw(
     const Mesh2D& mesh,
     const glm::mat4& transform,
     const glm::mat4& view,
-    const glm::vec4& color
+    const glm::vec4& color,
+    const float uTime
 ) {
     shader.use();
     shader.setMat4("uTransform", transform);
     shader.setMat4("uView", view);
 
     shader.setVec4("uColor", color);
-    shader.setFloat("uTime", (float)glfwGetTime());
+    shader.setFloat("uTime", uTime);
 
 
     glBindVertexArray(mesh.vao);

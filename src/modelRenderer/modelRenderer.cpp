@@ -56,7 +56,7 @@ void ModelRenderer::render(const glm::mat4& view, const glm::mat4& projection, c
     shader->setMat4("model", modelMat);
     shader->setMat4("view", view);
     shader->setMat4("projection", projection);
-    //shader->setInt("texture_diffuse1", 0);
+    shader->setInt("texture_diffuse1", 0);
 
     model->Draw(*shader);
 }

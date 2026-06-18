@@ -53,7 +53,7 @@ public:
         // bind appropriate textures
         unsigned int diffuseNr = 1;
         unsigned int specularNr = 1;
-
+        // std::cout << "Textures count: " << textures.size() << std::endl;
         for (unsigned int i = 0; i < textures.size(); i++)
         {
             glActiveTexture(GL_TEXTURE0 + i);

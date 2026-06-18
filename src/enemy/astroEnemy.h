@@ -40,6 +40,7 @@ public:
     }
     void enter(Enemy& e)    override;
     void exit(Enemy& e)     override;
+
 };
 
 
@@ -52,26 +53,25 @@ private:
     AstroPreAttackState preAttackState;
     WaitingState waitingForEnemy;
     Cast* cast;
-    Asteroid* asteroid = nullptr;
+    std::vector<Asteroid*> asteroids;
 public:
     AstroEnemy();
     ~AstroEnemy() {
         remove_cast();
-        delete asteroid;
-        asteroid = nullptr;
+        remove_asteroid();
     }
     glm::vec2 saved_target;
     float       get_attack_distance() const override { return 3.5f; }
     uint8_t     get_base_damage()     const override { return 50; }
-    std::string get_texture_name()    const override { return "mago"; }
+    std::string get_texture_name()    const override { return "cannon"; }
     void        init_states()               override;
     void        on_target_in_range()        override;
     void        on_target_out_of_range()    override;
 
 
     void spawn_cast(glm::mat4 model,const CASTTYPE type = CASTTYPE::AstroCast ,const glm::vec4& color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
-    void spawn_asteroid();
-    Asteroid* get_asteroid();
+    Asteroid* spawn_asteroid();
+    const std::vector<Asteroid*>& get_asteroid();
     void remove_cast();
     void remove_asteroid();
 

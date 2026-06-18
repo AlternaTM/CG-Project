@@ -15,10 +15,10 @@ void main()
 {
 
 
-    vec3 ambient = vec3(0.3, 0.3, 0.3);
+    vec3 ambient = vec3(0.8, 0.8, 0.8);
     vec3 result = ambient * texture(texture_diffuse1, TexCoords).rgb;
 
-    //FragColor = vec4(result, 1.0);
+    FragColor = vec4(result, 1.0);
     //FragColor = vec4(norm * 0.5 + 0.5, 1.0); 
-   FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+   //FragColor = vec4(1.0, 0.0, 0.0, 1.0);
 }

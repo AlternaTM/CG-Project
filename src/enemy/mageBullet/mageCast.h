@@ -21,14 +21,15 @@ private:
 	glm::mat4 model;
 	glm::vec4 base_color;
 	CASTTYPE type;
+	
 public:
-
+	float startTime = 0;
 	Cast(Mesh2D mesh,glm::mat4 model,CASTTYPE type, const glm::vec4& base_color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f))
 		:mesh(mesh), model(model), base_color(base_color), type(type){
 	};
 	~Cast();
 	void update(float dt);
-	void render(FigRenderer& figRenderer,const glm::mat4& view);
+	void render(FigRenderer& figRenderer,const glm::mat4& view, const float uTime );
 	void update_model(glm::mat4 model);
 	CASTTYPE get_type() {
 		return type;

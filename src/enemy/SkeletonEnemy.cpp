@@ -2,7 +2,7 @@
 
 
 
-SkeletonEnemy::SkeletonEnemy() {
+SkeletonEnemy::SkeletonEnemy():Enemy(EnemyTipe::Skeleton) {
 	init_states();
 	life = 255;
 }

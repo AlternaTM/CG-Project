@@ -137,6 +137,14 @@ private:
 
         // process materials
         aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+
+
+        std::cout << "Material: " << material->GetName().C_Str() << std::endl;
+        std::cout << "  DIFFUSE count:  " << material->GetTextureCount(aiTextureType_DIFFUSE) << std::endl;
+        std::cout << "  SPECULAR count: " << material->GetTextureCount(aiTextureType_SPECULAR) << std::endl;
+        std::cout << "  BASE_C count: " << material->GetTextureCount(aiTextureType_BASE_COLOR) << std::endl;
+        std::cout << "  NON CONOSCIUTE count:  " << material->GetTextureCount(aiTextureType_UNKNOWN) << std::endl;
+
         // we assume a convention for sampler names in the shaders. Each diffuse texture should be named
         // as 'texture_diffuseN' where N is a sequential number ranging from 1 to MAX_SAMPLER_NUMBER. 
         // Same applies to other texture as the following list summarizes:

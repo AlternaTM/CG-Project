@@ -170,7 +170,7 @@ void PreAttackState::exit(Enemy& e) {
 // ====================================
 
 MageEnemy::MageEnemy() 
-    :preAttackState(2.0f,&attackState), endAttackDelay(1.0f, &movingState), cast(nullptr)
+    :preAttackState(2.0f,&attackState), endAttackDelay(1.0f, &movingState), cast(nullptr), Enemy(EnemyTipe::Mage)
 {
     init_states();
     life = 255;

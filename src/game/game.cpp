@@ -136,9 +136,9 @@ void Game::update(float dt) {
 }
 
 void Game::render2d() {
-	enemyManager->render(*renderer, figRectRenderer, camera);
 
 	chestManager.render(*renderer, camera);
+	enemyManager->render(*renderer, figRectRenderer, camera);
 
 	(*renderer).Draw(
 		ResourceManager::GetTexture("player"),
@@ -164,8 +164,9 @@ void Game::render2d() {
 }
 
 void Game::render3d(float dt) {
+	castManager->render_asteroi3d(*camera3D, camera.getCameraPosition(), projection3D);
 	game_state->render3d(*this,dt);
-	castManager->render_asteroi3d(*camera3D,camera.getCameraPosition(),  projection3D);
+	
 }
 
 void Game::switch_state(GameStateType state) {

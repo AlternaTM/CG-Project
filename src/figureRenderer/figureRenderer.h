@@ -3,6 +3,7 @@
 #include "shader/shader.h"
 #include <glm/glm.hpp>
 #include <vector>
+#include <GLFW/glfw3.h>
 
 struct Vertex2D {
 	glm::vec2 pos;
@@ -46,7 +47,8 @@ public:
 		const Mesh2D& mesh,
 		const glm::mat4& transform,
 		const glm::mat4& view,
-		const glm::vec4& color = glm::vec4(1, 0, 0, 1)
+		const glm::vec4& color = glm::vec4(1, 0, 0, 1),
+		const float uTime = (float)glfwGetTime()
 	);
 private:
 	Shader shader;

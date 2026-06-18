@@ -14,7 +14,9 @@ void main()
     float dist = length(centered);
 
 
-    float core = 0.35;
+    float progrss = clamp(uTime,0.0,1.0);
+
+    float core =  mix(0.4, 0.20, progrss);
     float glow = 0.15;
     float alpha = 1.0 - smoothstep(core, core + glow, dist);
 
