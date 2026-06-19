@@ -23,4 +23,7 @@ public:
 	static bool move(GLFWwindow* window, Player& pl, float speed, float dt);
 	static void interact(GLFWwindow* window, Player& pl);
 	static void updateMouse(GLFWwindow* window, glm::vec2 cameraPos, glm::vec3 playerPos, glm::vec3& aimPos, float& aimRotation);
+
+
+	static bool isMouseKeyPressed(GLFWwindow* window, int l);
 };

@@ -73,6 +73,9 @@
     <Filter Include="shaders\aster3d">
       <UniqueIdentifier>{9ab9a4d9-0317-42db-b681-222754e1166c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="File di origine\player\shooting">
+      <UniqueIdentifier>{ea2deb01-5564-4c50-bd13-fd30b8e8866f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\player\player.cpp">
@@ -146,6 +149,9 @@
     </ClCompile>
     <ClCompile Include="src\enemy\astroEnemy.cpp">
       <Filter>File di origine\enemy\astro</Filter>
+    </ClCompile>
+    <ClCompile Include="src\player\shooting\bullet.cpp">
+      <Filter>File di origine\player\shooting</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -247,6 +253,9 @@
     </ClInclude>
     <ClInclude Include="src\enemy\astroEnemy.h">
       <Filter>File di origine\enemy\astro</Filter>
+    </ClInclude>
+    <ClInclude Include="src\player\shooting\bullet.h">
+      <Filter>File di origine\player\shooting</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

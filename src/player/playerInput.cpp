@@ -11,6 +11,7 @@ std::unordered_map<int, bool> PlayerInput::wasPressed = {};
 
 void PlayerInput::register_input(int l) {
     wasPressed.insert({ l, false });
+
 }
 bool PlayerInput::isPressed(GLFWwindow* window, int l) {
     return glfwGetKey(window, l);
@@ -79,4 +80,9 @@ void PlayerInput::updateMouse(GLFWwindow* window, glm::vec2 cameraPos, glm::vec3
 
 void PlayerInput::interact(GLFWwindow* window,Player& pl) {
 
+}
+
+
+bool PlayerInput::isMouseKeyPressed(GLFWwindow* window, int l) {
+    return glfwGetMouseButton(window, l) == GLFW_PRESS;
 }

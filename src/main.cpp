@@ -143,6 +143,7 @@ int main(void)
     ResourceManager::LoadTexture("skeleton", "assets/textures/skelSheet.png");
     ResourceManager::LoadTexture("mago", "assets/textures/magoSheet.png");
     ResourceManager::LoadTexture("cannon", "assets/textures/cannon.png");
+    ResourceManager::LoadTexture("bullet", "assets/textures/proiettile_base.png");
 
     // Avvio motore audio
     irrklang::ISoundEngine* engine = irrklang::createIrrKlangDevice();

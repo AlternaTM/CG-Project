@@ -7,6 +7,8 @@
 #include "modelRenderer/modelRenderer.h"
 #include <glm/glm.hpp>
 #include <array>
+#include "../player/shooting/bullet.h"
+
 class Game;
 class CastManager;
 // ================== GAME STATE ==========================
@@ -77,6 +79,7 @@ private:
 	//EnemyManager* enemyManager;
 	CastManager* castManager;
 	ChestManager chestManager;
+	BulletManager* bulletManager = nullptr;
 
 	//TOOL
 	FigRenderer figRectRenderer = FigRenderer("shaders/rect/rectVert.glsl","shaders/rect/rectFrag.glsl");
@@ -123,6 +126,7 @@ public:
 	GLFWwindow* get_window();
 	CastManager* get_CastManager();
 	EnemyManager* get_enemyManager();
+	BulletManager* get_bulletManager();
 
 	Camera3D* get_camera3D();
 	const glm::mat4 get_projection3D();

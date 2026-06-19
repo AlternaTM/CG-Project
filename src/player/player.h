@@ -65,14 +65,14 @@ public:
 };
 
 class Player : Renderable, public Entity  {
-
 public:
     State state;
     float speed;
     Camera& camera;
     glm::vec3 aimPosition;
     float aimRotation;
-
+    float shoot_delay = 0.2f;
+    float shoot_timer = shoot_delay;
     Player(Camera& camera);
 
     bool moved = false;
@@ -80,6 +80,9 @@ public:
     void update(float dt, GLFWwindow* window);
     void set_state(PlayerState* state);
     PlayerState* currentState;
+
+    void shoot(float dt);
+    
 
     glm::vec2 get_offset() override;
     glm::vec2 get_frame_size() override;

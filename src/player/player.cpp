@@ -1,6 +1,6 @@
 #include "player.h"
 #include "playerInput.h"
-
+#include "shooting/bullet.h"
 
 
 PlayingState* PlayingState::instance() {
@@ -17,6 +17,13 @@ void PlayingState::update(Player& player, float dt, GLFWwindow* window) {
     
     if(moved)
         update_anim(dt);
+
+    if (player.shoot_timer > 0.0f) {
+        player.shoot_timer -= dt;
+    }
+    if (PlayerInput::isMouseKeyPressed(window, GLFW_MOUSE_BUTTON_LEFT)) {
+        player.shoot(dt);
+    }
 }
 
 glm::vec2 PlayingState::get_offset() {
@@ -83,4 +90,16 @@ void Player::hit(uint8_t damage) {
     currentState->hit(&life,damage);
 }
 
+void Player::shoot(float dt) {
 
+    if (shoot_timer > 0.0f) {
+        return;
+    }
+    shoot_timer = shoot_delay;
+
+    glm::vec3 bulletDirection = glm::vec3(std::cos(aimRotation), std::sin(aimRotation), 0.0f);
+
+    Bullet* bullet = new Bullet(bulletDirection,50,1.0f);
+    bullet->set_position(pos);
+    BulletManager::add_bullet(bullet);
+}

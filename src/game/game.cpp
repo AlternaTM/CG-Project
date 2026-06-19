@@ -11,6 +11,7 @@ void InGameState::update(Game& game, float dt) {
 
 	game.get_CastManager()->update(dt);
 	game.get_enemyManager()->update(*game.get_player(), dt);
+	game.get_bulletManager()->update(dt);
 
 }
 void InGameState::exit(Game& game) {
@@ -92,7 +93,8 @@ void Game::init(
 
 	
 
-	//game.enemyManager->spawn_enemy(EnemyTipe::Mage, 1);
+	//game.enemyManager->spawn_enemy(EnemyTipe::Mage, 1);+
+	game.bulletManager = BulletManager::get_instance();
 	game.init_renderers(projection);
 
 	game.castManager->init(&game.figCastRenderer, &game.figAstroCastRenderer, &game.figAstroShadowCastRenderer, &game.asteroidModelRenderer);
@@ -152,6 +154,8 @@ void Game::render2d() {
 
 	castManager->render(camera);
 
+	bulletManager->render(*renderer, camera);
+
 	(*renderer).Draw(
 		ResourceManager::GetTexture("arrow"),
 		player.aimPosition,
@@ -201,6 +205,9 @@ CastManager* Game::get_CastManager() {
 }
 EnemyManager* Game::get_enemyManager() {
 	return enemyManager;
+}
+BulletManager* Game::get_bulletManager() {
+	return bulletManager;
 }
 
 
