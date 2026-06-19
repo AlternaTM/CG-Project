@@ -60,7 +60,6 @@ void BulletManager::update(float dt) {
 
 		for (Enemy* e : EnemyManager::get_instance()->get_enemys()) {
 			if (CollisionChecker::check_collision(*e, *bullet)) {
-				std::cout << "Collision" << std::endl;
 				bullet->hit += 1;
 				e->make_damage(bullet->damage);
 			}
@@ -72,7 +71,6 @@ void BulletManager::update(float dt) {
 				bool toRemove = b->hit >= b->max_hit;
 				if (toRemove) {
 					delete b;
-					std::cout << "ELIMINATO" << std::endl;
 				};
 				return toRemove;
 			}),

@@ -109,7 +109,7 @@ class Enemy : public Renderable, public Entity {
 protected:
     EnemyState* currentState = nullptr;
 
-    uint8_t life = 255;
+    int16_t life = 255;
     
 public:
     uint32_t ID;

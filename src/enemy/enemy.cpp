@@ -270,7 +270,12 @@ void EnemyManager::update(Player& player, float delta) {
         e->update(delta);
     }
 
-
+    enemys.erase(
+        std::remove_if(enemys.begin(),enemys.end(), [](Enemy* m){
+            return m->get_life() <= 0;
+        }),
+        enemys.end()
+    );
 }
 
 
