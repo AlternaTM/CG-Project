@@ -1,6 +1,10 @@
 #include "bullet.h"
 #include "resourceManager/resourceManager.h"
+#include "collision/collision.h"
+#include "enemy/enemy.h"
+#include "game/game.h"
 #include <cmath>
+
 static constexpr float RAD2DEG = 57.2957795f;
 
 BulletManager* BulletManager::_INSTANCE = nullptr;
@@ -53,7 +57,27 @@ void BulletManager::render(SpriteRenderer& enemyRenderer, Camera& camera) {
 void BulletManager::update(float dt) {
 	for (Bullet* bullet : bullets) {
 		bullet->update(dt);
+
+		for (Enemy* e : EnemyManager::get_instance()->get_enemys()) {
+			if (CollisionChecker::check_collision(*e, *bullet)) {
+				std::cout << "Collision" << std::endl;
+				bullet->hit += 1;
+				e->make_damage(bullet->damage);
+			}
+		}
 	}
+
+	bullets.erase(
+		std::remove_if(bullets.begin(), bullets.end(), [](Bullet* b) {
+				bool toRemove = b->hit >= b->max_hit;
+				if (toRemove) {
+					delete b;
+					std::cout << "ELIMINATO" << std::endl;
+				};
+				return toRemove;
+			}),
+			bullets.end()
+	);
 }
 
 

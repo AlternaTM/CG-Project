@@ -19,8 +19,10 @@ public:
 	uint8_t damage; 
 	float speed;
 	glm::vec2 direction;
-	Bullet(glm::vec2 direction, uint8_t damage, float speed) :
-		direction(direction), damage(damage), speed(speed)
+	uint8_t hit = 0;
+	uint8_t max_hit = 1;
+	Bullet(glm::vec2 direction, uint8_t damage, float speed, uint8_t max_hit = 1) :
+		direction(direction), damage(damage), speed(speed), max_hit (max_hit)
 	{
 		size = glm::vec2(0.3f);
 	};

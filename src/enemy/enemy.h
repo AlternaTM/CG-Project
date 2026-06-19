@@ -156,6 +156,9 @@ public:
     void remove_enemy(uint32_t ID);
     void update(Player& player,float delta);
     void render(SpriteRenderer& renderer, FigRenderer& figRenderer, Camera& camera);
+    std::vector<Enemy*>& get_enemys() {
+        return enemys;
+    }
 
 };
 
