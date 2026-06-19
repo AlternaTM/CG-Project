@@ -64,11 +64,15 @@ void BulletManager::update(float dt) {
 				e->make_damage(bullet->damage);
 			}
 		}
+		
 	}
+
+	
 
 	bullets.erase(
 		std::remove_if(bullets.begin(), bullets.end(), [](Bullet* b) {
-				bool toRemove = b->hit >= b->max_hit;
+				bool toRemove = b->hit >= b->max_hit; 
+				toRemove = toRemove || (b->get_pos()->x > 18.0f) || (b->get_pos()->x < -18.0f) || (b->get_pos()->y > 15.0f) || (b->get_pos()->y < -15.0f);
 				if (toRemove) {
 					delete b;
 				};
