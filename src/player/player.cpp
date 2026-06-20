@@ -95,11 +95,13 @@ void Player::shoot(float dt) {
     if (shoot_timer > 0.0f) {
         return;
     }
-    shoot_timer = shoot_delay;
+    shoot_timer = shoot_delay / shot_speed_mult;
 
     glm::vec3 bulletDirection = glm::vec3(std::cos(aimRotation), std::sin(aimRotation), 0.0f);
 
-    Bullet* bullet = new Bullet(bulletDirection,50,1.0f);
+    Bullet* bullet = new Bullet(bulletDirection, static_cast<uint8_t>(glm::clamp(base_damage * damage_mult, 0.0f, 255.0f)),2.0f * bullet_speed_mult, bullet_max_hit, bullet_sise_mult);
     bullet->set_position(pos);
     BulletManager::add_bullet(bullet);
 }
+
+

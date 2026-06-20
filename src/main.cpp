@@ -32,6 +32,7 @@
 #include <irrKlang/irrKlang.h>
 #include <ft2build.h>
 #include <vector>
+#include <random>
 
 #include "game/game.h"
 
@@ -209,7 +210,7 @@ int main(void)
         projection3D,
         {&chest, &chest_lid}
     );
-    srand(time(0));
+    std::mt19937 rng(std::random_device{}());
     Game* game = Game::get_instance();
 
     float lastTime = (float)glfwGetTime();

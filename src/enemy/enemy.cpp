@@ -151,7 +151,7 @@ void Enemy::update( float dt) {
     currentState->update(*this, dt);
 }
 
-uint8_t Enemy::get_life() {
+int16_t Enemy::get_life() {
     return life;
 }
 
@@ -233,7 +233,7 @@ void EnemyManager::render(SpriteRenderer& renderer, FigRenderer& figRenderer, Ca
 
 }
 
-void EnemyManager::drawlife(FigRenderer& figRenderer, Camera& camera, const glm::vec2& pos,const uint8_t life) {
+void EnemyManager::drawlife(FigRenderer& figRenderer, Camera& camera, const glm::vec2& pos,const int16_t life) {
     glm::vec2 fPos = pos + glm::vec2(-0.25f,0.3f);
 
     float bar = life / 255.0f;

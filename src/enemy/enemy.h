@@ -125,7 +125,7 @@ public:
 
     void make_damage(uint8_t damage);
     void update(float dt);
-    uint8_t get_life();
+    int16_t get_life();
 
 
 
@@ -148,7 +148,7 @@ private:
     static EnemyManager* _INSTACE;
     
     std::vector<Enemy *> enemys;
-    void drawlife(FigRenderer& figRenderer, Camera& camera,const glm::vec2& pos, const uint8_t life);
+    void drawlife(FigRenderer& figRenderer, Camera& camera,const glm::vec2& pos, const int16_t life);
 public: 
     static Player* _PLAYER;
     static EnemyManager* get_instance();

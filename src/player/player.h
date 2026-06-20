@@ -73,6 +73,17 @@ public:
     float aimRotation;
     float shoot_delay = 0.2f;
     float shoot_timer = shoot_delay;
+    uint8_t base_damage = 20;
+    //MIGLIORAMENTI 
+    float damage_mult = 1.0f;
+    float shot_speed_mult = 1.0f;
+    float bullet_speed_mult = 1.0f;
+    float bullet_sise_mult = 1.0f;
+    uint8_t bullet_max_hit = 1;
+
+    const float max_mult = 5.0f;
+
+
     Player(Camera& camera);
 
     bool moved = false;
