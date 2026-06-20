@@ -147,6 +147,7 @@
     <ClCompile Include="src\player\player.cpp" />
     <ClCompile Include="src\player\playerInput.cpp" />
     <ClCompile Include="src\player\shooting\bullet.cpp" />
+    <ClCompile Include="src\player\upgradeUI\upgrades.cpp" />
     <ClCompile Include="src\resourceManager\resourceManager.cpp" />
     <ClCompile Include="src\spriteRenderer\spriteRenderer.cpp" />
     <ClCompile Include="src\stb\stb_image.cpp" />
@@ -181,6 +182,7 @@
     <ClInclude Include="src\player\player.h" />
     <ClInclude Include="src\player\playerInput.h" />
     <ClInclude Include="src\player\shooting\bullet.h" />
+    <ClInclude Include="src\player\upgradeUI\upgrades.h" />
     <ClInclude Include="src\resourceManager\resourceManager.h" />
     <ClInclude Include="src\shader\shader.h" />
     <ClInclude Include="src\spriteRenderer\spriteRenderer.h" />

@@ -21,15 +21,17 @@ void InGameState::exit(Game& game) {
 
 // ================== InLootingState ==========================
 void LootingGameState::enter(Game& game) {
-
+	game.upgradeUI.createScene();
+	
 }
 void LootingGameState::update(Game& game, float dt) {
+	game.upgradeUI.update(dt);
 	if (PlayerInput::isKeyJustPressed(game.get_window(), GLFW_KEY_E)) {
 		game.switch_state(GameStateType::InGame);
 	}
 }
 void LootingGameState::exit(Game& game) {
-
+	game.upgradeUI.destroyScene();
 }
 
 void LootingGameState::render3d(Game& game,float dt) {
@@ -164,7 +166,7 @@ void Game::render2d() {
 		camera.getViewMatrix()
 	);
 
-	
+	upgradeUI.render(&figRectRenderer, camera);
 }
 
 void Game::render3d(float dt) {

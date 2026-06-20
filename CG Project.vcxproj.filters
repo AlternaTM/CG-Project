@@ -76,6 +76,9 @@
     <Filter Include="File di origine\player\shooting">
       <UniqueIdentifier>{ea2deb01-5564-4c50-bd13-fd30b8e8866f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="File di origine\player\upgradesUI">
+      <UniqueIdentifier>{0e8fbcce-cbe1-481b-a86a-e4cfe49aec5d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\player\player.cpp">
@@ -152,6 +155,9 @@
     </ClCompile>
     <ClCompile Include="src\player\shooting\bullet.cpp">
       <Filter>File di origine\player\shooting</Filter>
+    </ClCompile>
+    <ClCompile Include="src\player\upgradeUI\upgrades.cpp">
+      <Filter>File di origine\player\upgradesUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -256,6 +262,9 @@
     </ClInclude>
     <ClInclude Include="src\player\shooting\bullet.h">
       <Filter>File di origine\player\shooting</Filter>
+    </ClInclude>
+    <ClInclude Include="src\player\upgradeUI\upgrades.h">
+      <Filter>File di origine\player\upgradesUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -8,6 +8,7 @@
 #include <glm/glm.hpp>
 #include <array>
 #include "../player/shooting/bullet.h"
+#include "../player/upgradeUI/upgrades.h"
 
 class Game;
 class CastManager;
@@ -91,6 +92,7 @@ private:
 	SpriteRenderer* renderer;
 	EnemyManager* enemyManager;
 
+	
 
 
 	Game(
@@ -104,7 +106,9 @@ private:
 
 	int init_renderers(const glm::mat4& projection);
 public: 
-	
+	UpgradeUI upgradeUI;
+
+
 	static void init(
 		GLFWwindow* window, 
 		Camera& camera, 
