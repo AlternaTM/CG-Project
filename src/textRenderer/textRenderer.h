@@ -29,6 +29,8 @@ public:
         const glm::vec3& color
     );
 
+    float GetTextWidth(const std::string& text, float scale) const;
+
 private:
     std::map<char, Character> Characters;
     Shader textShader;

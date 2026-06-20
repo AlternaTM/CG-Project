@@ -6,7 +6,7 @@
 #include "camera/camera.h"
 #include "figureRenderer/figureRenderer.h"
 #include <glm/glm.hpp>
-
+#include "textRenderer/textRenderer.h"
 #include "animSystem/animSystem.h"
 #include "entity.h"
 #include <vector>
@@ -49,7 +49,7 @@ public:
 		destroyScene();
 	}
 	void update(float dt);
-	void render(FigRenderer* renderer, Camera& camera);
+	void render(FigRenderer* renderer, TextRenderer* textRenderer);
 	void createScene();
 	void destroyScene();
 };

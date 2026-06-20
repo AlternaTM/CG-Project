@@ -16,7 +16,7 @@ void UpgradeUI::update(float dt){
 
 }
 
-void UpgradeUI::render(FigRenderer* renderer, Camera& camera){
+void UpgradeUI::render(FigRenderer* renderer, TextRenderer* textRenderer){
 	if (
 		card1 == nullptr ||
 		card2 == nullptr ||
@@ -48,18 +48,27 @@ void UpgradeUI::render(FigRenderer* renderer, Camera& camera){
 		transform = glm::translate(transform, glm::vec3(c->pos, 0.0f));
 		transform = glm::scale(transform, glm::vec3(c->size, 1.0f));
 
-		renderer->draw(mesh, transform, glm::mat4(1.0f), glm::vec4(0.9f, 0.85f, 0.7f, 1.0f));
+		renderer->draw(mesh, transform, glm::mat4(1.0f), glm::vec4(0.38f, 0.38f, 0.38f, 0.98f));
 	}
 
+
+
+
+	float scale = 0.7f;
+	std::string text = "Choose";
+
+	float textWidth = textRenderer->GetTextWidth(text, scale);
+	float x = (1080 - textWidth);
+	textRenderer->RenderText("Choose", x, 800.0f, scale, { 1.0f, 1.0f, 1.0f });
 
 }
 
 
 void UpgradeUI::createScene() {
 	destroyScene();
-	card1 = new Card({ -5.0f, 0.0f }, { 2.0f, 3.0f });
+	card1 = new Card({ -3.0f, 0.0f }, { 2.0f, 3.0f });
 	card2 = new Card({ 0.0f, 0.0f }, { 2.0f, 3.0f });
-	card3 = new Card({ 5.0f, 0.0f }, { 2.0f, 3.0f });
+	card3 = new Card({ 3.0f, 0.0f }, { 2.0f, 3.0f });
 
 }
 

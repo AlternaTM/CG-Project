@@ -16,7 +16,7 @@
 #include "resourceManager/resourceManager.h"
 #include "spriteRenderer/spriteRenderer.h"
 #include "textRenderer/textRenderer.h"
-#include "timer/timer.h"
+
 
 
 #include "chest/chest.h"
@@ -192,10 +192,9 @@ int main(void)
 
     // ------------------- Player -------------------
 
-    Timer timer;
-    TextRenderer textRenderer(SCR_WIDTH, SCR_HEIGHT);
 
-    textRenderer.LoadFont("./assets/fonts/PressStart2P-Regular.ttf", 48);
+    
+
 
 
     //------------------- GAME -------------------
@@ -246,21 +245,18 @@ int main(void)
 
         game->render2d();
 
-        timer.update(dt);
-
-        int min = timer.getMinutes();
-        int sec = timer.getSeconds();
-
-        char buffer[6];
-        sprintf_s(buffer, "%02d:%02d", min, sec);
-
-        textRenderer.RenderText(buffer, 20.0f, SCR_HEIGHT - 70.0f, 0.7f, { 1.0f, 1.0f, 1.0f });
-
         // ============ RENDERING 3D ============
         glEnable(GL_DEPTH_TEST);
         
         game->render3d(dt);
         
+        // RENDERUI 
+        glDisable(GL_DEPTH_TEST);
+
+
+
+
+        game->renderUI();
         //============= FINE RENDER LOOP ==============
         PlayerInput::update_input(window);
         

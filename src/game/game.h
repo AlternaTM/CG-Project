@@ -9,6 +9,8 @@
 #include <array>
 #include "../player/shooting/bullet.h"
 #include "../player/upgradeUI/upgrades.h"
+#include "textRenderer/textRenderer.h"
+#include "timer/timer.h"
 
 class Game;
 class CastManager;
@@ -86,12 +88,13 @@ private:
 	FigRenderer figRectRenderer = FigRenderer("shaders/rect/rectVert.glsl","shaders/rect/rectFrag.glsl");
 	FigRenderer figCastRenderer = FigRenderer("shaders/cast/castVert.glsl", "shaders/cast/castFrag.glsl");
 	FigRenderer figAstroCastRenderer = FigRenderer("shaders/astroCast/astroVert.glsl","shaders/astroCast/astroFrag.glsl");
-	FigRenderer figAstroShadowCastRenderer = FigRenderer("shaders/astroCast/astroShadowVert.glsl", "shaders/astroCast/astroShadowFrag.glsl");;
+	FigRenderer figAstroShadowCastRenderer = FigRenderer("shaders/astroCast/astroShadowVert.glsl", "shaders/astroCast/astroShadowFrag.glsl");
+	TextRenderer textRenderer{ 1920, 1080 };
 	ModelRenderer asteroidModelRenderer = ModelRenderer("assets/models/astro/asteroid.obj", "shaders/asteroid3d/ast3dVertex.glsl", "shaders/asteroid3d/ast3dFrag.glsl");
 
 	SpriteRenderer* renderer;
 	EnemyManager* enemyManager;
-
+	Timer timer;
 	
 
 
@@ -125,12 +128,15 @@ public:
 
 	void render2d();
 	void render3d(float dt);
+	void renderUI();
 
 	Player* get_player();
 	GLFWwindow* get_window();
 	CastManager* get_CastManager();
 	EnemyManager* get_enemyManager();
 	BulletManager* get_bulletManager();
+
+	ChestManager& get_chestManager();
 
 	Camera3D* get_camera3D();
 	const glm::mat4 get_projection3D();

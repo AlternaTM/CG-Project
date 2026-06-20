@@ -152,3 +152,15 @@ void TextRenderer::RenderText(
     glBindVertexArray(0);
     glBindTexture(GL_TEXTURE_2D, 0);
 }
+
+
+float TextRenderer::GetTextWidth(const std::string& text, float scale) const
+{
+    float width = 0.0f;
+    for (char c : text) {
+        auto it = Characters.find(c);
+        if (it == Characters.end()) continue;
+        width += (it->second.Advance >> 6) * scale;
+    }
+    return width;
+}

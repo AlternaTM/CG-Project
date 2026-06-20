@@ -7,6 +7,7 @@
 #include <vector>
 #include "camera/camera.h"
 #include "spriteRenderer/spriteRenderer.h"
+#include "modelRenderer/modelRenderer.h"
 #include "collision/collision.h"
 #include "player/player.h"
 
@@ -24,8 +25,15 @@ class ChestManager {
 private:
     std::vector<Chest> chests;
 
-public: 
+
+public:
+    float angle = 0.0f;
+    bool finished = false;
+
     ChestManager(int n);
     bool interact(GLFWwindow* window, Player& pl);
     void render(SpriteRenderer& renderer, Camera& camera);
+
+    void render_chest(Camera3D& camera3D, const glm::mat4& projection3D, ModelRenderer& chest, ModelRenderer& chest_lid, float dt);
+
 };

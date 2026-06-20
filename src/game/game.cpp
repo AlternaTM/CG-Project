@@ -2,6 +2,7 @@
 #include "../enemy/mageBullet/mageCast.h"
 #include "../resourceManager/resourceManager.h"
 #include "../modelRenderer/modelRenderer.h"
+
 // ================== InGameState ==========================
 void InGameState::enter(Game& game) {
 
@@ -22,7 +23,8 @@ void InGameState::exit(Game& game) {
 // ================== InLootingState ==========================
 void LootingGameState::enter(Game& game) {
 	game.upgradeUI.createScene();
-	
+	game.get_chestManager().angle = 0.0f;
+	game.get_chestManager().finished = false;
 }
 void LootingGameState::update(Game& game, float dt) {
 	game.upgradeUI.update(dt);
@@ -36,7 +38,7 @@ void LootingGameState::exit(Game& game) {
 
 void LootingGameState::render3d(Game& game,float dt) {
 	
-	ModelRenderer::render_chest(
+	game.get_chestManager().render_chest(
 		*game.get_camera3D(),
 		game.get_projection3D(),
 		*game.get_chest_part()[0],
@@ -128,11 +130,14 @@ int Game::init_renderers(const glm::mat4& projection) {
 		return 1;
 	}
 
+	textRenderer.LoadFont("./assets/fonts/PressStart2P-Regular.ttf", 48);
+
 	return 0;
 }
 
 
 void Game::update(float dt) {
+	timer.update(dt);
 	game_state->update(*this, dt);
 	if (chestManager.interact(window, player)) {
 		this->switch_state(GameStateType::Looting);
@@ -166,13 +171,27 @@ void Game::render2d() {
 		camera.getViewMatrix()
 	);
 
-	upgradeUI.render(&figRectRenderer, camera);
+	
 }
 
 void Game::render3d(float dt) {
 	castManager->render_asteroi3d(*camera3D, camera.getCameraPosition(), projection3D);
 	game_state->render3d(*this,dt);
 	
+}
+
+void Game::renderUI() {
+	if(chestManager.finished)
+		upgradeUI.render(&figRectRenderer, &textRenderer);
+
+
+	int min = timer.getMinutes();
+	int sec = timer.getSeconds();
+
+	char buffer[6];
+	sprintf_s(buffer, "%02d:%02d", min, sec);
+
+	textRenderer.RenderText(buffer, 20.0f, 1080 - 70.0f, 0.7f, { 1.0f, 1.0f, 1.0f });
 }
 
 void Game::switch_state(GameStateType state) {
@@ -210,6 +229,11 @@ EnemyManager* Game::get_enemyManager() {
 }
 BulletManager* Game::get_bulletManager() {
 	return bulletManager;
+}
+
+
+ChestManager& Game::get_chestManager() {
+	return chestManager;
 }
 
 
