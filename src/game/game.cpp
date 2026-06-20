@@ -7,16 +7,32 @@
 void InGameState::enter(Game& game) {
 
 }
+
 void InGameState::update(Game& game, float dt) {
+	if (PlayerInput::isKeyJustPressed(game.get_window(), GLFW_KEY_ESCAPE)) {
+		game.switch_state(GameStateType::Pause);
+	}
 	game.get_player()->update(dt,game.get_window());
+	game.get_timer()->update(dt);
 
 	game.get_CastManager()->update(dt);
 	game.get_enemyManager()->update(*game.get_player(), dt);
 	game.get_bulletManager()->update(dt);
 
 }
+
 void InGameState::exit(Game& game) {
 
+}
+
+void InGameState::renderUI(Game& game) {
+	int min = game.get_timer()->getMinutes();
+	int sec = game.get_timer()->getSeconds();
+
+	char buffer[6];
+	sprintf_s(buffer, "%02d:%02d", min, sec);
+
+	game.get_TextRenderer()->RenderText(buffer, -7.5f, 3.7f, 0.7f, { 1.0f, 1.0f, 1.0f });
 }
 
 
@@ -26,12 +42,14 @@ void LootingGameState::enter(Game& game) {
 	game.get_chestManager().angle = 0.0f;
 	game.get_chestManager().finished = false;
 }
+
 void LootingGameState::update(Game& game, float dt) {
 	game.upgradeUI.update(dt);
 	if (PlayerInput::isKeyJustPressed(game.get_window(), GLFW_KEY_E)) {
 		game.switch_state(GameStateType::InGame);
 	}
 }
+
 void LootingGameState::exit(Game& game) {
 	game.upgradeUI.destroyScene();
 }
@@ -47,6 +65,57 @@ void LootingGameState::render3d(Game& game,float dt) {
 	);
 
 	
+}
+
+void LootingGameState::renderUI(Game& game) {
+	int min = game.get_timer()->getMinutes();
+	int sec = game.get_timer()->getSeconds();
+
+	char buffer[6];
+	sprintf_s(buffer, "%02d:%02d", min, sec);
+
+	game.get_TextRenderer()->RenderText(buffer, 20.0f, 1080 - 70.0f, 0.7f, { 1.0f, 1.0f, 1.0f });
+}
+
+
+// ================== PauseState ==========================
+void PauseGameState::enter(Game& game) {
+
+}
+
+void PauseGameState::update(Game& game, float dt) {
+
+	if (PlayerInput::isKeyJustPressed(game.get_window(), GLFW_KEY_ESCAPE)) {
+		game.switch_state(GameStateType::InGame);
+	}
+
+	for (auto& b : game.get_PauseButtons()) {
+		b.update(game.get_window());
+	}
+}
+
+void PauseGameState::exit(Game& game) {
+
+}
+
+void PauseGameState::renderUI(Game& game) {
+	int min = game.get_timer()->getMinutes();
+	int sec = game.get_timer()->getSeconds();
+
+	char buffer[6];
+	sprintf_s(buffer, "%02d:%02d", min, sec);
+
+	game.get_TextRenderer()->RenderText(buffer, 20.0f, 1080 - 70.0f, 0.7f, { 1.0f, 1.0f, 1.0f });
+
+	game.get_SpriteRenderer()->DrawColor(
+		{ 0.0f, 0.0f },
+		{ 32.0f, 18.0f },
+		{ 0.0f, 0.0f, 0.0f, 0.7f }
+	);
+
+	for (auto& b : game.get_PauseButtons()) {
+		b.render(*game.get_SpriteRenderer(), *game.get_TextRenderer());
+	}
 }
 
 // ================== GAME MANAGER ==========================
@@ -75,6 +144,20 @@ Game::Game(
 	chest_part(chest_part)
 {
 	game_state = &inGameState;
+
+	pauseButtons.emplace_back(
+		"RIPRENDI",
+		glm::vec2(0.0f, -1.0f),
+		glm::vec2(5.0f, 1.3f),
+		[this]() { switch_state(GameStateType::InGame); }
+	);
+
+	pauseButtons.emplace_back(
+		"USCITA",
+		glm::vec2(0.0f, 1.0f),
+		glm::vec2(5.0f, 1.3f),
+		[this]() {  }
+	);
 }
 
 void Game::init(
@@ -95,8 +178,6 @@ void Game::init(
 		chest_part
 	);
 
-	
-
 	//game.enemyManager->spawn_enemy(EnemyTipe::Mage, 1);+
 	game.bulletManager = BulletManager::get_instance();
 	game.init_renderers(projection);
@@ -107,11 +188,8 @@ void Game::init(
 	game.enemyManager->spawn_enemy(EnemyTipe::Astro, 1);
 	EnemyManager::_PLAYER = game.get_player();
 
-	
-
 	_INSTANCE = &game;
 }
-
 
 int Game::init_renderers(const glm::mat4& projection) {
 
@@ -137,7 +215,6 @@ int Game::init_renderers(const glm::mat4& projection) {
 
 
 void Game::update(float dt) {
-	timer.update(dt);
 	game_state->update(*this, dt);
 	if (chestManager.interact(window, player)) {
 		this->switch_state(GameStateType::Looting);
@@ -171,7 +248,6 @@ void Game::render2d() {
 		camera.getViewMatrix()
 	);
 
-	
 }
 
 void Game::render3d(float dt) {
@@ -181,17 +257,10 @@ void Game::render3d(float dt) {
 }
 
 void Game::renderUI() {
+	game_state->renderUI(*this);
+
 	if(chestManager.finished)
 		upgradeUI.render(&figRectRenderer, &textRenderer);
-
-
-	int min = timer.getMinutes();
-	int sec = timer.getSeconds();
-
-	char buffer[6];
-	sprintf_s(buffer, "%02d:%02d", min, sec);
-
-	textRenderer.RenderText(buffer, 20.0f, 1080 - 70.0f, 0.7f, { 1.0f, 1.0f, 1.0f });
 }
 
 void Game::switch_state(GameStateType state) {
@@ -207,6 +276,7 @@ void Game::switch_state(GameStateType state) {
 		game_state = &lootingState;
 		break;
 	case GameStateType::Pause:
+		game_state = &pauseState;
 		break;
 	}
 	game_state->enter(*this);
@@ -216,32 +286,42 @@ Player* Game::get_player() {
 	return &player;
 }
 
+Timer* Game::get_timer() {
+	return &timer;
+}
 
 GLFWwindow* Game::get_window() {
 	return window;
 }
 
+SpriteRenderer* Game::get_SpriteRenderer() {
+	return renderer;
+}
+
+TextRenderer* Game::get_TextRenderer() {
+	return &textRenderer;
+}
+
 CastManager* Game::get_CastManager() {
 	return castManager;
 }
+
 EnemyManager* Game::get_enemyManager() {
 	return enemyManager;
 }
+
 BulletManager* Game::get_bulletManager() {
 	return bulletManager;
 }
-
 
 ChestManager& Game::get_chestManager() {
 	return chestManager;
 }
 
-
 Game* Game::get_instance() {
 	assert(_INSTANCE != nullptr);
 	return _INSTANCE;
 }
-
 
 Camera3D* Game::get_camera3D() {
 	return camera3D;
@@ -250,7 +330,10 @@ const glm::mat4 Game::get_projection3D() {
 	return projection3D;
 }
 
-
 std::array<ModelRenderer*, 2>& Game::get_chest_part() {
 	return chest_part;
+}
+
+std::vector<Button>& Game::get_PauseButtons() {
+	return pauseButtons;
 }

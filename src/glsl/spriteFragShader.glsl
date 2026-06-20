@@ -5,10 +5,10 @@ out vec4 FragColor;
 in vec2 vTex;
 
 uniform sampler2D uTexture;
-uniform vec3 uColor; // tint opzionale
+uniform vec4 uColor;
 
 void main()
 {
     vec4 tex = texture(uTexture, vTex);
-    FragColor = tex;
+    FragColor = uColor * tex;
 }

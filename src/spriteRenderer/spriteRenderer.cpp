@@ -5,6 +5,7 @@
 SpriteRenderer::SpriteRenderer(Shader& shader)
     : shader(shader) {
     initRenderData();
+    initWhiteTexture();
 }
 
 SpriteRenderer::~SpriteRenderer() {
@@ -19,7 +20,8 @@ void SpriteRenderer::Draw(SpriteTexture& texture,
     float rotation,
     const glm::mat4& view,
     const glm::vec2& UVOffset,
-    const glm::vec2& UVSize
+    const glm::vec2& UVSize,
+	const glm::vec4& color
 ) {
     shader.use();
 
@@ -30,6 +32,7 @@ void SpriteRenderer::Draw(SpriteTexture& texture,
 
     shader.setMat4("uModel", model);
     shader.setMat4("uView", view);
+	shader.setVec4("uColor", color);
     shader.setVec2("uUVOffset", UVOffset);
     shader.setVec2("uUVSize", UVSize);
 
@@ -39,6 +42,25 @@ void SpriteRenderer::Draw(SpriteTexture& texture,
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
     glBindVertexArray(0);
+}
+
+void SpriteRenderer::DrawColor(
+    const glm::vec2& position,
+    const glm::vec2& size,
+    const glm::vec4& color,
+    const glm::mat4& view,
+    float rotation
+) {
+    Draw(
+        whiteTexture,
+        position,
+        size,
+        rotation,
+        view,
+        { 0.0f, 0.0f },
+        { 1.0f, 1.0f },
+        color
+    );
 }
 
 void SpriteRenderer::initRenderData() {
@@ -86,4 +108,9 @@ void SpriteRenderer::initRenderData() {
     );
 
     glBindVertexArray(0);
+}
+
+void SpriteRenderer::initWhiteTexture() {
+    unsigned char whitePixel[4] = { 255, 255, 255, 255 };
+    whiteTexture.generate(1, 1, whitePixel);
 }

@@ -11,6 +11,7 @@
 #include "../player/upgradeUI/upgrades.h"
 #include "textRenderer/textRenderer.h"
 #include "timer/timer.h"
+#include "../button.h"
 
 class Game;
 class CastManager;
@@ -19,7 +20,9 @@ class CastManager;
 enum GameStateType {
 	InGame,
 	Pause,
-	Looting
+	Looting,
+	TitleScreen,
+	GameOver
 };
 
 
@@ -35,6 +38,7 @@ public:
 	virtual void exit(Game& game) = 0;
 	virtual void render2d(Game& game){}
 	virtual void render3d(Game& game, float dt) {}
+	virtual void renderUI(Game& game) {}
 	virtual GameStateType get_type() {
 		return state_type;
 	}
@@ -46,6 +50,7 @@ public:
 	virtual void enter(Game& game) override;
 	virtual void update(Game& game, float dt) override;
 	virtual void exit(Game& game) override;
+	virtual void renderUI(Game& game) override;
 };
 
 class LootingGameState : public IGameState {
@@ -55,13 +60,19 @@ public:
 	virtual void update(Game& game, float dt) override;
 	virtual void exit(Game& game) override;
 	virtual void render3d(Game& game, float dt) override;
+	virtual void renderUI(Game& game) override;
+};
+
+class PauseGameState : public IGameState {
+public:
+	PauseGameState() : IGameState(GameStateType::Pause) {};
+	virtual void enter(Game& game) override;
+	virtual void update(Game& game, float dt) override;
+	virtual void exit(Game& game) override;
+	virtual void renderUI(Game& game) override;
 };
 
 // ================== GAME MANAGER ==========================
-
-
-
-
 
 class Game {
 private:
@@ -70,6 +81,7 @@ private:
 
 	InGameState inGameState;
 	LootingGameState lootingState;
+	PauseGameState pauseState;
 
 	Player player;
 	GLFWwindow* window;
@@ -78,6 +90,8 @@ private:
 	Camera3D* camera3D;
 	const glm::mat4 projection3D;
 	std::array<ModelRenderer*, 2> chest_part;
+
+	std::vector<Button> pauseButtons;
 
 	//EnemyManager* enemyManager;
 	CastManager* castManager;
@@ -89,7 +103,7 @@ private:
 	FigRenderer figCastRenderer = FigRenderer("shaders/cast/castVert.glsl", "shaders/cast/castFrag.glsl");
 	FigRenderer figAstroCastRenderer = FigRenderer("shaders/astroCast/astroVert.glsl","shaders/astroCast/astroFrag.glsl");
 	FigRenderer figAstroShadowCastRenderer = FigRenderer("shaders/astroCast/astroShadowVert.glsl", "shaders/astroCast/astroShadowFrag.glsl");
-	TextRenderer textRenderer{ 1920, 1080 };
+	TextRenderer textRenderer{};
 	ModelRenderer asteroidModelRenderer = ModelRenderer("assets/models/astro/asteroid.obj", "shaders/asteroid3d/ast3dVertex.glsl", "shaders/asteroid3d/ast3dFrag.glsl");
 
 	SpriteRenderer* renderer;
@@ -131,10 +145,14 @@ public:
 	void renderUI();
 
 	Player* get_player();
+	Timer* get_timer();
 	GLFWwindow* get_window();
 	CastManager* get_CastManager();
 	EnemyManager* get_enemyManager();
 	BulletManager* get_bulletManager();
+	SpriteRenderer* get_SpriteRenderer();
+	TextRenderer* get_TextRenderer();
+	std::vector<Button>& get_PauseButtons();
 
 	ChestManager& get_chestManager();
 

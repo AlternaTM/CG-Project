@@ -60,6 +60,8 @@ Player::Player(Camera& camera)
     currentState = PlayingState::instance();
     state = State::InGame;
     PlayerInput::register_input(GLFW_KEY_E);
+	PlayerInput::register_input(GLFW_KEY_ESCAPE);
+	PlayerInput::register_input(GLFW_MOUSE_BUTTON_LEFT);
     
     currentState->enter(*this);
 }

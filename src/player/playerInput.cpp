@@ -13,9 +13,11 @@ void PlayerInput::register_input(int l) {
     wasPressed.insert({ l, false });
 
 }
+
 bool PlayerInput::isPressed(GLFWwindow* window, int l) {
     return glfwGetKey(window, l);
 }
+
 bool PlayerInput::isKeyJustPressed(GLFWwindow* window, int l) {
     auto it = wasPressed.find(l);
     if (it == wasPressed.end()) {
@@ -24,6 +26,7 @@ bool PlayerInput::isKeyJustPressed(GLFWwindow* window, int l) {
     }
     return  (!it->second && glfwGetKey(window, l));
 }
+
 void PlayerInput::update_input(GLFWwindow* window) {//questo va chiamato DOPO che si sono fatti tutti i controlli, perché aggiorna il valore passato
     for (auto& pair : wasPressed) {
         pair.second = glfwGetKey(window, pair.first) == GLFW_PRESS;
@@ -57,7 +60,7 @@ bool PlayerInput::move(GLFWwindow* window, Player& pl, float speed, float dt)
     return moved;
 }
 
-void PlayerInput::updateMouse(GLFWwindow* window, glm::vec2 cameraPos, glm::vec3 playerPos, glm::vec3& aimPos, float& aimRotation)
+glm::vec2 PlayerInput::getMousePos(GLFWwindow* window)
 {
     double mx, my;
     glfwGetCursorPos(window, &mx, &my);
@@ -68,6 +71,13 @@ void PlayerInput::updateMouse(GLFWwindow* window, glm::vec2 cameraPos, glm::vec3
     glm::vec2 mousePos;
     mousePos.x = (float(mx) / wW) * 16.0f - 8.0f;
     mousePos.y = -((float(my) / wH) * 9.0f - 4.5f);
+
+	return mousePos;
+}
+
+void PlayerInput::updateMouse(GLFWwindow* window, glm::vec2 cameraPos, glm::vec3 playerPos, glm::vec3& aimPos, float& aimRotation)
+{
+    glm::vec2 mousePos = getMousePos(window);
 
     glm::vec2 playerViewPos = glm::vec2(playerPos.x, playerPos.y) - cameraPos;
 
@@ -82,7 +92,15 @@ void PlayerInput::interact(GLFWwindow* window,Player& pl) {
 
 }
 
-
 bool PlayerInput::isMouseKeyPressed(GLFWwindow* window, int l) {
     return glfwGetMouseButton(window, l) == GLFW_PRESS;
+}
+
+bool PlayerInput::isMouseButtonJustPressed(GLFWwindow* window, int l) {
+    auto it = wasPressed.find(l);
+    if (it == wasPressed.end()) {
+        std::cout << "Tasto mouse " << l << " non registrato!" << std::endl;
+        return false;
+    }
+    return (!it->second && glfwGetMouseButton(window, l) == GLFW_PRESS);
 }

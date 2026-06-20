@@ -16,7 +16,7 @@ struct Character {
 
 class TextRenderer {
 public:
-    TextRenderer(unsigned int width, unsigned int height);
+    TextRenderer();
     ~TextRenderer();
 
     void LoadFont(const std::string& fontPath, unsigned int fontSize);
@@ -37,4 +37,6 @@ private:
 
     unsigned int VAO;
     unsigned int VBO;
+
+    static constexpr float PIXELS_PER_WORLD_UNIT = 120.0f;
 };

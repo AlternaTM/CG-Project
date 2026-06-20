@@ -79,6 +79,12 @@
     <Filter Include="File di origine\player\upgradesUI">
       <UniqueIdentifier>{0e8fbcce-cbe1-481b-a86a-e4cfe49aec5d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="shaders\basicShaders">
+      <UniqueIdentifier>{8990d3ba-71d1-44b9-944a-bacfc756afbc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="File di origine\button">
+      <UniqueIdentifier>{acfe3d63-2e9d-483f-82ad-ef5e7f3ac899}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\player\player.cpp">
@@ -158,6 +164,9 @@
     </ClCompile>
     <ClCompile Include="src\player\upgradeUI\upgrades.cpp">
       <Filter>File di origine\player\upgradesUI</Filter>
+    </ClCompile>
+    <ClCompile Include="button.cpp">
+      <Filter>File di origine\button</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -265,6 +274,9 @@
     </ClInclude>
     <ClInclude Include="src\player\upgradeUI\upgrades.h">
       <Filter>File di origine\player\upgradesUI</Filter>
+    </ClInclude>
+    <ClInclude Include="button.h">
+      <Filter>File di origine\button</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

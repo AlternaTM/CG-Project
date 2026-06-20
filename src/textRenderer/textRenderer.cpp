@@ -8,12 +8,12 @@
 
 #include <iostream>
 
-TextRenderer::TextRenderer(unsigned int width, unsigned int height)
+TextRenderer::TextRenderer()
     : textShader("src/glsl/textVertexShader.glsl", "src/glsl/textFragShader.glsl")
 {
     glm::mat4 projection = glm::ortho(
-        0.0f, static_cast<float>(width),
-        0.0f, static_cast<float>(height)
+        -8.0f, 8.0f,
+        -4.5f, 4.5f
     );
 
     textShader.use();
@@ -115,16 +115,18 @@ void TextRenderer::RenderText(
     glActiveTexture(GL_TEXTURE0);
     glBindVertexArray(VAO);
 
+    float worldScale = scale / PIXELS_PER_WORLD_UNIT;
+
     std::string::const_iterator c;
     for (c = text.begin(); c != text.end(); c++)
     {
         const Character& ch = Characters[*c];
 
-        float xpos = x + ch.Bearing.x * scale;
-        float ypos = y - (ch.Size.y - ch.Bearing.y) * scale;
+        float xpos = x + ch.Bearing.x * worldScale;
+        float ypos = y - (ch.Size.y - ch.Bearing.y) * worldScale;
 
-        float w = ch.Size.x * scale;
-        float h = ch.Size.y * scale;
+        float w = ch.Size.x * worldScale;
+        float h = ch.Size.y * worldScale;
 
         float vertices[6][4] = {
             { xpos,     ypos + h,   0.0f, 0.0f },
@@ -146,7 +148,7 @@ void TextRenderer::RenderText(
         // render quad
         glDrawArrays(GL_TRIANGLES, 0, 6);
         // now advance cursors for next glyph (note that advance is number of 1/64 pixels)
-        x += (ch.Advance >> 6) * scale; // bitshift by 6 to get value in pixels (2^6 = 64 (divide amount of 1/64th pixels by 64 to get amount of pixels))
+        x += (ch.Advance >> 6) * worldScale; // bitshift by 6 to get value in pixels (2^6 = 64 (divide amount of 1/64th pixels by 64 to get amount of pixels))
     }
 
     glBindVertexArray(0);
@@ -156,11 +158,12 @@ void TextRenderer::RenderText(
 
 float TextRenderer::GetTextWidth(const std::string& text, float scale) const
 {
+    float worldScale = scale / PIXELS_PER_WORLD_UNIT;
     float width = 0.0f;
     for (char c : text) {
         auto it = Characters.find(c);
         if (it == Characters.end()) continue;
-        width += (it->second.Advance >> 6) * scale;
+        width += (it->second.Advance >> 6) * worldScale;
     }
     return width;
 }
