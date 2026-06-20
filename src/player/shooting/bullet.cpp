@@ -59,7 +59,12 @@ void BulletManager::update(float dt) {
 		bullet->update(dt);
 
 		for (Enemy* e : EnemyManager::get_instance()->get_enemys()) {
-			if (CollisionChecker::check_collision(*e, *bullet)) {
+			Entity fly; 
+			fly.get_pos()->x = e->get_pos()->x;
+			fly.get_pos()->y = e->get_pos()->y;
+			fly.get_size()->x = e->get_size()->x * 0.3f;
+			fly.get_size()->y = e->get_size()->y * 0.5f;
+			if (CollisionChecker::check_collision(fly, *bullet)) {
 				bullet->hit += 1;
 				e->make_damage(bullet->damage);
 			}
