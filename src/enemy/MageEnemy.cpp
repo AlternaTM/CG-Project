@@ -52,7 +52,7 @@ void RangedAttackState::update(Enemy& e,float dt) {
     MageEnemy* me = dynamic_cast<MageEnemy*>(&e);
     ttl -= dt;
 
-     glm::vec2 start = glm::vec2(e.get_pos()->x, e.get_pos()->y);
+    glm::vec2 start = glm::vec2(e.get_pos()->x, e.get_pos()->y);
     glm::vec2 size = glm::vec2(20.0f, 0.5f);
     glm::vec2 dir = glm::normalize(me->saved_target - start);
     float angle = atan2(dir.y, dir.x);
@@ -76,6 +76,12 @@ void RangedAttackState::update(Enemy& e,float dt) {
 
     me->get_cast()->update_model(model);
 
+    
+    if (checkBeamHit(*EnemyManager::_PLAYER->get_pos(), *EnemyManager::_PLAYER->get_size(),
+        start, forward, beamWidth , currentLength)) {
+        EnemyManager::_PLAYER->hit(e.get_base_damage());
+    }
+
     update_anim(dt);
 }
 
@@ -91,6 +97,32 @@ void RangedAttackState::on_animation_end() {
         owner->on_target_out_of_range();
 }
 
+
+bool RangedAttackState::checkBeamHit(const glm::vec2& objPos, const glm::vec2& objSize,
+    const glm::vec2 start, const glm::vec2 forward,
+    const float beamWidth, const float currentLength) const {
+    glm::vec2 right(-forward.y, forward.x);
+
+    glm::vec2 beamCenter = start + forward * (currentLength * 0.5f);
+    glm::vec2 beamHalf(currentLength * 0.5f, beamWidth * 0.5f);
+    glm::vec2 boxHalf = (objSize * 0.2f) * 0.5f;;
+
+    glm::vec2 d = beamCenter - objPos;
+
+    glm::vec2 axes[4] = { forward, right, glm::vec2(1,0), glm::vec2(0,1) };
+
+    for (const glm::vec2& axis : axes) {
+        float beamProj = beamHalf.x * fabs(glm::dot(forward, axis))
+            + beamHalf.y * fabs(glm::dot(right, axis));
+        float boxProj = boxHalf.x * fabs(axis.x) + boxHalf.y * fabs(axis.y);
+        float dist = fabs(glm::dot(d, axis));
+
+        if (dist > beamProj + boxProj)
+            return false;
+    }
+
+    return true;
+}
 
 
 // ============ RangedAttackState

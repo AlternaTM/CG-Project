@@ -4,6 +4,7 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <random>
+#include "collision/collision.h"
 
 // ============ RangedAttackState
 
@@ -92,6 +93,14 @@ void AstroAttackState::update(Enemy& e, float dt) {
     elapsed += dt;
     if (elapsed > 4.0f) {
         elapsed = 0.0f;
+        Entity e;
+        e.get_pos()->x  = me->saved_target.x;
+        e.get_pos()->y = me->saved_target.y;
+        
+        if (CollisionChecker::check_collision(*EnemyManager::_PLAYER, e)) {
+            EnemyManager::_PLAYER->hit(me->get_base_damage());
+        }
+
         me->on_target_out_of_range();
     }
 
@@ -170,7 +179,7 @@ void AstroPreAttackState::exit(Enemy& e) {
 // ====================================
 
 AstroEnemy::AstroEnemy()
-    :preAttackState(2.0f, &attackState), waitingForEnemy(10.0f, &preAttackState), cast(nullptr), Enemy(EnemyTipe::Astro)
+    :preAttackState(2.0f, &attackState), waitingForEnemy(3.0f, &preAttackState), cast(nullptr), Enemy(EnemyTipe::Astro)
 {
     init_states();
     size = glm::vec2(0.7f,0.7f);
@@ -195,7 +204,7 @@ void AstroEnemy::init_states() {
 
     waitingForEnemy.tot_framex = 6;
     waitingForEnemy.tot_rows = 1;
-    waitingForEnemy.frame_duration = 10.0f;
+    waitingForEnemy.frame_duration = 3.0f;
     waitingForEnemy.y_offset = 0;
     waitingForEnemy.max_frame = 1;
     waitingForEnemy.follow_player_dir_at_start = true;

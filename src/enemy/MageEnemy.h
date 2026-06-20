@@ -11,11 +11,13 @@ private:
     uint8_t last_frame = 0;
     float start_time;
     float ttl;
+    bool checkBeamHit(const glm::vec2& objPos, const glm::vec2& objSize,
+        const glm::vec2 start, const glm::vec2 forward,
+        const float beamWidth, const float currentLength) const;
 public:
     uint8_t start_pos;
     uint8_t end_pos;
     uint8_t duration;
-
     virtual void enter(Enemy&) override;
     virtual void update(Enemy&, float dt) override;
     virtual void exit(Enemy&) override;
@@ -65,6 +67,7 @@ public:
 
     void spawn_cast(glm::mat4 model, const glm::vec4& color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
     void remove_cast();
+
 
     Cast* get_cast() {
         return cast;
