@@ -21,7 +21,7 @@ enum GameStateType {
 	InGame,
 	Pause,
 	Looting,
-	TitleScreen,
+	Title,
 	GameOver
 };
 
@@ -72,6 +72,15 @@ public:
 	virtual void renderUI(Game& game) override;
 };
 
+class TitleGameState : public IGameState {
+public:
+	TitleGameState() : IGameState(GameStateType::Title) {};
+	virtual void enter(Game& game) override;
+	virtual void update(Game& game, float dt) override;
+	virtual void exit(Game& game) override;
+	virtual void renderUI(Game& game) override;
+};
+
 // ================== GAME MANAGER ==========================
 
 class Game {
@@ -82,6 +91,7 @@ private:
 	InGameState inGameState;
 	LootingGameState lootingState;
 	PauseGameState pauseState;
+	TitleGameState titleState;
 
 	Player player;
 	GLFWwindow* window;
@@ -91,7 +101,7 @@ private:
 	const glm::mat4 projection3D;
 	std::array<ModelRenderer*, 2> chest_part;
 
-	std::vector<Button> pauseButtons;
+	std::unordered_map<GameStateType, std::vector<Button>> stateButtons;
 
 	//EnemyManager* enemyManager;
 	CastManager* castManager;
@@ -110,8 +120,6 @@ private:
 	EnemyManager* enemyManager;
 	Timer timer;
 	
-
-
 	Game(
 		GLFWwindow* window,
 		Camera& camera,
@@ -122,6 +130,7 @@ private:
 	);
 
 	int init_renderers(const glm::mat4& projection);
+	void init_buttons();
 public: 
 	UpgradeUI upgradeUI;
 
@@ -152,7 +161,7 @@ public:
 	BulletManager* get_bulletManager();
 	SpriteRenderer* get_SpriteRenderer();
 	TextRenderer* get_TextRenderer();
-	std::vector<Button>& get_PauseButtons();
+	std::vector<Button>& get_buttons(GameStateType type);
 
 	ChestManager& get_chestManager();
 

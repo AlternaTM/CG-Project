@@ -3,6 +3,38 @@
 #include "../resourceManager/resourceManager.h"
 #include "../modelRenderer/modelRenderer.h"
 
+// ================== TitleState ==========================
+void TitleGameState::enter(Game& game) {
+	game.switch_state(GameStateType::Title);
+
+}
+
+void TitleGameState::update(Game& game, float dt) {
+	for (auto& b : game.get_buttons(GameStateType::Title)) {
+		b.update(game.get_window());
+	}
+
+}
+
+void TitleGameState::exit(Game& game) {
+
+}
+
+void TitleGameState::renderUI(Game& game) {
+	game.get_SpriteRenderer()->Draw(
+		ResourceManager::GetTexture("titleScreen"),
+		{ 0.0f, 0.0f },              // centro
+		{ 16.0f, 9.0f },
+		0.0f,
+		glm::mat4(1.0f)
+	);
+
+	for (auto& b : game.get_buttons(GameStateType::Title)) {
+		b.render(*game.get_SpriteRenderer(), *game.get_TextRenderer());
+	}
+
+}
+
 // ================== InGameState ==========================
 void InGameState::enter(Game& game) {
 
@@ -58,7 +90,12 @@ void LootingGameState::exit(Game& game) {
 }
 
 void LootingGameState::render3d(Game& game,float dt) {
-	
+	game.get_SpriteRenderer()->DrawColor(
+		{ 0.0f, 0.0f },
+		{ 32.0f, 18.0f },
+		{ 0.0f, 0.0f, 0.0f, 0.7f }
+	);
+
 	game.get_chestManager().render_chest(
 		*game.get_camera3D(),
 		game.get_projection3D(),
@@ -67,7 +104,6 @@ void LootingGameState::render3d(Game& game,float dt) {
 		dt
 	);
 
-	
 }
 
 void LootingGameState::renderUI(Game& game) {
@@ -78,7 +114,6 @@ void LootingGameState::renderUI(Game& game) {
 	sprintf_s(buffer, "%02d:%02d", min, sec);
 
 	game.get_TextRenderer()->RenderText(buffer, -7.5f, 3.7f, 0.7f, { 1.0f, 1.0f, 1.0f });
-
 
 	if (game.get_chestManager().finished) {
 		game.upgradeUI.render(game.get_TextRenderer(), game.get_SpriteRenderer());
@@ -97,7 +132,7 @@ void PauseGameState::update(Game& game, float dt) {
 		game.switch_state(GameStateType::InGame);
 	}
 
-	for (auto& b : game.get_PauseButtons()) {
+	for (auto& b : game.get_buttons(GameStateType::Pause)) {
 		b.update(game.get_window());
 	}
 }
@@ -121,7 +156,7 @@ void PauseGameState::renderUI(Game& game) {
 		{ 0.0f, 0.0f, 0.0f, 0.7f }
 	);
 
-	for (auto& b : game.get_PauseButtons()) {
+	for (auto& b : game.get_buttons(GameStateType::Pause)) {
 		b.render(*game.get_SpriteRenderer(), *game.get_TextRenderer());
 	}
 }
@@ -151,21 +186,9 @@ Game::Game(
 	projection3D(projection3D),
 	chest_part(chest_part)
 {
-	game_state = &inGameState;
+	game_state = &titleState;
 
-	pauseButtons.emplace_back(
-		"RIPRENDI",
-		glm::vec2(0.0f, -1.0f),
-		glm::vec2(5.0f, 1.3f),
-		[this]() { switch_state(GameStateType::InGame); }
-	);
-
-	pauseButtons.emplace_back(
-		"USCITA",
-		glm::vec2(0.0f, 1.0f),
-		glm::vec2(5.0f, 1.3f),
-		[this]() {  }
-	);
+	
 }
 
 void Game::init(
@@ -189,6 +212,7 @@ void Game::init(
 	//game.enemyManager->spawn_enemy(EnemyTipe::Mage, 1);+
 	game.bulletManager = BulletManager::get_instance();
 	game.init_renderers(projection);
+	game.init_buttons();
 
 	game.castManager->init(&game.figCastRenderer, &game.figAstroCastRenderer, &game.figAstroShadowCastRenderer, &game.asteroidModelRenderer);
 
@@ -221,6 +245,52 @@ int Game::init_renderers(const glm::mat4& projection) {
 	return 0;
 }
 
+void Game::init_buttons() {
+	stateButtons[GameStateType::Title] = {
+		Button(
+			"INIZIA",
+			glm::vec2(0.0f, 1.0f),
+			glm::vec2(5.0f, 1.3f),
+			[this]() { switch_state(GameStateType::InGame); }
+		),
+		Button(
+			"ESCI",
+			glm::vec2(0.0f, -1.0f),
+			glm::vec2(5.0f, 1.3f),
+			[this]() {  }
+		)
+	};
+
+	stateButtons[GameStateType::Pause] = {
+		Button(
+			"RIPRENDI",
+			glm::vec2(0.0f, 1.0f),
+			glm::vec2(5.0f, 1.3f),
+			[this]() { switch_state(GameStateType::InGame); }
+		),
+		Button(
+			"ABBANDONA",
+			glm::vec2(0.0f, -1.0f),
+			glm::vec2(5.0f, 1.3f),
+			[this]() { switch_state(GameStateType::Title); }
+		)
+	};
+
+	stateButtons[GameStateType::GameOver] = {
+		Button(
+			"RIPROVA",
+			glm::vec2(0.0f, 1.0f),
+			glm::vec2(5.0f, 1.3f),
+			[this]() { switch_state(GameStateType::InGame); }
+		),
+		Button(
+			"ABBANDONA",
+			glm::vec2(0.0f, -1.0f),
+			glm::vec2(5.0f, 1.3f),
+			[this]() { switch_state(GameStateType::Title); }
+		)
+	};
+}
 
 void Game::update(float dt) {
 	game_state->update(*this, dt);
@@ -275,6 +345,9 @@ void Game::switch_state(GameStateType state) {
 	}
 	game_state->exit(*this);
 	switch (state) {
+	case GameStateType::Title:
+		game_state = &titleState;
+		break;
 	case GameStateType::InGame:
 		game_state = &inGameState;
 		break;
@@ -340,6 +413,6 @@ std::array<ModelRenderer*, 2>& Game::get_chest_part() {
 	return chest_part;
 }
 
-std::vector<Button>& Game::get_PauseButtons() {
-	return pauseButtons;
+std::vector<Button>& Game::get_buttons(GameStateType type) {
+	return stateButtons[type];
 }

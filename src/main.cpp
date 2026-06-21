@@ -145,6 +145,7 @@ int main(void)
     ResourceManager::LoadTexture("mago", "assets/textures/magoSheet.png");
     ResourceManager::LoadTexture("cannon", "assets/textures/cannon.png");
     ResourceManager::LoadTexture("bullet", "assets/textures/proiettile_base.png");
+    ResourceManager::LoadTexture("titleScreen", "assets/textures/title.png");
 
     // Avvio motore audio
     irrklang::ISoundEngine* engine = irrklang::createIrrKlangDevice();
@@ -277,5 +278,3 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
     // height will be significantly larger than specified on retina displays.
     glViewport(0, 0, width, height);
 }
-
-
