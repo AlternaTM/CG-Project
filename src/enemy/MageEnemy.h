@@ -56,6 +56,9 @@ private:
     Cast* cast;
 public:
     MageEnemy();
+    ~MageEnemy() {
+        remove_cast();
+    }
     glm::vec2 saved_target;
     float       get_attack_distance() const override { return 3.5f; }
     uint8_t     get_base_damage()     const override { return 5; }

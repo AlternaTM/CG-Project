@@ -44,14 +44,17 @@ void LootingGameState::enter(Game& game) {
 }
 
 void LootingGameState::update(Game& game, float dt) {
-	game.upgradeUI.update(dt);
-	if (PlayerInput::isKeyJustPressed(game.get_window(), GLFW_KEY_E)) {
+	game.upgradeUI.update(game.get_window(),dt);
+
+	if (game.upgradeUI.applied) {
+		game.upgradeUI.applied = false;
 		game.switch_state(GameStateType::InGame);
 	}
 }
 
 void LootingGameState::exit(Game& game) {
 	game.upgradeUI.destroyScene();
+	game.get_chestManager().finished = false;
 }
 
 void LootingGameState::render3d(Game& game,float dt) {
@@ -74,7 +77,12 @@ void LootingGameState::renderUI(Game& game) {
 	char buffer[6];
 	sprintf_s(buffer, "%02d:%02d", min, sec);
 
-	game.get_TextRenderer()->RenderText(buffer, 20.0f, 1080 - 70.0f, 0.7f, { 1.0f, 1.0f, 1.0f });
+	game.get_TextRenderer()->RenderText(buffer, -7.5f, 3.7f, 0.7f, { 1.0f, 1.0f, 1.0f });
+
+
+	if (game.get_chestManager().finished) {
+		game.upgradeUI.render(game.get_TextRenderer(), game.get_SpriteRenderer());
+	}
 }
 
 
@@ -105,7 +113,7 @@ void PauseGameState::renderUI(Game& game) {
 	char buffer[6];
 	sprintf_s(buffer, "%02d:%02d", min, sec);
 
-	game.get_TextRenderer()->RenderText(buffer, 20.0f, 1080 - 70.0f, 0.7f, { 1.0f, 1.0f, 1.0f });
+	game.get_TextRenderer()->RenderText(buffer, -7.5f, 3.7f, 0.7f, { 1.0f, 1.0f, 1.0f });
 
 	game.get_SpriteRenderer()->DrawColor(
 		{ 0.0f, 0.0f },
@@ -258,9 +266,7 @@ void Game::render3d(float dt) {
 
 void Game::renderUI() {
 	game_state->renderUI(*this);
-
-	if(chestManager.finished)
-		upgradeUI.render(&figRectRenderer, &textRenderer);
+		
 }
 
 void Game::switch_state(GameStateType state) {

@@ -36,4 +36,5 @@ public:
 
     void render_chest(Camera3D& camera3D, const glm::mat4& projection3D, ModelRenderer& chest, ModelRenderer& chest_lid, float dt);
 
+    void spawn_chest();
 };

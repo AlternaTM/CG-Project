@@ -113,3 +113,13 @@ void ChestManager::render_chest(Camera3D& camera3D, const glm::mat4& projection3
     chest_lid.render(camera3D.getViewMatrix(), projection3D, &chestWorld);
 
 }
+
+
+void ChestManager::spawn_chest() {
+    static std::mt19937 gen(std::random_device{}());
+    std::uniform_real_distribution<float> dist(-5.0f, 5.0f);
+
+    chests.push_back(
+        Chest(dist(gen), dist(gen))
+    );
+}

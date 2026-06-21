@@ -1,7 +1,7 @@
 #include "player.h"
 #include "playerInput.h"
 #include "shooting/bullet.h"
-
+#include <algorithm> 
 
 PlayingState* PlayingState::instance() {
     static PlayingState inst;
@@ -105,5 +105,35 @@ void Player::shoot(float dt) {
     bullet->set_position(pos);
     BulletManager::add_bullet(bullet);
 }
+
+void Player::apply_upgrade(Upgrades upgrade) {
+    constexpr float increment = 0.2f;
+
+    switch (upgrade) {
+    case Upgrades::BulletDamager:
+        damage_mult = std::min(damage_mult + increment, max_mult);
+        break;
+
+    case Upgrades::ShootingSpeed:
+        shot_speed_mult = std::min(shot_speed_mult + increment, max_mult);
+        break;
+
+    case Upgrades::BulletSpeed:
+        bullet_speed_mult = std::min(bullet_speed_mult + increment, max_mult);
+        break;
+
+    case Upgrades::BulletSize:
+        bullet_sise_mult = std::min(bullet_sise_mult + increment, max_mult);
+        break;
+
+    case Upgrades::BulletPierce:
+        bullet_max_hit = static_cast<uint8_t>(std::min<int>(bullet_max_hit + 1, max_hits));
+        break;
+
+    default:
+        break;
+    }
+
+} 
 
 

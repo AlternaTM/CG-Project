@@ -10,6 +10,8 @@
 #include "textRenderer/textRenderer.h"
 
 class Button {
+protected:
+    float textScale = 0.8f;
 public:
     Button(
         const std::string& label,
@@ -32,5 +34,5 @@ private:
     glm::vec4 normalColor = { 0.2f, 0.2f, 0.25f, 0.9f };
     glm::vec4 hoverColor = { 0.35f, 0.35f, 0.45f, 0.95f };
     glm::vec3 textColor = { 1.0f, 1.0f, 1.0f };
-    float textScale = 0.8f;
+
 };

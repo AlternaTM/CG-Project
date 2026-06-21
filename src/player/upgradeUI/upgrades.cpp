@@ -2,8 +2,10 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <cmath>
+#include "game/game.h"
 
-void UpgradeUI::update(float dt){
+
+void UpgradeUI::update(GLFWwindow* window, float dt){
 	if (
 		card1 == nullptr ||
 		card2 == nullptr ||
@@ -12,11 +14,17 @@ void UpgradeUI::update(float dt){
 		return;
 	}
 
+	Card* cards[3] = { card1, card2, card3 };
 
+
+	for (Card* c : cards) {
+
+		c->update(window);
+	}
 
 }
 
-void UpgradeUI::render(FigRenderer* renderer, TextRenderer* textRenderer){
+void UpgradeUI::render(TextRenderer* textRenderer, SpriteRenderer* spriteRenderer){
 	if (
 		card1 == nullptr ||
 		card2 == nullptr ||
@@ -25,33 +33,14 @@ void UpgradeUI::render(FigRenderer* renderer, TextRenderer* textRenderer){
 		return;
 	}
 	
-	static std::vector<Vertex2D> vertices = {
-	{{-0.5f, -0.5f}, {0.0f, 0.0f}},
-	{{ 0.5f, -0.5f}, {1.0f, 0.0f}},
-	{{ 0.5f,  0.5f}, {1.0f, 1.0f}},
-	{{-0.5f,  0.5f}, {0.0f, 1.0f}},
-	};
-
-	static std::vector<uint32_t> indices = {
-		0, 1, 2,
-		2, 3, 0
-	};
 
 	Card* cards[3] = { card1, card2, card3 };
 
 
 	for (Card* c : cards) {
-		Mesh2D mesh;
-		mesh.create(vertices, indices);
 
-		glm::mat4 transform = glm::mat4(1.0f);
-		transform = glm::translate(transform, glm::vec3(c->pos, 0.0f));
-		transform = glm::scale(transform, glm::vec3(c->size, 1.0f));
-
-		renderer->draw(mesh, transform, glm::mat4(1.0f), glm::vec4(0.38f, 0.38f, 0.38f, 0.98f));
+		c->render(*spriteRenderer, *textRenderer);
 	}
-
-
 
 
 	float scale = 0.7f;
@@ -59,17 +48,40 @@ void UpgradeUI::render(FigRenderer* renderer, TextRenderer* textRenderer){
 
 	float textWidth = textRenderer->GetTextWidth(text, scale);
 	float x = (1080 - textWidth);
-	textRenderer->RenderText("Choose", x, 800.0f, scale, { 1.0f, 1.0f, 1.0f });
+	textRenderer->RenderText("Choose", 0.0f - textWidth/2.0f, 2.8f, scale, { 1.0f, 1.0f, 1.0f });
 
 }
 
 
 void UpgradeUI::createScene() {
 	destroyScene();
-	card1 = new Card({ -3.0f, 0.0f }, { 2.0f, 3.0f });
-	card2 = new Card({ 0.0f, 0.0f }, { 2.0f, 3.0f });
-	card3 = new Card({ 3.0f, 0.0f }, { 2.0f, 3.0f });
 
+
+	Upgrades up = randomUpgrade();
+	card1 = new Card(toString(up), {-3.0f, 0.0f}, {2.0f, 3.0f},up , [this](Upgrades u) {
+		//player.applyUpgrade(u);
+		if (!applied && Game::get_instance()->get_chestManager().finished) {
+			applied = true;
+			Game::get_instance()->get_player()->apply_upgrade(u);
+		}
+	});
+	up = randomUpgrade();
+	card2 = new Card(toString(up), {0.0f, 0.0f}, {2.0f, 3.0f},up, [this](Upgrades u) {
+		if (!applied && Game::get_instance()->get_chestManager().finished) {
+			applied = true;
+			Game::get_instance()->get_player()->apply_upgrade(u);
+		}
+		//player.applyUpgrade(u);
+	});
+	up = randomUpgrade();
+	card3 = new Card(toString(up),{ 3.0f, 0.0f }, {2.0f, 3.0f},up, [this](Upgrades u) {
+		//player.applyUpgrade(u);
+		if (!applied && Game::get_instance()->get_chestManager().finished) {
+			applied = true;
+			Game::get_instance()->get_player()->apply_upgrade(u);
+		}
+		
+	});
 }
 
 void UpgradeUI::destroyScene() {
@@ -80,3 +92,4 @@ void UpgradeUI::destroyScene() {
 	delete card3;
 	card3 = nullptr;
 }
+

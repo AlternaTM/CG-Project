@@ -11,7 +11,7 @@
 #include "../player/upgradeUI/upgrades.h"
 #include "textRenderer/textRenderer.h"
 #include "timer/timer.h"
-#include "../button.h"
+#include "button/button.h"
 
 class Game;
 class CastManager;

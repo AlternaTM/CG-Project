@@ -6,6 +6,7 @@
 #include "MageEnemy.h"
 #include "astroEnemy.h" 
 #include "mageBullet/mageCast.h"
+#include "game/game.h"
 #include <glm/gtc/matrix_transform.hpp>
 
 Player* EnemyManager::_PLAYER = nullptr;
@@ -137,8 +138,7 @@ Enemy::Enemy(EnemyTipe type):type(type) {
 
 void Enemy::make_damage(uint8_t damage) {
     life -= damage;
-    if (life <= 0)
-        EnemyManager::get_instance()->remove_enemy(this->ID); //QUI MUORE L'OGGETTO; NON FARE NULLA DOPO QUESTA RIGA
+
 }
 
 void Enemy::change_state(EnemyState* new_state) {
@@ -207,6 +207,7 @@ void EnemyManager::spawn_enemy(EnemyTipe type, int n) {
     });
 }
 
+/*
 void EnemyManager::remove_enemy(uint32_t ID) {
     auto it = std::find_if(enemys.begin(), enemys.end(),
         [ID](Enemy* e) { return e->ID == ID; });
@@ -216,7 +217,7 @@ void EnemyManager::remove_enemy(uint32_t ID) {
         enemys.erase(it);
     }
 }
-
+*/
 void EnemyManager::render(SpriteRenderer& renderer, FigRenderer& figRenderer, Camera& camera) {
     for ( Enemy* e : enemys) {
         renderer.Draw(
@@ -271,12 +272,42 @@ void EnemyManager::update(Player& player, float delta) {
     }
 
     enemys.erase(
-        std::remove_if(enemys.begin(),enemys.end(), [](Enemy* m){
-            return m->get_life() <= 0;
-        }),
+        std::remove_if(enemys.begin(), enemys.end(), [this, &player](Enemy* e) {
+            if (e->get_life() <= 0) {
+                if (e->type == EnemyTipe::Astro) {
+                    Game::get_instance()->get_chestManager().spawn_chest();
+                }
+                delete e; 
+                return true;
+            }
+            return false;
+            }),
         enemys.end()
     );
+
+
+    spawnTimer += delta;
+    if (spawnTimer >= spawnInterval) {
+        spawnTimer = 0.0f;
+
+        if (enemys.size() < minEnemies) {
+            for (int i = 0; i < spawnAmount; i++) {
+                spawn_enemy(randomWeightedEnemyType(), 1); 
+            }
+        }
+    }
 }
+
+EnemyTipe EnemyManager::randomWeightedEnemyType() {
+    static std::random_device rd;
+    static std::mt19937 gen(rd());
+
+    
+    static std::discrete_distribution<int> dist({ 60, 30, 10 });
+
+    return static_cast<EnemyTipe>(dist(gen));
+}
+
 
 
 

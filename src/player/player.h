@@ -9,6 +9,8 @@
 #include "playerinput.h"
 #include "animSystem/animSystem.h"
 #include "entity.h"
+#include "upgradeUI/upgrades.h"
+
 
 class Player;
 
@@ -82,7 +84,7 @@ public:
     uint8_t bullet_max_hit = 1;
 
     const float max_mult = 5.0f;
-
+    const uint8_t max_hits = 5;
 
     Player(Camera& camera);
 
@@ -99,6 +101,8 @@ public:
     glm::vec2 get_frame_size() override;
 
     void hit(uint8_t damage);
+
+    void apply_upgrade(Upgrades upgrade);
 protected:
     uint8_t life = 255;
 };

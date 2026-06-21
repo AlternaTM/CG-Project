@@ -149,11 +149,19 @@ private:
     
     std::vector<Enemy *> enemys;
     void drawlife(FigRenderer& figRenderer, Camera& camera,const glm::vec2& pos, const int16_t life);
+    EnemyTipe randomWeightedEnemyType();
+
+
+    float spawnTimer = 0.0f;
+    const float spawnInterval = 5.0f;   
+    const size_t minEnemies = 3;        
+    const int spawnAmount = 15;          
+
 public: 
     static Player* _PLAYER;
     static EnemyManager* get_instance();
     void spawn_enemy(EnemyTipe type, int n);
-    void remove_enemy(uint32_t ID);
+    //void remove_enemy(uint32_t ID);
     void update(Player& player,float delta);
     void render(SpriteRenderer& renderer, FigRenderer& figRenderer, Camera& camera);
     std::vector<Enemy*>& get_enemys() {
