@@ -167,14 +167,31 @@ glm::vec2 Enemy::get_offset() {
 // ============= ENEMY MANAGER ==================================
 
 
-EnemyManager* EnemyManager::_INSTACE = nullptr;
+EnemyManager* EnemyManager::_INSTANCE = nullptr;
 
 
 EnemyManager* EnemyManager::get_instance() {
-    if (_INSTACE == nullptr) {
-        _INSTACE = new EnemyManager();
+    if (_INSTANCE == nullptr) {
+        _INSTANCE = new EnemyManager();
+        _INSTANCE->init_life_bar_mesh();
     }
-    return _INSTACE;
+    return _INSTANCE;
+}
+
+void EnemyManager::init_life_bar_mesh() {
+    std::vector<Vertex2D> vertices = {
+        {{-0.5f, -0.5f}, {0.0f, 0.0f}},
+        {{ 0.5f, -0.5f}, {1.0f, 0.0f}},
+        {{ 0.5f,  0.5f}, {1.0f, 1.0f}},
+        {{-0.5f,  0.5f}, {0.0f, 1.0f}},
+    };
+
+    std::vector<uint32_t> indices = {
+        0, 1, 2,
+        2, 3, 0
+    };
+
+    lifeBarMesh.create(vertices, indices);
 }
 
 void EnemyManager::spawn_enemy(EnemyTipe type, int n) {
@@ -218,6 +235,7 @@ void EnemyManager::remove_enemy(uint32_t ID) {
     }
 }
 */
+
 void EnemyManager::render(SpriteRenderer& renderer, FigRenderer& figRenderer, Camera& camera) {
     for ( Enemy* e : enemys) {
         renderer.Draw(
@@ -240,30 +258,12 @@ void EnemyManager::drawlife(FigRenderer& figRenderer, Camera& camera, const glm:
     float bar = life / 255.0f;
     bar *= 0.5f;
 
-    std::vector<Vertex2D> vertices = {
-        {{-0.5f, -0.5f}, {0.0f, 0.0f}},
-        {{ 0.5f, -0.5f}, {1.0f, 0.0f}},
-        {{ 0.5f,  0.5f}, {1.0f, 1.0f}},
-        {{-0.5f,  0.5f}, {0.0f, 1.0f}},
-    };
-
-    std::vector<uint32_t> indices = {
-        0, 1, 2,
-        2, 3, 0
-    };
-
-    Mesh2D mesh;
-    mesh.create(vertices, indices);
-
     glm::mat4 model = glm::mat4(1.0f);
 
     model = glm::translate(model, glm::vec3(fPos.x + 0.25f, fPos.y, 0.0f));
-    //model = glm::rotate(model, angle, glm::vec3(0, 0, 1));
     model = glm::scale(model, glm::vec3(bar, 0.05f, 1.0f));
     
-    figRenderer.draw(mesh, model, camera.getViewMatrix());
-
-    //figRenderer.drawRect(fPos, glm::vec2(bar, 0.05f),0,camera.getViewMatrix());
+    figRenderer.draw(lifeBarMesh, model, camera.getViewMatrix());
 }
 
 void EnemyManager::update(Player& player, float delta) {

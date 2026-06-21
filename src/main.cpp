@@ -214,14 +214,15 @@ int main(void)
     Game* game = Game::get_instance();
 
     float lastTime = (float)glfwGetTime();
-
+    float now = 0.0f;
+	float dt = 0.0f;
 
 
 
     //------------------- CICLO ------------------- 
     while (!glfwWindowShouldClose(window)) {
-        float now = (float)glfwGetTime();
-        float dt = now - lastTime;
+        now = (float)glfwGetTime();
+        dt = now - lastTime;
         lastTime = now;
 
         

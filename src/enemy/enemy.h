@@ -145,12 +145,14 @@ public:
 class EnemyManager {
 private:
     EnemyManager() {}
-    static EnemyManager* _INSTACE;
+    static EnemyManager* _INSTANCE;
+
+	void init_life_bar_mesh();
     
     std::vector<Enemy *> enemys;
     void drawlife(FigRenderer& figRenderer, Camera& camera,const glm::vec2& pos, const int16_t life);
     EnemyTipe randomWeightedEnemyType();
-
+    Mesh2D lifeBarMesh;
 
     float spawnTimer = 0.0f;
     const float spawnInterval = 5.0f;   
