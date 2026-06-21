@@ -42,15 +42,8 @@ bool ChestManager::interact(GLFWwindow* window, Player& pl) {
 }
 
 
-ChestManager::ChestManager(int n) {
-    static std::mt19937 gen(std::random_device{}());
-    std::uniform_real_distribution<float> dist(-5.0f, 5.0f);
+ChestManager::ChestManager() {
 
-    for (int i = 0; i < n; i++) {
-        chests.push_back(
-            Chest(dist(gen), dist(gen))
-        );
-    }
 
 }
 
@@ -122,4 +115,9 @@ void ChestManager::spawn_chest() {
     chests.push_back(
         Chest(dist(gen), dist(gen))
     );
+}
+
+
+void ChestManager::reset() {
+    chests.clear();
 }

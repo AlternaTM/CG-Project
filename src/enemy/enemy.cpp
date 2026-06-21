@@ -308,6 +308,17 @@ EnemyTipe EnemyManager::randomWeightedEnemyType() {
     return static_cast<EnemyTipe>(dist(gen));
 }
 
+void EnemyManager::reset() {
+    enemys.erase(
+        std::remove_if(enemys.begin(), enemys.end(), [](Enemy* e) {
+                delete e;
+                return true;
+            }),
+        enemys.end()
+    );
+}
+
+
 
 
 

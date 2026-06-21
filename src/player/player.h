@@ -103,6 +103,9 @@ public:
     void hit(uint8_t damage);
 
     void apply_upgrade(Upgrades upgrade);
+
+
+    void reset();
 protected:
     uint8_t life = 255;
 };

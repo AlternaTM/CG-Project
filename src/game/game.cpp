@@ -89,12 +89,16 @@ void LootingGameState::exit(Game& game) {
 	game.get_chestManager().finished = false;
 }
 
-void LootingGameState::render3d(Game& game,float dt) {
+void LootingGameState::render2d(Game& game) {
 	game.get_SpriteRenderer()->DrawColor(
 		{ 0.0f, 0.0f },
 		{ 32.0f, 18.0f },
 		{ 0.0f, 0.0f, 0.0f, 0.7f }
 	);
+
+}
+
+void LootingGameState::render3d(Game& game,float dt) {
 
 	game.get_chestManager().render_chest(
 		*game.get_camera3D(),
@@ -178,7 +182,7 @@ Game::Game(
 	player(camera), 
 	castManager(CastManager::get_instance()),
 	camera(camera),
-	chestManager(2),
+	chestManager(),
 	renderer(renderer),
 	enemyManager(EnemyManager::get_instance()),
 	window(window),
@@ -216,8 +220,7 @@ void Game::init(
 
 	game.castManager->init(&game.figCastRenderer, &game.figAstroCastRenderer, &game.figAstroShadowCastRenderer, &game.asteroidModelRenderer);
 
-	game.enemyManager->spawn_enemy(EnemyTipe::Skeleton, 10);
-	game.enemyManager->spawn_enemy(EnemyTipe::Astro, 1);
+
 	EnemyManager::_PLAYER = game.get_player();
 
 	_INSTANCE = &game;
@@ -251,7 +254,7 @@ void Game::init_buttons() {
 			"INIZIA",
 			glm::vec2(0.0f, 1.0f),
 			glm::vec2(5.0f, 1.3f),
-			[this]() { switch_state(GameStateType::InGame); }
+			[this]() {spawn_game();  switch_state(GameStateType::InGame); }
 		),
 		Button(
 			"ESCI",
@@ -266,13 +269,13 @@ void Game::init_buttons() {
 			"RIPRENDI",
 			glm::vec2(0.0f, 1.0f),
 			glm::vec2(5.0f, 1.3f),
-			[this]() { switch_state(GameStateType::InGame); }
+			[this]() {  switch_state(GameStateType::InGame); }
 		),
 		Button(
 			"ABBANDONA",
 			glm::vec2(0.0f, -1.0f),
 			glm::vec2(5.0f, 1.3f),
-			[this]() { switch_state(GameStateType::Title); }
+			[this]() {reset(); switch_state(GameStateType::Title); }
 		)
 	};
 
@@ -326,6 +329,7 @@ void Game::render2d() {
 		camera.getViewMatrix()
 	);
 
+	game_state->render2d(*this);
 }
 
 void Game::render3d(float dt) {
@@ -415,4 +419,19 @@ std::array<ModelRenderer*, 2>& Game::get_chest_part() {
 
 std::vector<Button>& Game::get_buttons(GameStateType type) {
 	return stateButtons[type];
+}
+
+
+void Game::reset() {
+	player.reset();
+	enemyManager->reset();
+	chestManager.reset();
+	bulletManager->reset();
+}
+
+void Game::spawn_game() {
+	enemyManager->spawn_enemy(EnemyTipe::Skeleton, 10);
+	enemyManager->spawn_enemy(EnemyTipe::Astro, 1);
+	chestManager.spawn_chest();
+	chestManager.spawn_chest();
 }

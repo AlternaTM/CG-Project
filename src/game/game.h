@@ -59,6 +59,7 @@ public:
 	virtual void enter(Game& game) override;
 	virtual void update(Game& game, float dt) override;
 	virtual void exit(Game& game) override;
+	virtual void render2d(Game& game) override;
 	virtual void render3d(Game& game, float dt) override;
 	virtual void renderUI(Game& game) override;
 };
@@ -162,6 +163,10 @@ public:
 	SpriteRenderer* get_SpriteRenderer();
 	TextRenderer* get_TextRenderer();
 	std::vector<Button>& get_buttons(GameStateType type);
+
+
+	void reset();
+	void spawn_game();
 
 	ChestManager& get_chestManager();
 

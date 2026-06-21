@@ -137,3 +137,13 @@ void Player::apply_upgrade(Upgrades upgrade) {
 } 
 
 
+void Player::reset() {
+    life = 255;
+    damage_mult = 1.0f;
+    shot_speed_mult = 1.0f;
+    bullet_speed_mult = 1.0f;
+    bullet_sise_mult = 1.0f;
+    bullet_max_hit = 1;
+
+    pos = glm::vec3(0.0f,0.0f,0.0f);
+}

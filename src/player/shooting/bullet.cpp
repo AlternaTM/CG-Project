@@ -104,3 +104,7 @@ BulletManager* BulletManager::get_instance() {
 
 	return _INSTANCE;
 }
+
+void BulletManager::reset() {
+	remove_all();
+}

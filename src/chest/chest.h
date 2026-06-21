@@ -30,11 +30,13 @@ public:
     float angle = 0.0f;
     bool finished = false;
 
-    ChestManager(int n);
+    ChestManager();
     bool interact(GLFWwindow* window, Player& pl);
     void render(SpriteRenderer& renderer, Camera& camera);
 
     void render_chest(Camera3D& camera3D, const glm::mat4& projection3D, ModelRenderer& chest, ModelRenderer& chest_lid, float dt);
 
     void spawn_chest();
+
+    void reset();
 };

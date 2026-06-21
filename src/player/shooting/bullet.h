@@ -67,5 +67,5 @@ public:
 	void remove_all();
 
 	static BulletManager* get_instance();
-
+	void reset();
 };

@@ -168,6 +168,7 @@ public:
         return enemys;
     }
 
+    void reset();
 };
 
 
