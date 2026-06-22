@@ -27,3 +27,8 @@ int Timer::getSeconds() const {
 bool Timer::isFinished() const {
     return elapsed >= maxTime;
 }
+
+
+void Timer::reset() {
+    elapsed = 0.0f;
+}

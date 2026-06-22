@@ -61,7 +61,7 @@ public:
     }
     glm::vec2 saved_target;
     float       get_attack_distance() const override { return 3.5f; }
-    uint8_t     get_base_damage()     const override { return 5; }
+    uint8_t     get_base_damage()     const override { return 1; }
     std::string get_texture_name()    const override { return "mago"; }
     void        init_states()               override;
     void        on_target_in_range()        override;

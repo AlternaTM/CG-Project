@@ -11,6 +11,7 @@ public:
     float getTime() const;
 
     bool isFinished() const;
+    void reset();
 
 private:
     float elapsed;          // secondi

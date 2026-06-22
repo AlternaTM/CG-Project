@@ -554,7 +554,7 @@ void Game::init_buttons() {
 			"Riprova",
 			glm::vec2(0.0f, 0.7f),
 			glm::vec2(5.0f, 1.1f),
-			[this]() { switch_state(GameStateType::InGame); }
+			[this]() { switch_state(GameStateType::InGame); spawn_game(); }
 		),
 		Button(
 			"Abbandona",
@@ -719,6 +719,7 @@ void Game::reset() {
 	enemyManager->reset();
 	chestManager.reset();
 	bulletManager->reset();
+	timer.reset();
 }
 
 void Game::spawn_game() {

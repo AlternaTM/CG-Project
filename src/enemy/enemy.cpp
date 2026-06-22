@@ -316,6 +316,7 @@ void EnemyManager::reset() {
             }),
         enemys.end()
     );
+    spawnTimer = 0.0f;
 }
 
 
