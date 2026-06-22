@@ -93,8 +93,8 @@ int main(void)
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     Shader spriteShader(
-        "src/glsl/spriteVertexShader.glsl",
-        "src/glsl/spriteFragShader.glsl"
+        "shaders/glsl/spriteVertexShader.glsl",
+        "shaders/glsl/spriteFragShader.glsl"
     );
 
     glm::mat4 projection = glm::ortho(
@@ -161,18 +161,14 @@ int main(void)
 
 
     //----------------chest---------------------
-    //ChestManager chestManager = ChestManager(2);
-
-
-    //Shader chestShader("src/glsl/modelVertexShader.glsl", "src/glsl/modelFragShader.glsl");
 
     // Chest base
-    ModelRenderer chest("assets/models/chest/chest.obj", "src/glsl/modelVertexShader.glsl", "src/glsl/modelFragShader.glsl");
+    ModelRenderer chest("assets/models/chest/chest.obj", "shaders/glsl/modelVertexShader.glsl", "shaders/glsl/modelFragShader.glsl");
     chest.setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
     chest.setScale(glm::vec3(1.0f));
 
     // Chest lid
-    ModelRenderer chest_lid("assets/models/chest/chest_lid.obj", "src/glsl/modelVertexShader.glsl", "src/glsl/modelFragShader.glsl");
+    ModelRenderer chest_lid("assets/models/chest/chest_lid.obj", "shaders/glsl/modelVertexShader.glsl", "shaders/glsl/modelFragShader.glsl");
     chest_lid.setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
     chest_lid.setScale(glm::vec3(1.0f));
     

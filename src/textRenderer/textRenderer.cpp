@@ -9,7 +9,7 @@
 #include <iostream>
 
 TextRenderer::TextRenderer()
-    : textShader("src/glsl/textVertexShader.glsl", "src/glsl/textFragShader.glsl")
+    : textShader("shaders/glsl/textVertexShader.glsl", "shaders/glsl/textFragShader.glsl")
 {
     glm::mat4 projection = glm::ortho(
         -8.0f, 8.0f,
