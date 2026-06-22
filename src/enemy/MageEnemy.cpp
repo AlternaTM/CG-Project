@@ -46,6 +46,9 @@ void RangedAttackState::enter(Enemy& e) {
         glm::vec4(0.7f, 0.0f, 0.3f, 0.97f)
     );
 
+
+    attackSound = EnemyManager::get_instance()->playCostantSound("assets/audio/laser.wav");
+
 }
 
 void RangedAttackState::update(Enemy& e,float dt) {
@@ -88,6 +91,7 @@ void RangedAttackState::update(Enemy& e,float dt) {
 void RangedAttackState::exit(Enemy& e) {
     MageEnemy* me = dynamic_cast<MageEnemy*>(&e);
     me->remove_cast();
+    EnemyManager::get_instance()->stopConstantSound(attackSound);
     owner = nullptr;
 }
 

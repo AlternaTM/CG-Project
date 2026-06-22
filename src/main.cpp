@@ -205,6 +205,7 @@ int main(void)
         &renderer,
         &camera3D,
         projection3D,
+        engine,
         {&chest, &chest_lid, &orso, &lamp}
     );
     std::mt19937 rng(std::random_device{}());

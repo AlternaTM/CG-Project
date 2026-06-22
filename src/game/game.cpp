@@ -446,6 +446,7 @@ Game::Game(
 	SpriteRenderer* renderer, 
 	Camera3D* camera3D,
 	const glm::mat4 projection3D,
+	irrklang::ISoundEngine* audioEngine,
 	const std::array<ModelRenderer*, 4>& models
 )
 	: 
@@ -458,6 +459,7 @@ Game::Game(
 	window(window),
 	camera3D(camera3D),
 	projection3D(projection3D),
+	audioEngine(audioEngine),
 	models(models)
 {
 	game_state = &titleState;
@@ -472,6 +474,7 @@ void Game::init(
 	SpriteRenderer* renderer,
 	Camera3D* camera3D,
 	const glm::mat4 projection3D,
+	irrklang::ISoundEngine* audioEngine,
 	const std::array<ModelRenderer*, 4>& models
 ) {
 	static Game game(
@@ -480,6 +483,7 @@ void Game::init(
 		renderer,
 		camera3D,
 		projection3D,
+		audioEngine,
 		models
 	);
 
@@ -489,7 +493,7 @@ void Game::init(
 	game.init_buttons();
 
 	game.castManager->init(&game.figCastRenderer, &game.figAstroCastRenderer, &game.figAstroShadowCastRenderer, &game.asteroidModelRenderer);
-
+	EnemyManager::get_instance()->init(audioEngine);
 
 	EnemyManager::_PLAYER = game.get_player();
 
@@ -674,6 +678,10 @@ ModelRenderer* Game::get_bear_model() {
 }
 ModelRenderer* Game::get_lamp_model() {
 	return models[3];
+}
+
+irrklang::ISoundEngine* Game::get_engine() {
+	return audioEngine;
 }
 
 

@@ -8,6 +8,7 @@ class MageEnemy;
 class RangedAttackState : public EnemyState, public Animable {
 private:
     Enemy* owner = nullptr;
+    irrklang::ISound* attackSound = nullptr;
     uint8_t last_frame = 0;
     float start_time;
     float ttl;

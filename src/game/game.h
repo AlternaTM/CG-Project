@@ -12,6 +12,7 @@
 #include "textRenderer/textRenderer.h"
 #include "timer/timer.h"
 #include "button/button.h"
+#include <irrKlang/irrKlang.h>
 
 class Game;
 class CastManager;
@@ -131,6 +132,9 @@ private:
 	TextRenderer textRenderer{};
 	ModelRenderer asteroidModelRenderer = ModelRenderer("assets/models/astro/asteroid.obj", "shaders/asteroid3d/ast3dVertex.glsl", "shaders/asteroid3d/ast3dFrag.glsl");
 
+	irrklang::ISoundEngine* audioEngine;
+
+
 	SpriteRenderer* renderer;
 	EnemyManager* enemyManager;
 	Timer timer;
@@ -141,6 +145,7 @@ private:
 		SpriteRenderer* renderer,
 		Camera3D* camera3D,
 		const glm::mat4 projection3D,
+		irrklang::ISoundEngine* audioEngine,
 		const std::array<ModelRenderer*, 4>& models
 	);
 
@@ -157,6 +162,7 @@ public:
 		SpriteRenderer* renderer, 
 		Camera3D* camera3D,
 		const glm::mat4 projection3D,
+		irrklang::ISoundEngine* audioEngine,
 		const std::array<ModelRenderer*, 4>& models
 	);
 	void switch_state(GameStateType new_state);
@@ -176,6 +182,9 @@ public:
 	BulletManager* get_bulletManager();
 	SpriteRenderer* get_SpriteRenderer();
 	TextRenderer* get_TextRenderer();
+
+	irrklang::ISoundEngine* get_engine();
+
 	std::vector<Button>& get_buttons(GameStateType type);
 
 
@@ -193,4 +202,7 @@ public:
 	ModelRenderer* get_bear_model();
 	ModelRenderer* get_lamp_model();
 	static Game* get_instance();
+
+
+	
 };

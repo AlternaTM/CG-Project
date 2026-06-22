@@ -63,6 +63,9 @@ void MeleeAttackState::update(Enemy& e,float dt) {
 
     update_anim(dt);
     if (actual_frame == 6 && last_frame != 6) {
+        
+        EnemyManager::get_instance()->playSound("assets/audio/swipe.wav");
+
         EnemyManager::_PLAYER->hit(e.get_base_damage());
     }
 
@@ -168,7 +171,6 @@ glm::vec2 Enemy::get_offset() {
 
 
 EnemyManager* EnemyManager::_INSTANCE = nullptr;
-
 
 EnemyManager* EnemyManager::get_instance() {
     if (_INSTANCE == nullptr) {
@@ -320,9 +322,30 @@ void EnemyManager::reset() {
 }
 
 
+void EnemyManager::init(irrklang::ISoundEngine* engine) {
+    audioEngine = engine;
+}
+
+void EnemyManager::playSound(const std::string& file) {
+    if (audioEngine != nullptr) {
+        audioEngine->play2D(file.c_str());
+    }
+    
+}
 
 
+irrklang::ISound* EnemyManager::playCostantSound(const std::string& file) {
+    return audioEngine->play2D(file.c_str(), true, false, true);
+}
 
+
+void EnemyManager::stopConstantSound(irrklang::ISound* isound) {
+    if (isound) {
+        isound->stop();
+        isound->drop();  
+        isound = nullptr;
+    }
+}
 
 
 

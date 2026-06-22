@@ -7,7 +7,7 @@
 #include "animSystem/animSystem.h"
 #include "entity.h"
 #include <glm/glm.hpp>
-
+#include <irrKlang/irrKlang.h>
 
 class Player;
 class Enemy;
@@ -158,9 +158,11 @@ private:
     const float spawnInterval = 5.0f;   
     const size_t minEnemies = 3;        
     const int spawnAmount = 30;          
+    irrklang::ISoundEngine* audioEngine = nullptr;
 
 public: 
     static Player* _PLAYER;
+    void init(irrklang::ISoundEngine* audioEngine);
     static EnemyManager* get_instance();
     void spawn_enemy(EnemyTipe type, int n);
     //void remove_enemy(uint32_t ID);
@@ -169,6 +171,10 @@ public:
     std::vector<Enemy*>& get_enemys() {
         return enemys;
     }
+    void playSound(const std::string& file);
+
+    irrklang::ISound* playCostantSound(const std::string& file);
+    void stopConstantSound(irrklang::ISound* isound);
 
     void reset();
 };
