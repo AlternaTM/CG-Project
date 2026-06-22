@@ -85,6 +85,16 @@ public:
 	virtual void renderUI(Game& game) override;
 };
 
+class GameOverState : public IGameState {
+public:
+	GameOverState() : IGameState(GameStateType::GameOver) {};
+	virtual void enter(Game& game) override;
+	virtual void update(Game& game, float dt) override;
+	virtual void exit(Game& game) override;
+	virtual void renderUI(Game& game) override;
+	virtual void render2d(Game& game) override;
+};
+
 // ================== GAME MANAGER ==========================
 
 class Game {
@@ -96,6 +106,7 @@ private:
 	LootingGameState lootingState;
 	PauseGameState pauseState;
 	TitleGameState titleState;
+	GameOverState gameOverState;
 
 	Player player;
 	GLFWwindow* window;

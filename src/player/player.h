@@ -95,7 +95,8 @@ public:
     PlayerState* currentState;
 
     void shoot(float dt);
-    
+
+    uint8_t get_life();
 
     glm::vec2 get_offset() override;
     glm::vec2 get_frame_size() override;

@@ -85,6 +85,11 @@ void InGameState::update(Game& game, float dt) {
 	if (PlayerInput::isKeyJustPressed(game.get_window(), GLFW_KEY_ESCAPE)) {
 		game.switch_state(GameStateType::Pause);
 	}
+
+	if (game.get_player()->get_life() == 0) {
+		game.switch_state(GameStateType::GameOver);
+	}
+
 	game.get_player()->update(dt,game.get_window());
 	game.get_timer()->update(dt);
 
@@ -105,7 +110,44 @@ void InGameState::renderUI(Game& game) {
 	char buffer[6];
 	sprintf_s(buffer, "%02d:%02d", min, sec);
 
-	game.get_TextRenderer()->RenderText(buffer, -7.5f, 3.7f, 0.7f, { 1.0f, 1.0f, 1.0f });
+	float timerScale = 0.7f;
+	float timerX = -7.5f;
+	float timerY = 3.7f;
+
+	game.get_TextRenderer()->RenderText(buffer, timerX, timerY, timerScale, { 1.0f, 1.0f, 1.0f });
+
+	// Barra della vita, sotto il timer
+	float textWidth = game.get_TextRenderer()->GetTextWidth(buffer, timerScale);
+	float barHeight = 0.2f;
+	float gap = 0.15f;
+
+	float barY = timerY - gap - barHeight * 0.5f;
+
+	uint8_t life = game.get_player()->get_life();
+	float lifeRatio = life / 255.0f;
+
+	glm::vec2 barCenter = { timerX + textWidth * 0.5f, barY };
+	glm::vec2 barFullSize = { textWidth, barHeight };
+
+	// vita mancante
+	game.get_SpriteRenderer()->DrawColor(
+		barCenter,
+		barFullSize,
+		{ 0.3f, 0.3f, 0.3f, 1.0f }
+	);
+
+	// vita attuale
+	float redWidth = textWidth * lifeRatio;
+	glm::vec2 redCenter = { timerX + redWidth * 0.5f, barY };
+	glm::vec2 redSize = { redWidth, barHeight };
+
+	if (redWidth > 0.0f) {
+		game.get_SpriteRenderer()->DrawColor(
+			redCenter,
+			redSize,
+			{ 0.85f, 0.15f, 0.15f, 1.0f }
+		);
+	}
 }
 
 void InGameState::render2d(Game& game) {
@@ -164,7 +206,44 @@ void LootingGameState::renderUI(Game& game) {
 	char buffer[6];
 	sprintf_s(buffer, "%02d:%02d", min, sec);
 
-	game.get_TextRenderer()->RenderText(buffer, -7.5f, 3.7f, 0.7f, { 1.0f, 1.0f, 1.0f });
+	float timerScale = 0.7f;
+	float timerX = -7.5f;
+	float timerY = 3.7f;
+
+	game.get_TextRenderer()->RenderText(buffer, timerX, timerY, timerScale, { 1.0f, 1.0f, 1.0f });
+
+	// Barra della vita, sotto il timer
+	float textWidth = game.get_TextRenderer()->GetTextWidth(buffer, timerScale);
+	float barHeight = 0.2f;
+	float gap = 0.15f;
+
+	float barY = timerY - gap - barHeight * 0.5f;
+
+	uint8_t life = game.get_player()->get_life();
+	float lifeRatio = life / 255.0f;
+
+	glm::vec2 barCenter = { timerX + textWidth * 0.5f, barY };
+	glm::vec2 barFullSize = { textWidth, barHeight };
+
+	// vita mancante
+	game.get_SpriteRenderer()->DrawColor(
+		barCenter,
+		barFullSize,
+		{ 0.3f, 0.3f, 0.3f, 1.0f }
+	);
+
+	// vita attuale
+	float redWidth = textWidth * lifeRatio;
+	glm::vec2 redCenter = { timerX + redWidth * 0.5f, barY };
+	glm::vec2 redSize = { redWidth, barHeight };
+
+	if (redWidth > 0.0f) {
+		game.get_SpriteRenderer()->DrawColor(
+			redCenter,
+			redSize,
+			{ 0.85f, 0.15f, 0.15f, 1.0f }
+		);
+	}
 
 	if (game.get_chestManager().finished) {
 		game.upgradeUI.render(game.get_TextRenderer(), game.get_SpriteRenderer());
@@ -199,12 +278,60 @@ void PauseGameState::renderUI(Game& game) {
 	char buffer[6];
 	sprintf_s(buffer, "%02d:%02d", min, sec);
 
-	game.get_TextRenderer()->RenderText(buffer, -7.5f, 3.7f, 0.7f, { 1.0f, 1.0f, 1.0f });
+	float timerScale = 0.7f;
+	float timerX = -7.5f;
+	float timerY = 3.7f;
+
+	game.get_TextRenderer()->RenderText(buffer, timerX, timerY, timerScale, { 1.0f, 1.0f, 1.0f });
+
+	// Barra della vita, sotto il timer
+	float textWidth = game.get_TextRenderer()->GetTextWidth(buffer, timerScale);
+	float barHeight = 0.2f;
+	float gap = 0.15f;
+
+	float barY = timerY - gap - barHeight * 0.5f;
+
+	uint8_t life = game.get_player()->get_life();
+	float lifeRatio = life / 255.0f;
+
+	glm::vec2 barCenter = { timerX + textWidth * 0.5f, barY };
+	glm::vec2 barFullSize = { textWidth, barHeight };
+
+	// vita mancante
+	game.get_SpriteRenderer()->DrawColor(
+		barCenter,
+		barFullSize,
+		{ 0.3f, 0.3f, 0.3f, 1.0f }
+	);
+
+	// vita attuale
+	float redWidth = textWidth * lifeRatio;
+	glm::vec2 redCenter = { timerX + redWidth * 0.5f, barY };
+	glm::vec2 redSize = { redWidth, barHeight };
+
+	if (redWidth > 0.0f) {
+		game.get_SpriteRenderer()->DrawColor(
+			redCenter,
+			redSize,
+			{ 0.85f, 0.15f, 0.15f, 1.0f }
+		);
+	}
 
 	game.get_SpriteRenderer()->DrawColor(
 		{ 0.0f, 0.0f },
-		{ 32.0f, 18.0f },
-		{ 0.0f, 0.0f, 0.0f, 0.7f }
+		{ 16.0f, 9.0f },
+		{ 0.0f, 0.0f, 0.0f, 0.8f }
+	);
+
+	std::string title = "Pausa";
+	float titleScale = 1.2f;
+	float titleWidth = game.get_TextRenderer()->GetTextWidth(title, titleScale);
+	game.get_TextRenderer()->RenderText(
+		title,
+		-titleWidth * 0.5f,
+		2.2f,
+		titleScale,
+		{ 1.0f, 1.0f, 1.0f }
 	);
 
 	for (auto& b : game.get_buttons(GameStateType::Pause)) {
@@ -213,6 +340,98 @@ void PauseGameState::renderUI(Game& game) {
 }
 
 void PauseGameState::render2d(Game& game) {
+	game.render_game2D();
+}
+
+// ================== GameOverState =========================
+void GameOverState::enter(Game& game) {
+
+}
+
+void GameOverState::update(Game& game, float dt) {
+
+	if (PlayerInput::isKeyJustPressed(game.get_window(), GLFW_KEY_ESCAPE)) {
+		game.switch_state(GameStateType::InGame);
+	}
+
+	for (auto& b : game.get_buttons(GameStateType::GameOver)) {
+		b.update(game.get_window());
+	}
+}
+
+void GameOverState::exit(Game& game) {
+	game.reset();
+}
+
+void GameOverState::renderUI(Game& game) {
+	int min = game.get_timer()->getMinutes();
+	int sec = game.get_timer()->getSeconds();
+
+	char buffer[6];
+	sprintf_s(buffer, "%02d:%02d", min, sec);
+
+	float timerScale = 0.7f;
+	float timerX = -7.5f;
+	float timerY = 3.7f;
+
+	game.get_TextRenderer()->RenderText(buffer, timerX, timerY, timerScale, { 1.0f, 1.0f, 1.0f });
+
+	// Barra della vita, sotto il timer
+	float textWidth = game.get_TextRenderer()->GetTextWidth(buffer, timerScale);
+	float barHeight = 0.2f;
+	float gap = 0.15f;
+
+	float barY = timerY - gap - barHeight * 0.5f;
+
+	uint8_t life = game.get_player()->get_life();
+	float lifeRatio = life / 255.0f;
+
+	glm::vec2 barCenter = { timerX + textWidth * 0.5f, barY };
+	glm::vec2 barFullSize = { textWidth, barHeight };
+
+	// vita mancante
+	game.get_SpriteRenderer()->DrawColor(
+		barCenter,
+		barFullSize,
+		{ 0.3f, 0.3f, 0.3f, 1.0f }
+	);
+
+	// vita attuale
+	float redWidth = textWidth * lifeRatio;
+	glm::vec2 redCenter = { timerX + redWidth * 0.5f, barY };
+	glm::vec2 redSize = { redWidth, barHeight };
+
+	if (redWidth > 0.0f) {
+		game.get_SpriteRenderer()->DrawColor(
+			redCenter,
+			redSize,
+			{ 0.85f, 0.15f, 0.15f, 1.0f }
+		);
+	}
+
+	game.get_SpriteRenderer()->DrawColor(
+		{0.0f, 0.0f},
+		{16.0f, 9.0f},
+		{ 0.0f, 0.0f, 0.0f, 0.8f }
+	);
+
+	std::string title = "Game Over";
+	float titleScale = 1.2f;
+	float titleWidth = game.get_TextRenderer()->GetTextWidth(title, titleScale);
+	game.get_TextRenderer()->RenderText(
+		title,
+		-titleWidth * 0.5f,
+		2.2f,
+		titleScale,
+		{ 1.0f, 1.0f, 1.0f }
+	);
+
+	for (auto& b : game.get_buttons(GameStateType::GameOver)) {
+		b.render(*game.get_SpriteRenderer(), *game.get_TextRenderer());
+	}
+}
+
+void GameOverState::render2d(Game& game) {
 	game.render_game2D();
 }
 
@@ -302,45 +521,45 @@ int Game::init_renderers(const glm::mat4& projection) {
 void Game::init_buttons() {
 	stateButtons[GameStateType::Title] = {
 		Button(
-			"INIZIA",
+			"Inizia",
 			glm::vec2(-4.2f, 1.0f),
 			glm::vec2(5.0f, 1.3f),
 			[this]() {spawn_game();  switch_state(GameStateType::InGame); }
 		),
 		Button(
-			"ESCI",
+			"Esci",
 			glm::vec2(-4.2f, -1.0f),
 			glm::vec2(5.0f, 1.3f),
-			[this]() {  }
+			[this]() { glfwSetWindowShouldClose(window, true); }
 		)
 	};
 
 	stateButtons[GameStateType::Pause] = {
 		Button(
-			"RIPRENDI",
-			glm::vec2(0.0f, 1.0f),
-			glm::vec2(5.0f, 1.3f),
+			"Riprendi",
+			glm::vec2(0.0f, 0.7f),
+			glm::vec2(5.0f, 1.1f),
 			[this]() {  switch_state(GameStateType::InGame); }
 		),
 		Button(
-			"ABBANDONA",
-			glm::vec2(0.0f, -1.0f),
-			glm::vec2(5.0f, 1.3f),
+			"Abbandona",
+			glm::vec2(0.0f, -0.7f),
+			glm::vec2(5.0f, 1.1f),
 			[this]() {reset(); switch_state(GameStateType::Title); }
 		)
 	};
 
 	stateButtons[GameStateType::GameOver] = {
 		Button(
-			"RIPROVA",
-			glm::vec2(0.0f, 1.0f),
-			glm::vec2(5.0f, 1.3f),
+			"Riprova",
+			glm::vec2(0.0f, 0.7f),
+			glm::vec2(5.0f, 1.1f),
 			[this]() { switch_state(GameStateType::InGame); }
 		),
 		Button(
-			"ABBANDONA",
-			glm::vec2(0.0f, -1.0f),
-			glm::vec2(5.0f, 1.3f),
+			"Abbandona",
+			glm::vec2(0.0f, -0.7f),
+			glm::vec2(5.0f, 1.1f),
 			[this]() { switch_state(GameStateType::Title); }
 		)
 	};
@@ -385,6 +604,9 @@ void Game::switch_state(GameStateType state) {
 		break;
 	case GameStateType::Pause:
 		game_state = &pauseState;
+		break;
+	case GameStateType::GameOver:
+		game_state = &gameOverState;
 		break;
 	}
 	game_state->enter(*this);

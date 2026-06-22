@@ -33,8 +33,12 @@ glm::vec2 PlayingState::get_offset() {
 }
 
 void PlayingState::hit(uint8_t* pl, uint8_t damage) {
-    //std::cout << "Damage given" << std::endl;
-    *pl -= damage;
+    if (damage >= *pl) {
+        *pl = 0;
+    }
+    else {
+        *pl -= damage;
+    }
 }
 
 
@@ -56,7 +60,7 @@ void DeadState::update(Player& player, float dt, GLFWwindow* window) {
 //Player ---------------------------------
 
 Player::Player(Camera& camera)
-    :  aimPosition(0.0f), speed(9.0f), aimRotation(0.0f), camera(camera){
+    :  aimPosition(0.0f), speed(4.5f), aimRotation(0.0f), camera(camera){
     currentState = PlayingState::instance();
     state = State::InGame;
     PlayerInput::register_input(GLFW_KEY_E);
@@ -136,6 +140,9 @@ void Player::apply_upgrade(Upgrades upgrade) {
 
 } 
 
+uint8_t Player::get_life() {
+    return life;
+}
 
 void Player::reset() {
     life = 255;
