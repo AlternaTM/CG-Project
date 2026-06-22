@@ -2,6 +2,7 @@
 #include "../enemy/mageBullet/mageCast.h"
 #include "../resourceManager/resourceManager.h"
 #include "../modelRenderer/modelRenderer.h"
+#include "globals.h"
 
 // ================== TitleState ==========================
 void TitleGameState::enter(Game& game) {
@@ -21,6 +22,7 @@ void TitleGameState::exit(Game& game) {
 }
 
 void TitleGameState::renderUI(Game& game) {
+	/*
 	game.get_SpriteRenderer()->Draw(
 		ResourceManager::GetTexture("titleScreen"),
 		{ 0.0f, 0.0f },              // centro
@@ -28,11 +30,50 @@ void TitleGameState::renderUI(Game& game) {
 		0.0f,
 		glm::mat4(1.0f)
 	);
-
+	*/
 	for (auto& b : game.get_buttons(GameStateType::Title)) {
 		b.render(*game.get_SpriteRenderer(), *game.get_TextRenderer());
 	}
 
+	float scale = 0.7f;
+	std::string text = "Battlefield in the Bedroom";
+
+	float textWidth = game.get_TextRenderer()->GetTextWidth(text, scale);
+	float x = (1080 - textWidth);
+	game.get_TextRenderer()->RenderText("Battlefield in the Bedroom", -6.7f, 2.8f, scale, { 1.0f, 1.0f, 1.0f });
+
+}
+
+void TitleGameState::render3d(Game& game, float dt) {
+	glm::mat4 bearMatrix = glm::mat4(1.0f);
+	bearMatrix = glm::translate(bearMatrix, glm::vec3(0.0f, 0.0f, 0.0f)); 
+	bearMatrix = glm::rotate(bearMatrix, glm::radians(30.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	//parentMatrix = glm::scale(parentMatrix, glm::vec3(0.2f));
+	game.get_bear_model()->shader->use();
+
+	game.get_bear_model()->shader->setVec3("lightPos1", glm::vec3(-2.0f, 0, 0));
+	game.get_bear_model()->shader->setVec3("lightColor1", glm::vec3(1, 1, 1));
+
+	game.get_bear_model()->render(
+		game.get_camera3D()->getViewMatrix(),
+		game.get_projection3D(),
+		&bearMatrix
+	);
+	
+	glm::mat4 lampMatrix = glm::mat4(1.0f);
+	lampMatrix = glm::translate(lampMatrix, glm::vec3(3.0f, -0.7f, 2.0f));
+	lampMatrix = glm::rotate(lampMatrix, glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	lampMatrix = glm::scale(lampMatrix, glm::vec3(0.8f));
+
+	game.get_bear_model()->shader->setVec3("lightPos2", glm::vec3(2.2f, 2.0f, 1.6f));
+	game.get_bear_model()->shader->setVec3("lightColor2", glm::vec3(0.6f, 0.6f, 0.6f));
+
+	game.get_lamp_model()->render(
+		game.get_camera3D()->getViewMatrix(),
+		game.get_projection3D(),
+		&lampMatrix
+	);
+	
 }
 
 // ================== InGameState ==========================
@@ -67,6 +108,10 @@ void InGameState::renderUI(Game& game) {
 	game.get_TextRenderer()->RenderText(buffer, -7.5f, 3.7f, 0.7f, { 1.0f, 1.0f, 1.0f });
 }
 
+void InGameState::render2d(Game& game) {
+	game.render_game2D();
+}
+
 
 // ================== InLootingState ==========================
 void LootingGameState::enter(Game& game) {
@@ -90,6 +135,8 @@ void LootingGameState::exit(Game& game) {
 }
 
 void LootingGameState::render2d(Game& game) {
+	game.render_game2D();
+
 	game.get_SpriteRenderer()->DrawColor(
 		{ 0.0f, 0.0f },
 		{ 32.0f, 18.0f },
@@ -165,6 +212,10 @@ void PauseGameState::renderUI(Game& game) {
 	}
 }
 
+void PauseGameState::render2d(Game& game) {
+	game.render_game2D();
+}
+
 // ================== GAME MANAGER ==========================
 
 Game* Game::_INSTANCE = nullptr;
@@ -176,7 +227,7 @@ Game::Game(
 	SpriteRenderer* renderer, 
 	Camera3D* camera3D,
 	const glm::mat4 projection3D,
-	const std::array<ModelRenderer*, 2>& chest_part
+	const std::array<ModelRenderer*, 4>& models
 )
 	: 
 	player(camera), 
@@ -188,7 +239,7 @@ Game::Game(
 	window(window),
 	camera3D(camera3D),
 	projection3D(projection3D),
-	chest_part(chest_part)
+	models(models)
 {
 	game_state = &titleState;
 
@@ -202,7 +253,7 @@ void Game::init(
 	SpriteRenderer* renderer,
 	Camera3D* camera3D,
 	const glm::mat4 projection3D,
-	const std::array<ModelRenderer*, 2>& chest_part
+	const std::array<ModelRenderer*, 4>& models
 ) {
 	static Game game(
 		window,
@@ -210,7 +261,7 @@ void Game::init(
 		renderer,
 		camera3D,
 		projection3D,
-		chest_part
+		models
 	);
 
 	//game.enemyManager->spawn_enemy(EnemyTipe::Mage, 1);+
@@ -252,13 +303,13 @@ void Game::init_buttons() {
 	stateButtons[GameStateType::Title] = {
 		Button(
 			"INIZIA",
-			glm::vec2(0.0f, 1.0f),
+			glm::vec2(-4.2f, 1.0f),
 			glm::vec2(5.0f, 1.3f),
 			[this]() {spawn_game();  switch_state(GameStateType::InGame); }
 		),
 		Button(
 			"ESCI",
-			glm::vec2(0.0f, -1.0f),
+			glm::vec2(-4.2f, -1.0f),
 			glm::vec2(5.0f, 1.3f),
 			[this]() {  }
 		)
@@ -303,32 +354,6 @@ void Game::update(float dt) {
 }
 
 void Game::render2d() {
-
-	chestManager.render(*renderer, camera);
-	enemyManager->render(*renderer, figRectRenderer, camera);
-
-	(*renderer).Draw(
-		ResourceManager::GetTexture("player"),
-		*player.get_pos(),
-		*player.get_size(),
-		0.0f,
-		camera.getViewMatrix(),
-		player.get_offset(),
-		player.get_frame_size()
-	);
-
-	castManager->render(camera);
-
-	bulletManager->render(*renderer, camera);
-
-	(*renderer).Draw(
-		ResourceManager::GetTexture("arrow"),
-		player.aimPosition,
-		{ 1.0f, 1.0f },
-		player.aimRotation,
-		camera.getViewMatrix()
-	);
-
 	game_state->render2d(*this);
 }
 
@@ -413,13 +438,58 @@ const glm::mat4 Game::get_projection3D() {
 	return projection3D;
 }
 
-std::array<ModelRenderer*, 2>& Game::get_chest_part() {
-	return chest_part;
+std::array<ModelRenderer*, 2> Game::get_chest_part() {
+	return { models[0], models[1] };
 }
 
 std::vector<Button>& Game::get_buttons(GameStateType type) {
 	return stateButtons[type];
 }
+
+
+ModelRenderer* Game::get_bear_model() {
+	return models[2];
+}
+ModelRenderer* Game::get_lamp_model() {
+	return models[3];
+}
+
+
+void Game::render_game2D() {
+	(*renderer).Draw(
+		ResourceManager::GetTexture("world"),
+		{ 0.0f, 0.0f },              
+		{ SCREEN_WIDTH * 2.0f, SCREEN_HEIGHT * 2.0f },
+		0.0f,
+		camera.getViewMatrix()
+	);
+
+	chestManager.render(*renderer, camera);
+	enemyManager->render(*renderer, figRectRenderer, camera);
+
+	(*renderer).Draw(
+		ResourceManager::GetTexture("player"),
+		*player.get_pos(),
+		*player.get_size(),
+		0.0f,
+		camera.getViewMatrix(),
+		player.get_offset(),
+		player.get_frame_size()
+	);
+
+	castManager->render(camera);
+
+	bulletManager->render(*renderer, camera);
+
+	(*renderer).Draw(
+		ResourceManager::GetTexture("arrow"),
+		player.aimPosition,
+		{ 1.0f, 1.0f },
+		player.aimRotation,
+		camera.getViewMatrix()
+	);
+}
+
 
 
 void Game::reset() {

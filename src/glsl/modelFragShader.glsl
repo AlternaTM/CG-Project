@@ -66,7 +66,7 @@ void main()
         vec3 reflectDir = reflect(-lightDir, norm);
         float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32.0);
 
-        // Attenuazione: più il frammento è lontano, meno luce riceve
+        
         float distance    = length(lightInside - FragPos);
         float attenuation = 1.0 / (1.0 + 0.09 * distance + 0.032 * distance * distance);
 

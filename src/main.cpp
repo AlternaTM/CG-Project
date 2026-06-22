@@ -35,6 +35,7 @@
 #include <random>
 
 #include "game/game.h"
+#include "game/globals.h"
 
 
 #include FT_FREETYPE_H
@@ -66,7 +67,7 @@ int main(void)
 
 
 	/* Create a windowed mode window and its OpenGL context */
-	window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Toy Survivor", NULL, NULL);
+	window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Battlefield in the Bedroom", NULL, NULL);
 	if (!window)
 	{
 		glfwTerminate();
@@ -163,7 +164,7 @@ int main(void)
     //ChestManager chestManager = ChestManager(2);
 
 
-    Shader chestShader("src/glsl/modelVertexShader.glsl", "src/glsl/modelFragShader.glsl");
+    //Shader chestShader("src/glsl/modelVertexShader.glsl", "src/glsl/modelFragShader.glsl");
 
     // Chest base
     ModelRenderer chest("assets/models/chest/chest.obj", "src/glsl/modelVertexShader.glsl", "src/glsl/modelFragShader.glsl");
@@ -191,10 +192,10 @@ int main(void)
 
 
 
-    // ------------------- Player -------------------
+    // ------------------- Orso -------------------
+    ModelRenderer orso("assets/models/bear/Orso.obj", "shaders/bear_shader/bearVertexShader.glsl", "shaders/bear_shader/bearFragShader.glsl");
+    ModelRenderer lamp("assets/models/lamp/lampada.obj", "shaders/bear_shader/bearVertexShader.glsl", "shaders/bear_shader/bearFragShader.glsl");
 
-
-    
 
 
 
@@ -208,7 +209,7 @@ int main(void)
         &renderer,
         &camera3D,
         projection3D,
-        {&chest, &chest_lid}
+        {&chest, &chest_lid, &orso, &lamp}
     );
     std::mt19937 rng(std::random_device{}());
     Game* game = Game::get_instance();
@@ -237,13 +238,6 @@ int main(void)
 
         // ============ RENDERING 2D ============
         glDisable(GL_DEPTH_TEST);
-        renderer.Draw(
-            ResourceManager::GetTexture("world"),
-            { 0.0f, 0.0f },              // centro
-            { worldWidth, worldHeight },
-            0.0f,
-            camera.getViewMatrix()
-        );
 
         game->render2d();
 
@@ -254,9 +248,6 @@ int main(void)
         
         // RENDERUI 
         glDisable(GL_DEPTH_TEST);
-
-
-
 
         game->renderUI();
         //============= FINE RENDER LOOP ==============

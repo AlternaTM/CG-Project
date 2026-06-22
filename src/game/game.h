@@ -51,6 +51,7 @@ public:
 	virtual void update(Game& game, float dt) override;
 	virtual void exit(Game& game) override;
 	virtual void renderUI(Game& game) override;
+	virtual void render2d(Game& game) override;
 };
 
 class LootingGameState : public IGameState {
@@ -71,6 +72,7 @@ public:
 	virtual void update(Game& game, float dt) override;
 	virtual void exit(Game& game) override;
 	virtual void renderUI(Game& game) override;
+	virtual void render2d(Game& game) override;
 };
 
 class TitleGameState : public IGameState {
@@ -79,6 +81,7 @@ public:
 	virtual void enter(Game& game) override;
 	virtual void update(Game& game, float dt) override;
 	virtual void exit(Game& game) override;
+	virtual void render3d(Game& game, float dt) override;
 	virtual void renderUI(Game& game) override;
 };
 
@@ -100,7 +103,7 @@ private:
 	
 	Camera3D* camera3D;
 	const glm::mat4 projection3D;
-	std::array<ModelRenderer*, 2> chest_part;
+	std::array<ModelRenderer*, 4> models;
 
 	std::unordered_map<GameStateType, std::vector<Button>> stateButtons;
 
@@ -127,7 +130,7 @@ private:
 		SpriteRenderer* renderer,
 		Camera3D* camera3D,
 		const glm::mat4 projection3D,
-		const std::array<ModelRenderer*, 2>& chest_part
+		const std::array<ModelRenderer*, 4>& models
 	);
 
 	int init_renderers(const glm::mat4& projection);
@@ -143,7 +146,7 @@ public:
 		SpriteRenderer* renderer, 
 		Camera3D* camera3D,
 		const glm::mat4 projection3D,
-		const std::array<ModelRenderer*, 2>& chest_part
+		const std::array<ModelRenderer*, 4>& models
 	);
 	void switch_state(GameStateType new_state);
 
@@ -168,11 +171,15 @@ public:
 	void reset();
 	void spawn_game();
 
+	void render_game2D();
+
 	ChestManager& get_chestManager();
 
 	Camera3D* get_camera3D();
 	const glm::mat4 get_projection3D();
 
-	std::array<ModelRenderer*, 2>& get_chest_part();
+	std::array<ModelRenderer*, 2> get_chest_part();
+	ModelRenderer* get_bear_model();
+	ModelRenderer* get_lamp_model();
 	static Game* get_instance();
 };

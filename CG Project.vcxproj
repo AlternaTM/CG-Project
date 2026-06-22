@@ -174,6 +174,7 @@
     <ClInclude Include="src\entity.h" />
     <ClInclude Include="src\figureRenderer\figureRenderer.h" />
     <ClInclude Include="src\game\game.h" />
+    <ClInclude Include="src\game\globals.h" />
     <ClInclude Include="src\modelRenderer\modelRenderer.h" />
     <ClInclude Include="src\models\chest.h" />
     <ClInclude Include="src\chest\chest.h" />
@@ -205,6 +206,8 @@
     <None Include="shaders\astroCast\astroShadowFrag.glsl" />
     <None Include="shaders\astroCast\astroShadowVert.glsl" />
     <None Include="shaders\astroCast\astroVert.glsl" />
+    <None Include="shaders\bear_shader\bearFragShader.glsl" />
+    <None Include="shaders\bear_shader\bearVertexShader.glsl" />
     <None Include="shaders\cast\castFrag.glsl" />
     <None Include="shaders\cast\castVert.glsl" />
     <None Include="shaders\rect\rectFrag.glsl" />
