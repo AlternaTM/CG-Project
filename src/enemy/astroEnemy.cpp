@@ -179,7 +179,7 @@ void AstroPreAttackState::exit(Enemy& e) {
 // ====================================
 
 AstroEnemy::AstroEnemy()
-    :preAttackState(2.0f, &attackState), waitingForEnemy(3.0f, &preAttackState), cast(nullptr), Enemy(EnemyTipe::Astro)
+    :preAttackState(2.0f, &attackState), waitingForEnemy(randomWaitTime(), &preAttackState), cast(nullptr), Enemy(EnemyTipe::Astro)
 {
     init_states();
     size = glm::vec2(0.7f,0.7f);
@@ -273,3 +273,8 @@ const std::vector<Asteroid*>& AstroEnemy::get_asteroid() {
     return asteroids;
 }
 
+float AstroEnemy::randomWaitTime() {
+    static std::mt19937 rng(std::random_device{}());
+    std::uniform_real_distribution<float> dist(1.0f, 4.5f);
+    return dist(rng);
+}

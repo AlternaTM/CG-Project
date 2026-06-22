@@ -75,6 +75,8 @@ public:
     void remove_cast();
     void remove_asteroid();
 
+    static float randomWaitTime();
+
     Cast* get_cast() {
         return cast;
     }
