@@ -52,7 +52,13 @@ public:
     void update(Player& player, float dt, GLFWwindow* window) override;
     void on_animation_end() override {}
 
-    glm::vec2 get_offset() override;
+    glm::vec2 get_offset() override {
+        return Animable::get_offset();
+    }
+    virtual glm::vec2 get_frame_size() override {
+        return Animable::get_frame_size();
+    }
+
 
     void hit(uint8_t* player, uint8_t damage) override;
 };

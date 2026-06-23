@@ -33,31 +33,35 @@ void PlayerInput::update_input(GLFWwindow* window) {//questo va chiamato DOPO ch
     }
 }
 
-bool PlayerInput::move(GLFWwindow* window, Player& pl, float speed, float dt)
+glm::vec2 PlayerInput::move(GLFWwindow* window, Player& pl, float speed, float dt)
 {
     glm::vec3* pl_pos = pl.get_pos();
-    bool moved = false;
+    glm::vec2 movedDir = glm::vec2(0.0f);
     if (glfwGetKey(window, GLFW_KEY_W)) {
-        moved = true;
+
         pl_pos->y += speed * dt;
+        movedDir.y = 1.0f;
     } 
     if (glfwGetKey(window, GLFW_KEY_S)) {
-        moved = true;
+
         pl_pos->y -= speed * dt;
+        movedDir.y = -1.0f;
     }
     if (glfwGetKey(window, GLFW_KEY_A)) {
-        moved = true;
+
         pl_pos->x -= speed * dt;
+        movedDir.x = -1.0f;
     }
     if (glfwGetKey(window, GLFW_KEY_D)) {
-        moved = true;
+
         pl_pos->x += speed * dt;
+        movedDir.x = 1.0f;
     }
-    if (moved) {
+    if (movedDir.x != 0.0f || movedDir.y != 0.0f) {
         pl_pos->x = glm::clamp(pl_pos->x, -15.5f, 15.5f);
         pl_pos->y = glm::clamp(pl_pos->y, -8.5f, 8.5f);
     }
-    return moved;
+    return movedDir;
 }
 
 glm::vec2 PlayerInput::getMousePos(GLFWwindow* window)

@@ -11,12 +11,17 @@ PlayingState* PlayingState::instance() {
 void PlayingState::enter(Player& player) {player.state = State::InGame;}
 
 void PlayingState::update(Player& player, float dt, GLFWwindow* window) {
-    moved = PlayerInput::move(window, player, player.speed, dt);
+    glm::vec2 movedInfo = PlayerInput::move(window, player, player.speed, dt);
+    moved = movedInfo.x != 0.0f || movedInfo.y != 0.0f;
 
     PlayerInput::updateMouse(window, player.camera.getCameraPosition(), *player.get_pos(), player.aimPosition, player.aimRotation);
     
-    if(moved)
+    if (moved) {
+        if (movedInfo.x != 0.0f)  
+            flipped = movedInfo.x < 0.0f;
         update_anim(dt);
+    }
+    
 
     if (player.shoot_timer > 0.0f) {
         player.shoot_timer -= dt;
@@ -26,11 +31,7 @@ void PlayingState::update(Player& player, float dt, GLFWwindow* window) {
     }
 }
 
-glm::vec2 PlayingState::get_offset() {
-    if(moved)
-        return Animable::get_offset();
-    return { 0.0f,0.0f };
-}
+
 
 void PlayingState::hit(uint8_t* pl, uint8_t damage) {
     if (damage >= *pl) {

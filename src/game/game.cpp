@@ -707,6 +707,7 @@ void Game::render_game2D() {
 		player.get_frame_size()
 	);
 
+
 	castManager->render(camera);
 
 	bulletManager->render(*renderer, camera);
