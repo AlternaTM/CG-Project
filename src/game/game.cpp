@@ -148,6 +148,37 @@ void InGameState::renderUI(Game& game) {
 			{ 0.85f, 0.15f, 0.15f, 1.0f }
 		);
 	}
+
+	// Stats
+	float statsScale = 0.4f;
+	float statsMarginRight = 7.5f;
+	float statsY = 3.7f;
+	float statsLineGap = 0.35f;
+
+	char scoreBuffer[32];
+	sprintf_s(scoreBuffer, "Punti: %u", game.get_score());
+
+	char killsBuffer[32];
+	sprintf_s(killsBuffer, "Nemici: %u", game.get_enemiesKilled());
+
+	float scoreWidth = game.get_TextRenderer()->GetTextWidth(scoreBuffer, statsScale);
+	float killsWidth = game.get_TextRenderer()->GetTextWidth(killsBuffer, statsScale);
+
+	game.get_TextRenderer()->RenderText(
+		scoreBuffer,
+		statsMarginRight - scoreWidth,
+		statsY,
+		statsScale,
+		{ 1.0f, 1.0f, 1.0f }
+	);
+
+	game.get_TextRenderer()->RenderText(
+		killsBuffer,
+		statsMarginRight - killsWidth,
+		statsY - statsLineGap,
+		statsScale,
+		{ 1.0f, 1.0f, 1.0f }
+	);
 }
 
 void InGameState::render2d(Game& game) {
@@ -721,7 +752,10 @@ void Game::render_game2D() {
 	);
 }
 
-
+void Game::updateScoreCount(uint8_t score) {
+	this->score += score;
+	enemiesKilled++;
+}
 
 void Game::reset() {
 	player.reset();
@@ -729,6 +763,8 @@ void Game::reset() {
 	chestManager.reset();
 	bulletManager->reset();
 	timer.reset();
+	score = 0;
+	enemiesKilled = 0;
 }
 
 void Game::spawn_game() {

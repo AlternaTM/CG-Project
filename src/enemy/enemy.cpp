@@ -279,6 +279,7 @@ void EnemyManager::update(Player& player, float delta) {
                 if (e->type == EnemyTipe::Astro) {
                     Game::get_instance()->get_chestManager().spawn_chest();
                 }
+                Game::get_instance()->updateScoreCount(e->get_reward_score());
                 delete e; 
                 return true;
             }
