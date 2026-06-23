@@ -133,7 +133,8 @@ private:
 	ModelRenderer asteroidModelRenderer = ModelRenderer("assets/models/astro/asteroid.obj", "shaders/asteroid3d/ast3dVertex.glsl", "shaders/asteroid3d/ast3dFrag.glsl");
 
 	irrklang::ISoundEngine* audioEngine;
-
+	uint8_t score = 0;
+	uint8_t enemiesKilled = 0;
 
 	SpriteRenderer* renderer;
 	EnemyManager* enemyManager;
@@ -203,6 +204,7 @@ public:
 	ModelRenderer* get_lamp_model();
 	static Game* get_instance();
 
-
-	
+	void updateScoreCount(uint8_t score);
+	uint8_t get_score() { return score; }
+	uint8_t get_enemiesKilled() { return enemiesKilled; }
 };
