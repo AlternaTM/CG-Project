@@ -158,7 +158,7 @@ private:
     Mesh2D lifeBarMesh;
 
     float spawnTimer = 0.0f;
-    const float spawnInterval = 5.0f;   
+    const float spawnInterval = 3.0f;   
     const size_t minEnemies = 3;        
     const int spawnAmountMin = 20;  
     const int spawnAmmoutnMax = 50;
