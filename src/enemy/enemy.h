@@ -9,6 +9,7 @@
 #include <glm/glm.hpp>
 #include <irrKlang/irrKlang.h>
 
+
 class Player;
 class Enemy;
 
@@ -153,6 +154,7 @@ private:
     std::vector<Enemy *> enemys;
     void drawlife(FigRenderer& figRenderer, Camera& camera,const glm::vec2& pos, const int16_t life);
     EnemyTipe randomWeightedEnemyType();
+    uint16_t randomAmmountSpawn();
     Mesh2D lifeBarMesh;
 
     float spawnTimer = 0.0f;
@@ -182,3 +184,12 @@ public:
 };
 
 
+template<typename T>
+inline T clamp(T value, T lo, T hi) {
+    return std::max(lo, std::min(value, hi));
+}
+
+template<typename T>
+inline T lerp(T a, T b, float t) {
+    return a + t * (b - a);
+}

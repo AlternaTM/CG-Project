@@ -311,6 +311,29 @@ EnemyTipe EnemyManager::randomWeightedEnemyType() {
     return static_cast<EnemyTipe>(dist(gen));
 }
 
+uint16_t EnemyManager::randomAmmountSpawn() {
+    static std::random_device rd;
+    static std::mt19937 gen(rd());
+
+
+    const float maxMinutes = 28.0f;
+    float t = clamp(Game::get_instance()->get_timer()->getTime() / (maxMinutes * 60.0f), 0.0f, 1.0f);
+
+    float bias = t * t * t;
+
+
+    std::uniform_real_distribution<float> dist(0.0f, 1.0f);
+    float raw = lerp(static_cast<float>(spawnAmountMin),
+        static_cast<float>(spawnAmmoutnMax),
+        bias + (dist(gen) * 0.2f - 0.1f)); 
+
+    return static_cast<uint16_t>(
+        clamp(static_cast<float>(std::round(raw)),
+            static_cast<float>(spawnAmountMin),
+            static_cast<float>(spawnAmmoutnMax))
+        );
+}
+
 void EnemyManager::reset() {
     enemys.erase(
         std::remove_if(enemys.begin(), enemys.end(), [](Enemy* e) {
