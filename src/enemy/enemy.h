@@ -117,6 +117,7 @@ public:
     virtual float       get_attack_distance() const = 0;
     virtual uint8_t     get_base_damage()     const = 0;
     virtual std::string get_texture_name()    const = 0;
+	virtual uint8_t     get_reward_score()    const = 0;
     virtual void init_states() = 0;
     virtual void change_state(EnemyState* new_state);
 
