@@ -59,6 +59,7 @@ public:
     ~AstroEnemy() {
         remove_cast();
         remove_asteroid();
+
     }
     glm::vec2 saved_target;
     float       get_attack_distance() const override { return 3.5f; }

@@ -92,6 +92,7 @@ void RangedAttackState::exit(Enemy& e) {
     MageEnemy* me = dynamic_cast<MageEnemy*>(&e);
     me->remove_cast();
     EnemyManager::get_instance()->stopConstantSound(attackSound);
+    attackSound = nullptr;
     owner = nullptr;
 }
 

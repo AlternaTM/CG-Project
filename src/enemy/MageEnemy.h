@@ -19,6 +19,11 @@ public:
     uint8_t start_pos;
     uint8_t end_pos;
     uint8_t duration;
+    ~RangedAttackState() {
+        EnemyManager::get_instance()->stopConstantSound(attackSound);
+        attackSound = nullptr;
+    }
+
     virtual void enter(Enemy&) override;
     virtual void update(Enemy&, float dt) override;
     virtual void exit(Enemy&) override;
@@ -59,6 +64,7 @@ public:
     MageEnemy();
     ~MageEnemy() {
         remove_cast();
+        
     }
     glm::vec2 saved_target;
     float       get_attack_distance() const override { return 5.5f; }
