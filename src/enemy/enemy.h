@@ -157,7 +157,8 @@ private:
     float spawnTimer = 0.0f;
     const float spawnInterval = 5.0f;   
     const size_t minEnemies = 3;        
-    const int spawnAmount = 30;          
+    const int spawnAmountMin = 20;  
+    const int spawnAmmoutnMax = 50;
     irrklang::ISoundEngine* audioEngine = nullptr;
 
 public: 

@@ -293,7 +293,7 @@ void EnemyManager::update(Player& player, float delta) {
         spawnTimer = 0.0f;
 
         if (enemys.size() < minEnemies) {
-            for (int i = 0; i < spawnAmount; i++) {
+            for (int i = 0; i < spawnAmountMin; i++) {
                 spawn_enemy(randomWeightedEnemyType(), 1); 
             }
         }
