@@ -37,6 +37,18 @@ public:
         loadModel(path);
     }
 
+    Model(vector<Vertex> vertices, vector<unsigned int> indices, const string& texturePath)
+    {
+        
+        Texture tex;
+        tex.id = TextureFromFile(texturePath.c_str(), ""); 
+        tex.type = "texture_diffuse";
+        tex.path = texturePath;
+        textures_loaded.push_back(tex);
+
+        meshes.push_back(Mesh(vertices, indices, { tex }));
+    }
+
     void Draw(Shader& shader)
     {
         

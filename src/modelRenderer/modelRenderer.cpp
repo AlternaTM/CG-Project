@@ -1,5 +1,5 @@
 #include "modelRenderer.h"
-#include "../models/model.h"
+
 #include "../shader/shader.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/quaternion.hpp>
@@ -10,6 +10,15 @@ ModelRenderer::ModelRenderer(const std::string& modelPath, const std::string& ve
     : position(0.0f), scale(1.0f), rotation(0.0f),pivot(0.0f)
 {
     model = new Model(modelPath);
+    shader = new Shader(vertexShader.c_str(), fragmentShader.c_str());
+}
+
+
+ModelRenderer::ModelRenderer(Model* model, const std::string& vertexShader,
+    const std::string& fragmentShader) 
+    : position(0.0f), scale(1.0f), rotation(0.0f), pivot(0.0f)
+{
+    this->model = model;
     shader = new Shader(vertexShader.c_str(), fragmentShader.c_str());
 }
 

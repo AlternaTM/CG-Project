@@ -88,6 +88,9 @@
     <Filter Include="shaders\bear">
       <UniqueIdentifier>{2c032ec0-ed2c-41c4-8e50-d4a436628131}</UniqueIdentifier>
     </Filter>
+    <Filter Include="File di origine\models\modelBuilder">
+      <UniqueIdentifier>{561d02b4-666e-4bce-a1ca-a5fbb8a9f98b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\player\player.cpp">
@@ -170,6 +173,9 @@
     </ClCompile>
     <ClCompile Include="src\button\button.cpp">
       <Filter>File di origine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\models\modelBuilder\modelBuilder.cpp">
+      <Filter>File di origine\models\modelBuilder</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -283,6 +289,9 @@
     </ClInclude>
     <ClInclude Include="src\game\globals.h">
       <Filter>File di origine\game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\models\modelBuilder\modelBuilder.h">
+      <Filter>File di origine\models\modelBuilder</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

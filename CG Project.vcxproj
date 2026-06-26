@@ -144,6 +144,7 @@
     <ClCompile Include="src\glad.c" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\modelRenderer\modelRenderer.cpp" />
+    <ClCompile Include="src\models\modelBuilder\modelBuilder.cpp" />
     <ClCompile Include="src\models\modelHelper.cpp" />
     <ClCompile Include="src\player\player.cpp" />
     <ClCompile Include="src\player\playerInput.cpp" />
@@ -181,6 +182,7 @@
     <ClInclude Include="src\collision\collision.h" />
     <ClInclude Include="src\models\mesh.h" />
     <ClInclude Include="src\models\model.h" />
+    <ClInclude Include="src\models\modelBuilder\modelBuilder.h" />
     <ClInclude Include="src\models\modelHelper.h" />
     <ClInclude Include="src\player\player.h" />
     <ClInclude Include="src\player\playerInput.h" />

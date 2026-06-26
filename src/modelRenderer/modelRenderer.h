@@ -2,6 +2,7 @@
 #include <glm/glm.hpp>
 #include <string>
 #include "camera/camera3D.h"
+#include "./models/model.h"
 
 // Forward declarations
 class Model;
@@ -20,6 +21,10 @@ public:
     Shader* shader;
     ModelRenderer(const std::string& modelPath, const std::string& vertexShader,
         const std::string& fragmentShader);
+
+    ModelRenderer(Model* model, const std::string& vertexShader,
+        const std::string& fragmentShader);
+
     ~ModelRenderer();
 
     void setPosition(glm::vec3 pos);
