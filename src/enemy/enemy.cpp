@@ -272,6 +272,7 @@ void EnemyManager::update(Player& player, float delta) {
     for (Enemy* e : enemys) {
         e->update(delta);
     }
+    fix_overlaps();
 
     enemys.erase(
         std::remove_if(enemys.begin(), enemys.end(), [this, &player](Enemy* e) {
@@ -300,6 +301,37 @@ void EnemyManager::update(Player& player, float delta) {
         }
     }
 }
+
+
+void EnemyManager::fix_overlaps() {
+    for (int i = 0; i < enemys.size(); i++) {
+        for (int y = i+1; y < enemys.size(); y++) {
+            float dx = enemys[y]->get_pos()->x - enemys[i]->get_pos()->x;
+            float dy = enemys[y]->get_pos()->y - enemys[i]->get_pos()->y;
+
+            float dist = sqrtf(dx * dx + dy * dy);
+
+
+
+            if (dist < 0.3f && dist > 0) {
+                float overlap = 0.3f / 2.0f * 0.1f;
+                float nx = dx / dist;
+                float ny = dy / dist;
+                if (enemys[i]->type != EnemyTipe::Astro) {
+                    enemys[i]->get_pos()->x -= nx * overlap;
+                    enemys[i]->get_pos()->y -= ny * overlap;
+                }
+                if (enemys[y]->type != EnemyTipe::Astro) {
+                    enemys[y]->get_pos()->x += nx * overlap;
+                    enemys[y]->get_pos()->y += ny * overlap;
+                }
+            }
+
+        }
+    }
+}
+
+
 
 EnemyTipe EnemyManager::randomWeightedEnemyType() {
     static std::random_device rd;

@@ -180,6 +180,8 @@ public:
     irrklang::ISound* playCostantSound(const std::string& file);
     void stopConstantSound(irrklang::ISound* isound);
 
+    void fix_overlaps();
+
     void reset();
 };
 
