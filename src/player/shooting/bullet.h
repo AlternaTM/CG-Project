@@ -9,7 +9,7 @@
 #include "animSystem/animSystem.h"
 #include "entity.h"
 #include <vector>
-
+#include "enemy/enemy.h"
 
 
 
@@ -21,6 +21,9 @@ public:
 	glm::vec2 direction;
 	uint8_t hit = 0;
 	uint8_t max_hit = 1;
+
+	Enemy* lastHit = nullptr;
+
 	Bullet(glm::vec2 direction, uint8_t damage, float speed, uint8_t max_hit = 1, float size_multi = 1.0f) :
 		direction(direction), damage(damage), speed(speed), max_hit (max_hit)
 	{

@@ -1,7 +1,7 @@
 #include "bullet.h"
 #include "resourceManager/resourceManager.h"
 #include "collision/collision.h"
-#include "enemy/enemy.h"
+
 #include "game/game.h"
 #include <cmath>
 
@@ -65,8 +65,12 @@ void BulletManager::update(float dt) {
 			fly.get_size()->x = e->get_size()->x * 0.3f;
 			fly.get_size()->y = e->get_size()->y * 0.5f;
 			if (CollisionChecker::check_collision(fly, *bullet)) {
-				bullet->hit += 1;
-				e->make_damage(bullet->damage);
+				if (bullet->lastHit != e) {
+					std::cout << "COLPITO:   " << bullet->lastHit << " ---- " << e << std::endl;
+					bullet->lastHit = e;
+					bullet->hit += 1;
+					e->make_damage(bullet->damage);
+				}
 			}
 		}
 		
