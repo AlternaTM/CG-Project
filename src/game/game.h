@@ -220,9 +220,9 @@ public:
 	ModelRenderer* get_plane_model();
 	static Game* get_instance();
 
-	void updateScoreCount(uint8_t score);
-	uint8_t get_score() { return score; }
-	uint8_t get_enemiesKilled() { return enemiesKilled; }
+	void updateScoreCount(uint16_t score);
+	uint16_t get_score() { return score; }
+	uint16_t get_enemiesKilled() { return enemiesKilled; }
 };
 
 

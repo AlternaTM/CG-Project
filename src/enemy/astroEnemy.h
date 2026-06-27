@@ -65,7 +65,7 @@ public:
     float       get_attack_distance() const override { return 3.5f; }
     uint8_t     get_base_damage()     const override { return 50; }
     std::string get_texture_name()    const override { return "cannon"; }
-	uint8_t     get_reward_score()    const override { return 50; }
+	uint16_t     get_reward_score()    const override { return 50; }
     void        init_states()               override;
     void        on_target_in_range()        override;
     void        on_target_out_of_range()    override;

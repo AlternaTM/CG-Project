@@ -909,7 +909,7 @@ void Game::render_game2D() {
 	);
 }
 
-void Game::updateScoreCount(uint8_t score) {
+void Game::updateScoreCount(uint16_t score) {
 	this->score += score;
 	enemiesKilled++;
 }
