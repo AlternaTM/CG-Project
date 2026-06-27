@@ -38,7 +38,7 @@ inline SpriteTexture toIcon(Upgrades upgrade) {
 inline Upgrades randomUpgrade() {
 	static std::random_device rd;
 	static std::mt19937 gen(rd());
-	static std::uniform_int_distribution<int> dist(0, 3); 
+	static std::uniform_int_distribution<int> dist(0, 4); 
 
 	return static_cast<Upgrades>(dist(gen));
 }
