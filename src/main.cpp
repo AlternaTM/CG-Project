@@ -163,12 +163,14 @@ int main(void)
     //----------------chest---------------------
 
     // Chest base
-    ModelRenderer chest("assets/models/chest/chest.obj", "shaders/glsl/modelVertexShader.glsl", "shaders/glsl/modelFragShader.glsl");
+    
+    ModelRenderer& chest = ResourceManager::LoadModel("chest", "assets/models/chest/chest.obj", "shaders/glsl/modelVertexShader.glsl", "shaders/glsl/modelFragShader.glsl");
     chest.setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
     chest.setScale(glm::vec3(1.0f));
 
     // Chest lid
-    ModelRenderer chest_lid("assets/models/chest/chest_lid.obj", "shaders/glsl/modelVertexShader.glsl", "shaders/glsl/modelFragShader.glsl");
+    ModelRenderer& chest_lid = ResourceManager::LoadModel("chest_lid", "assets/models/chest/chest_lid.obj", "shaders/glsl/modelVertexShader.glsl", "shaders/glsl/modelFragShader.glsl");
+
     chest_lid.setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
     chest_lid.setScale(glm::vec3(1.0f));
     
@@ -206,8 +208,7 @@ int main(void)
         &renderer,
         &camera3D,
         projection3D,
-        engine,
-        {&chest, &chest_lid, &orso, &lamp}
+        engine
     );
     std::mt19937 rng(std::random_device{}());
     Game* game = Game::get_instance();

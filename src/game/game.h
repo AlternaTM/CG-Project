@@ -115,7 +115,6 @@ private:
 	
 	Camera3D* camera3D;
 	const glm::mat4 projection3D;
-	std::array<ModelRenderer*, 4> models;
 
 	std::unordered_map<GameStateType, std::vector<Button>> stateButtons;
 
@@ -146,8 +145,7 @@ private:
 		SpriteRenderer* renderer,
 		Camera3D* camera3D,
 		const glm::mat4 projection3D,
-		irrklang::ISoundEngine* audioEngine,
-		const std::array<ModelRenderer*, 4>& models
+		irrklang::ISoundEngine* audioEngine
 	);
 
 	int init_renderers(const glm::mat4& projection);
@@ -163,8 +161,7 @@ public:
 		SpriteRenderer* renderer, 
 		Camera3D* camera3D,
 		const glm::mat4 projection3D,
-		irrklang::ISoundEngine* audioEngine,
-		const std::array<ModelRenderer*, 4>& models
+		irrklang::ISoundEngine* audioEngine
 	);
 	void switch_state(GameStateType new_state);
 

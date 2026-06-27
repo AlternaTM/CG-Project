@@ -477,8 +477,7 @@ Game::Game(
 	SpriteRenderer* renderer, 
 	Camera3D* camera3D,
 	const glm::mat4 projection3D,
-	irrklang::ISoundEngine* audioEngine,
-	const std::array<ModelRenderer*, 4>& models
+	irrklang::ISoundEngine* audioEngine
 )
 	: 
 	player(camera), 
@@ -490,8 +489,7 @@ Game::Game(
 	window(window),
 	camera3D(camera3D),
 	projection3D(projection3D),
-	audioEngine(audioEngine),
-	models(models)
+	audioEngine(audioEngine)
 {
 	game_state = &titleState;
 
@@ -505,8 +503,7 @@ void Game::init(
 	SpriteRenderer* renderer,
 	Camera3D* camera3D,
 	const glm::mat4 projection3D,
-	irrklang::ISoundEngine* audioEngine,
-	const std::array<ModelRenderer*, 4>& models
+	irrklang::ISoundEngine* audioEngine
 ) {
 	static Game game(
 		window,
@@ -514,8 +511,7 @@ void Game::init(
 		renderer,
 		camera3D,
 		projection3D,
-		audioEngine,
-		models
+		audioEngine
 	);
 
 	//game.enemyManager->spawn_enemy(EnemyTipe::Mage, 1);+
@@ -696,7 +692,7 @@ const glm::mat4 Game::get_projection3D() {
 }
 
 std::array<ModelRenderer*, 2> Game::get_chest_part() {
-	return { models[0], models[1] };
+	return { &ResourceManager::GetModel("chest"), &ResourceManager::GetModel("chest_lid") };
 }
 
 std::vector<Button>& Game::get_buttons(GameStateType type) {
@@ -705,10 +701,10 @@ std::vector<Button>& Game::get_buttons(GameStateType type) {
 
 
 ModelRenderer* Game::get_bear_model() {
-	return models[2];
+	return &ResourceManager::GetModel("orso");
 }
 ModelRenderer* Game::get_lamp_model() {
-	return models[3];
+	return &ResourceManager::GetModel("lamp");
 }
 
 irrklang::ISoundEngine* Game::get_engine() {
