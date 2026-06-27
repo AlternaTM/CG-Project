@@ -14,7 +14,7 @@ ModelRenderer* ModelBuilder::buildPlane(
 	vector<unsigned int> indices;
 
 
-    float maxHeight = 3.0f;
+    float maxHeight = 5.0f;
 
 	int W = 40, H = 40;
     float center = 0.75f;

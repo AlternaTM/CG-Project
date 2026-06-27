@@ -66,7 +66,7 @@ void BulletManager::update(float dt) {
 			fly.get_size()->y = e->get_size()->y * 0.5f;
 			if (CollisionChecker::check_collision(fly, *bullet)) {
 				if (bullet->lastHit != e) {
-					std::cout << "COLPITO:   " << bullet->lastHit << " ---- " << e << std::endl;
+					//std::cout << "COLPITO:   " << bullet->lastHit << " ---- " << e << std::endl;
 					bullet->lastHit = e;
 					bullet->hit += 1;
 					e->make_damage(bullet->damage);
