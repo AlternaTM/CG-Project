@@ -316,7 +316,7 @@ uint16_t EnemyManager::randomAmmountSpawn() {
     static std::mt19937 gen(rd());
 
 
-    const float maxMinutes = 28.0f;
+    const float maxMinutes = 15.0f;
     float t = clamp(Game::get_instance()->get_timer()->getTime() / (maxMinutes * 60.0f), 0.0f, 1.0f);
 
     float bias = t * t * t;
