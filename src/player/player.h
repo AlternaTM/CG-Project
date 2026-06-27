@@ -10,7 +10,7 @@
 #include "animSystem/animSystem.h"
 #include "entity.h"
 #include "upgradeUI/upgrades.h"
-
+#define HEAL_AMOUNT 20
 
 class Player;
 

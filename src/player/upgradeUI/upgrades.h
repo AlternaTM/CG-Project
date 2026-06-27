@@ -20,7 +20,8 @@ enum Upgrades {
 	BulletSize,
 	ShootingSpeed,
 	BulletDamager,
-	BulletPierce
+	BulletPierce,
+	HealtPlus
 };
 
 
@@ -31,6 +32,7 @@ inline SpriteTexture toIcon(Upgrades upgrade) {
 		case Upgrades::ShootingSpeed: return ResourceManager::GetTexture("Shooting_speed");
 		case Upgrades::BulletDamager: return ResourceManager::GetTexture("Bullet_damage");
 		case Upgrades::BulletPierce:  return ResourceManager::GetTexture("Bullet_Piercing");
+		case Upgrades::HealtPlus:     return ResourceManager::GetTexture("Bullet_Piercing");
 	}
 	return ResourceManager::GetTexture("Sconosciuto");
 }

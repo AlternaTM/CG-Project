@@ -134,7 +134,9 @@ void Player::apply_upgrade(Upgrades upgrade) {
     case Upgrades::BulletPierce:
         bullet_max_hit = static_cast<uint8_t>(std::min<int>(bullet_max_hit + 1, max_hits));
         break;
-
+    case Upgrades::HealtPlus:
+        life = (life > 255 - HEAL_AMOUNT) ? 255 : life + HEAL_AMOUNT;
+        break;
     default:
         break;
     }
