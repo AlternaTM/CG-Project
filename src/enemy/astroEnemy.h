@@ -53,7 +53,7 @@ private:
     AstroPreAttackState preAttackState;
     WaitingState waitingForEnemy;
     Cast* cast;
-    std::vector<Asteroid*> asteroids;
+    Asteroid* asteroids = nullptr;
 public:
     AstroEnemy();
     ~AstroEnemy() {
@@ -73,7 +73,7 @@ public:
 
     void spawn_cast(glm::mat4 model,const CASTTYPE type = CASTTYPE::AstroCast ,const glm::vec4& color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
     Asteroid* spawn_asteroid();
-    const std::vector<Asteroid*>& get_asteroid();
+    Asteroid* get_asteroid();
     void remove_cast();
     void remove_asteroid();
 

@@ -221,7 +221,7 @@ int main(void)
         "shaders/asteroid3d/ast3dVertex.glsl",
         "shaders/asteroid3d/ast3dFrag.glsl");
 
-    ResourceManager::LoadModel("asteroid", "assets/models/astro/asteroid.obj", &asterShader);
+    ResourceManager::LoadModel("asteroid", "assets/models/ball/palla.obj", &asterShader);
     
     //------------------- GAME -------------------
     

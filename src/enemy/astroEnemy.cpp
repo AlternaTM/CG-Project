@@ -9,6 +9,7 @@
 // ============ RangedAttackState
 
 void AstroAttackState::enter(Enemy& e) {
+    elapsed = 0.0f;
     owner = &e;
     reset_anim();
     AstroEnemy* em = dynamic_cast<AstroEnemy*>(&e);
@@ -35,90 +36,61 @@ void AstroAttackState::enter(Enemy& e) {
         glm::vec4(0.0f, 0.0f, 0.0f, 0.4f)
     );
 
+
+
+
     // ASTEROIDE 3D 
 
-    em->spawn_asteroid();
-    em->spawn_asteroid();
-    em->spawn_asteroid();
-    em->spawn_asteroid();
-    em->spawn_asteroid();
+    Asteroid* asteroid = em->spawn_asteroid();
+    asteroid->set_scale(glm::vec3(2.0f));
+    asteroid->get_pos()->x = em->saved_target.x;
+    asteroid->get_pos()->y = em->saved_target.y + 8.0f;
+    asteroid->get_pos()->z = -3.0f;
 
-    std::vector<Asteroid*> asteroids = em->get_asteroid();
-    static std::mt19937 rng(std::random_device{}());
-
-    std::uniform_real_distribution<float> distX(-1.8f, 1.8f);
-    std::uniform_real_distribution<float> distY(-2.0f, 2.0f);
-    std::uniform_real_distribution<float> distS(0.1f, 0.25f);
-    std::uniform_real_distribution<float> distR(25.0f, 90.0f);
-
-    std::uniform_real_distribution<float> distAbs(0.5f, 1.0f);
-    std::bernoulli_distribution distSign(0.5);
-
-    bool flag = true; 
-    for (Asteroid* asteroid : asteroids) {
-        asteroid->get_pos()->z = -3.0f;
-        
-        if (flag) {
-            asteroid->get_pos()->x = em->saved_target.x;
-            asteroid->get_pos()->y = em->saved_target.y;
-            asteroid->set_scale(glm::vec3(0.55f));
-            flag = false;
-        }
-        else {
-
-            float randomx = distX(rng);
-            float randomy = distY(rng);
-            float randoms = distS(rng);
-            float val = distAbs(rng);
-            if (distSign(rng)) val = -val;
-
-
-            asteroid->get_pos()->x = em->saved_target.x + randomx;
-            asteroid->get_pos()->y = em->saved_target.y + randomy;
-            
-            asteroid->set_scale(glm::vec3(randoms));
-        }
-
-        asteroid->rotation_speed = glm::vec3(
-            distR(rng),
-            distR(rng),
-            distR(rng)
-        );
-    }
+    asteroid->rotation_speed = glm::vec3(45.0f);
 
 }
 
 void AstroAttackState::update(Enemy& e, float dt) {
     AstroEnemy* me = dynamic_cast<AstroEnemy*>(&e);
     elapsed += dt;
+
     if (elapsed > 4.0f) {
         elapsed = 0.0f;
         Entity e;
-        e.get_pos()->x  = me->saved_target.x;
+        e.get_pos()->x = me->saved_target.x;
         e.get_pos()->y = me->saved_target.y;
-        
+
         if (CollisionChecker::check_collision(*EnemyManager::_PLAYER, e)) {
             EnemyManager::_PLAYER->hit(me->get_base_damage());
         }
 
         me->on_target_out_of_range();
+        return;
     }
 
-
-    std::vector<Asteroid*> asteroids = me->get_asteroid();
-
+    Asteroid* asteroids = me->get_asteroid();
 
     float t = glm::clamp(elapsed / 4.0f, 0.0f, 1.0f);
     float perc = glm::mix(me->saved_target.y + 8.0f, me->saved_target.y - 0.5f, t);
 
-    for (Asteroid* a : asteroids) {
-        a->set_rotation(a->get_rotation() + a->rotation_speed * dt);
-        a->get_pos()->y = perc;
+    float current_scale = glm::mix(2.0f, 1.1f, t);
+    asteroids->set_scale(glm::vec3(current_scale));
 
-    }
+    asteroids->set_rotation(asteroids->get_rotation() + asteroids->rotation_speed * dt);
+    asteroids->get_pos()->y = perc;
 
+   
 
     update_anim(dt);
+
+
+
+
+
+
+
+
 }
 
 void AstroAttackState::exit(Enemy& e) {
@@ -243,33 +215,37 @@ void AstroEnemy::spawn_cast(glm::mat4 model, const CASTTYPE type, const glm::vec
 
 
 void AstroEnemy::remove_cast() {
-    CastManager::get_instance()->remove(cast);
+    if (cast) {
+        CastManager::get_instance()->remove(cast);
+        delete cast;
+        cast = nullptr;
+    }
+   
 
-    delete cast;
-    cast = nullptr;
+
 }
 
 void AstroEnemy::remove_asteroid() {
-    for (Asteroid* a : asteroids) {
-        if (a != nullptr) {
-            CastManager::get_instance()->remove_aster(a);
-        } 
-        delete a;
 
+    if (asteroids != nullptr) {
+        CastManager::get_instance()->remove_aster(asteroids);
+        delete asteroids;
+        asteroids = nullptr;
     }
-    asteroids.clear();
+
+
 }
 
 
 Asteroid* AstroEnemy::spawn_asteroid() {
-    Asteroid* asteroid = new Asteroid();
-    asteroids.push_back(asteroid);
-    CastManager::get_instance()->add_aster(asteroid);
-    return asteroid;
+    remove_asteroid();
+    asteroids = new Asteroid();
+    CastManager::get_instance()->add_aster(asteroids);
+    return asteroids;
 }
 
 
-const std::vector<Asteroid*>& AstroEnemy::get_asteroid() {
+Asteroid* AstroEnemy::get_asteroid() {
     return asteroids;
 }
 
