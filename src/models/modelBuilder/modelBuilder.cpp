@@ -5,17 +5,28 @@
 # define M_PI           3.14159265358979323846  /* pi */
 
 
-ModelRenderer ModelBuilder::buildPlane(glm::vec2 size, const std::string& vertexShader, const std::string& fragmentShader) {
+ModelRenderer* ModelBuilder::buildPlane(
+    glm::vec2 size,
+    const std::string& texturePath,
+    Shader* shader
+) {
 	vector<Vertex> verts;
 	vector<unsigned int> indices;
 
+
+    float maxHeight = 3.0f;
+
 	int W = 40, H = 40;
+    float center = 0.75f;
+    float steepness = 20.0f;
 
     for (int j = 0; j <= H; j++) {
         for (int i = 0; i <= W; i++) {
-            float x = (float)i / W * 2.0f - 1.0f;
-            float z = (float)j / H * 2.0f - 1.0f;
-            float y = 0.3f * sin(x * M_PI * 2) * cos(z * M_PI * 2);
+            float x = ((float)i / W - 0.5f) * size.x;
+            float z = ((float)j / H - 0.5f) * size.y;
+
+            float t = 1 - ((float)j / H);
+            float y = maxHeight * (1.0f / (1.0f + exp(-steepness * (t - center))));
 
             Vertex v;
             v.Position = glm::vec3(x, y, z);
@@ -36,7 +47,7 @@ ModelRenderer ModelBuilder::buildPlane(glm::vec2 size, const std::string& vertex
         }
     }
 
-    Model* sup = new Model(verts, indices, "assets/texture.png");
+    Model* sup = new Model(verts, indices, texturePath);
 
-    return ModelRenderer(sup, vertexShader, fragmentShader);
+    return new ModelRenderer(sup, shader);
 }

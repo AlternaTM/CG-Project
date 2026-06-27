@@ -211,7 +211,13 @@ private:
 inline unsigned int TextureFromFile(const char* path, const string& directory, bool gamma)
 {
     string filename = string(path);
+
     filename = directory + '/' + filename;
+
+    if (!filename.empty() && (filename[0] == '/' || filename[0] == '\\'))
+        filename = filename.substr(1);
+
+    //std::cout << "Trying to load texture: [" << filename << "]" << std::endl;
 
     unsigned int textureID;
     glGenTextures(1, &textureID);
@@ -242,7 +248,7 @@ inline unsigned int TextureFromFile(const char* path, const string& directory, b
     }
     else
     {
-        std::cout << "Texture failed to load at path: " << path << std::endl;
+        std::cout << "Texture failed to load at path: " << filename << std::endl;
         stbi_image_free(data);
     }
 

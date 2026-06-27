@@ -37,6 +37,7 @@
 #include "game/game.h"
 #include "game/globals.h"
 
+#include "models/modelBuilder/modelBuilder.h"
 
 #include FT_FREETYPE_H
 
@@ -163,13 +164,18 @@ int main(void)
     //----------------chest---------------------
 
     // Chest base
+
+    Shader& chestShader = ResourceManager::LoadShader("chest",
+        "shaders/glsl/modelVertexShader.glsl",
+        "shaders/glsl/modelFragShader.glsl");
+
     
-    ModelRenderer& chest = ResourceManager::LoadModel("chest", "assets/models/chest/chest.obj", "shaders/glsl/modelVertexShader.glsl", "shaders/glsl/modelFragShader.glsl");
+    ModelRenderer& chest = ResourceManager::LoadModel("chest", "assets/models/chest/chest.obj", &chestShader);
     chest.setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
     chest.setScale(glm::vec3(1.0f));
 
     // Chest lid
-    ModelRenderer& chest_lid = ResourceManager::LoadModel("chest_lid", "assets/models/chest/chest_lid.obj", "shaders/glsl/modelVertexShader.glsl", "shaders/glsl/modelFragShader.glsl");
+    ModelRenderer& chest_lid = ResourceManager::LoadModel("chest_lid", "assets/models/chest/chest_lid.obj", &chestShader);
 
     chest_lid.setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
     chest_lid.setScale(glm::vec3(1.0f));
@@ -192,12 +198,28 @@ int main(void)
 
     // ------------------- Orso -------------------
 
-    ModelRenderer& lamp = ResourceManager::LoadModel("lamp","assets/models/lamp/lampada.obj", "shaders/bear_shader/bearVertexShader.glsl", "shaders/bear_shader/bearFragShader.glsl");
+    Shader& bearShader = ResourceManager::LoadShader("bear",
+        "shaders/bear_shader/bearVertexShader.glsl",
+        "shaders/bear_shader/bearFragShader.glsl");
 
-    ModelRenderer& orso = ResourceManager::LoadModel("orso", "assets/models/bear/Orso.obj", "shaders/bear_shader/bearVertexShader.glsl", "shaders/bear_shader/bearFragShader.glsl");
 
+    ResourceManager::LoadModel("lamp","assets/models/lamp/lampada.obj", &bearShader);
 
+    ResourceManager::LoadModel("orso", "assets/models/bear/Orso.obj", &bearShader);
 
+    //------------------- PIANO -------------------
+
+    ModelRenderer* plane = ModelBuilder::buildPlane(glm::vec2(20.0f,10.0f),"assets/models/plane/wood_floor_basecolor.png", &bearShader);
+    ResourceManager::addModel("plane", plane);
+
+    
+    //asteroid 
+    Shader& asterShader = ResourceManager::LoadShader("aster",
+        "shaders/asteroid3d/ast3dVertex.glsl",
+        "shaders/asteroid3d/ast3dFrag.glsl");
+
+    ResourceManager::LoadModel("asteroid", "assets/models/astro/asteroid.obj", &asterShader);
+    
     //------------------- GAME -------------------
     
 
@@ -258,8 +280,10 @@ int main(void)
 
 
 
-    ResourceManager::Clear();
+    
     ResourceManager::clearModels();
+    ResourceManager::clearShaders();
+    ResourceManager::Clear();
     glfwTerminate();
     return 0;
 }

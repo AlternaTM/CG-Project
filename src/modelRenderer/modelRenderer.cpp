@@ -5,29 +5,24 @@
 #include <glm/gtc/quaternion.hpp>
 
 
-ModelRenderer::ModelRenderer(const std::string& modelPath, const std::string& vertexShader,
-    const std::string& fragmentShader)
-    : position(0.0f), scale(1.0f), rotation(0.0f),pivot(0.0f)
+ModelRenderer::ModelRenderer(const std::string& modelPath, Shader* shader)
+    : position(0.0f), scale(1.0f), rotation(0.0f),pivot(0.0f), shader(shader)
 {
     model = new Model(modelPath);
-    shader = new Shader(vertexShader.c_str(), fragmentShader.c_str());
 }
 
 
-ModelRenderer::ModelRenderer(Model* model, const std::string& vertexShader,
-    const std::string& fragmentShader) 
-    : position(0.0f), scale(1.0f), rotation(0.0f), pivot(0.0f)
+ModelRenderer::ModelRenderer(Model* model, Shader* shader) 
+    : position(0.0f), scale(1.0f), rotation(0.0f), pivot(0.0f), shader(shader)
 {
     this->model = model;
-    shader = new Shader(vertexShader.c_str(), fragmentShader.c_str());
+    //shader = new Shader(vertexShader.c_str(), fragmentShader.c_str());
 }
 
 ModelRenderer::~ModelRenderer() {
     //std::cout << "~ModelRenderer() called, model ptr: " << model << std::endl;
     delete model;
-    delete shader;
     model = nullptr;
-    shader = nullptr;
 }
 
 void ModelRenderer::setPosition(glm::vec3 pos) { position = pos; }

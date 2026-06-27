@@ -19,11 +19,9 @@ private:
 public:
     Model* model;
     Shader* shader;
-    ModelRenderer(const std::string& modelPath, const std::string& vertexShader,
-        const std::string& fragmentShader);
+    ModelRenderer(const std::string& modelPath, Shader* shader);
 
-    ModelRenderer(Model* model, const std::string& vertexShader,
-        const std::string& fragmentShader);
+    ModelRenderer(Model* model, Shader* shader);
 
     ~ModelRenderer();
 

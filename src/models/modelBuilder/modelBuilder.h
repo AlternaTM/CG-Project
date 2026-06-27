@@ -8,5 +8,9 @@
 
 class ModelBuilder {
 public:
-	static ModelRenderer buildPlane(glm::vec2 size, const std::string& vertexShader, const std::string& fragmentShader);
+	static ModelRenderer* buildPlane(
+		glm::vec2 size,
+		const std::string& texturePath,
+		Shader* shader
+	);
 };

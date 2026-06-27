@@ -49,23 +49,23 @@ std::map<std::string, ModelRenderer*> ResourceManager::models;
 ModelRenderer& ResourceManager::LoadModel(
     const std::string& name,
     const std::string& path,
-    const std::string& vertShader,
-    const std::string& fragShader)
+    Shader* shader
+)
 {
     if (models.find(name) != models.end())
         return *models[name];
 
-    ModelRenderer* mr = new ModelRenderer(path, vertShader, fragShader);
+    ModelRenderer* mr = new ModelRenderer(path,shader);
     models[name] = mr;
     return *mr;
 }
 
-ModelRenderer& ResourceManager::GetModel(const std::string& path)
+ModelRenderer& ResourceManager::GetModel(const std::string& name)
 {
-    if (models.find(path) == models.end())
-        throw std::runtime_error("ResourceManager: modello non trovato: " + path);
+    if (models.find(name) == models.end())
+        throw std::runtime_error("ResourceManager: modello non trovato: " + name);
 
-    return *models[path];
+    return *models[name];
 }
 
 
@@ -85,4 +85,36 @@ void ResourceManager::clearModels()
         delete pair.second;  
 
     models.clear();
+}
+
+// ============ Shaders
+
+
+std::map<std::string, Shader*> ResourceManager::shaders;
+
+Shader& ResourceManager::LoadShader(const std::string& name,
+    const std::string& vertPath,
+    const std::string& fragPath)
+{
+    if (shaders.find(name) != shaders.end())
+        return *shaders[name];
+
+    shaders[name] = new Shader(vertPath.c_str(), fragPath.c_str());
+    return *shaders[name];
+}
+
+Shader& ResourceManager::GetShader(const std::string& name)
+{
+    if (shaders.find(name) == shaders.end())
+        throw std::runtime_error("ResourceManager: shader non trovata: " + name);
+
+    return *shaders[name];
+}
+
+void ResourceManager::clearShaders()
+{
+    for (auto& pair : shaders)
+        delete pair.second;
+
+    shaders.clear();
 }
