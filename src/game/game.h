@@ -13,6 +13,7 @@
 #include "timer/timer.h"
 #include "button/button.h"
 #include <irrKlang/irrKlang.h>
+#include "../highscoreManager.h"
 
 class Game;
 class CastManager;
@@ -23,7 +24,8 @@ enum GameStateType {
 	Pause,
 	Looting,
 	Title,
-	GameOver
+	GameOver,
+	HighScore
 };
 
 
@@ -96,6 +98,15 @@ public:
 	virtual void render2d(Game& game) override;
 };
 
+class HighScoreState : public IGameState {
+public:
+	HighScoreState() : IGameState(GameStateType::HighScore) {};
+	virtual void enter(Game& game) override;
+	virtual void update(Game& game, float dt) override;
+	virtual void exit(Game& game) override;
+	virtual void renderUI(Game& game) override;
+};
+
 // ================== GAME MANAGER ==========================
 
 class Game {
@@ -108,6 +119,11 @@ private:
 	PauseGameState pauseState;
 	TitleGameState titleState;
 	GameOverState gameOverState;
+	HighScoreState highScoreState;
+
+	irrklang::ISound* currentMusic = nullptr;
+	GameStateType currentMusicState;
+	std::unordered_map<GameStateType, std::string> musicTracks;
 
 	Player player;
 	GLFWwindow* window;
@@ -133,8 +149,8 @@ private:
 	ModelRenderer asteroidModelRenderer = ModelRenderer("assets/models/astro/asteroid.obj", "shaders/asteroid3d/ast3dVertex.glsl", "shaders/asteroid3d/ast3dFrag.glsl");
 
 	irrklang::ISoundEngine* audioEngine;
-	uint8_t score = 0;
-	uint8_t enemiesKilled = 0;
+	uint16_t score = 0;
+	uint16_t enemiesKilled = 0;
 
 	SpriteRenderer* renderer;
 	EnemyManager* enemyManager;
@@ -152,6 +168,8 @@ private:
 
 	int init_renderers(const glm::mat4& projection);
 	void init_buttons();
+	void init_audio();
+
 public: 
 	UpgradeUI upgradeUI;
 
@@ -167,7 +185,7 @@ public:
 		const std::array<ModelRenderer*, 4>& models
 	);
 	void switch_state(GameStateType new_state);
-
+	void playMusicForState(GameStateType state);
 
 	void update(float dt);
 

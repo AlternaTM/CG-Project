@@ -147,6 +147,13 @@ int main(void)
     ResourceManager::LoadTexture("cannon", "assets/textures/cannon.png");
     ResourceManager::LoadTexture("bullet", "assets/textures/proiettile_base.png");
     ResourceManager::LoadTexture("titleScreen", "assets/textures/title.png");
+    ResourceManager::LoadTexture("button_menu", "assets/textures/button_menu.png");
+    ResourceManager::LoadTexture("button_card", "assets/textures/button_card.png");
+    ResourceManager::LoadTexture("Bullet_speed", "assets/textures/Bullet_speed.png");
+    ResourceManager::LoadTexture("Bullet_dimension", "assets/textures/Bullet_dimension.png");
+    ResourceManager::LoadTexture("Shooting_speed", "assets/textures/Shooting_speed.png");
+    ResourceManager::LoadTexture("Bullet_damage", "assets/textures/Bullet_damage.png");
+    ResourceManager::LoadTexture("Bullet_Piercing", "assets/textures/Bullet_Piercing.png");
 
     // Avvio motore audio
     irrklang::ISoundEngine* engine = irrklang::createIrrKlangDevice();
@@ -155,10 +162,6 @@ int main(void)
 
     // Avvio BGM looped (da cambiare la musica)
     engine->setSoundVolume(0.3f);
-    engine->play2D("assets/audio/bgm.wav", true);
-
-
-
 
     //----------------chest---------------------
 

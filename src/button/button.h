@@ -15,8 +15,18 @@ protected:
 public:
     Button(
         const std::string& label,
-        glm::vec2 position,   // spazio (-8..8 / -4.5..4.5)
+        glm::vec2 position,
         glm::vec2 size,       
+		SpriteTexture texture,
+        std::function<void()> onClick
+    );
+
+    Button(
+        SpriteTexture icon,
+        glm::vec2 iconSize,
+        glm::vec2 position,
+        glm::vec2 size,
+        SpriteTexture texture,
         std::function<void()> onClick
     );
 
@@ -25,14 +35,18 @@ public:
 
 private:
     std::string label;
+    bool hasIcon = false;
     glm::vec2 position;
     glm::vec2 size;
     std::function<void()> onClick;
+    SpriteTexture button;
+	SpriteTexture icon;
+	glm::vec2 iconSize;
 
     bool hovered = false;
 
-    glm::vec4 normalColor = { 0.2f, 0.2f, 0.25f, 0.9f };
-    glm::vec4 hoverColor = { 0.35f, 0.35f, 0.45f, 0.95f };
+    glm::vec4 normalColor = { 1.0f, 1.0f, 1.0f, 1.0f };
+    glm::vec4 hoverColor = { 0.55f, 0.35f, 0.35f, 1.0f };
     glm::vec3 textColor = { 1.0f, 1.0f, 1.0f };
 
 };

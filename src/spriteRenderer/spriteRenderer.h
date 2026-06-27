@@ -12,8 +12,8 @@ public:
     void Draw(SpriteTexture& texture,
         const glm::vec2& position,
         const glm::vec2& size,
-        float rotation,
-        const glm::mat4& view,
+        float rotation = 0.0f,
+        const glm::mat4& view = glm::mat4(1.0f),
         const glm::vec2& UVOffset = { 0.0f,0.0f },
         const glm::vec2& UVSize = { 1.0f,1.0f },
         const glm::vec4& color = { 1.0f, 1.0f, 1.0f, 1.0f }

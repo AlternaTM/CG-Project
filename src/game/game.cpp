@@ -35,12 +35,12 @@ void TitleGameState::renderUI(Game& game) {
 		b.render(*game.get_SpriteRenderer(), *game.get_TextRenderer());
 	}
 
-	float scale = 0.7f;
+	float scale = 0.9f;
 	std::string text = "Battlefield in the Bedroom";
 
 	float textWidth = game.get_TextRenderer()->GetTextWidth(text, scale);
 	float x = (1080 - textWidth);
-	game.get_TextRenderer()->RenderText("Battlefield in the Bedroom", -6.7f, 2.8f, scale, { 1.0f, 1.0f, 1.0f });
+	game.get_TextRenderer()->RenderText("Battlefield in the Bedroom", -6.7f, 3.2f, scale, { 1.0f, 1.0f, 1.0f });
 
 }
 
@@ -376,15 +376,12 @@ void PauseGameState::render2d(Game& game) {
 
 // ================== GameOverState =========================
 void GameOverState::enter(Game& game) {
-
+	if (game.get_score() > 0) {
+		HighscoreManager::trySaveScore(game.get_score(), game.get_enemiesKilled());
+	}
 }
 
 void GameOverState::update(Game& game, float dt) {
-
-	if (PlayerInput::isKeyJustPressed(game.get_window(), GLFW_KEY_ESCAPE)) {
-		game.switch_state(GameStateType::InGame);
-	}
-
 	for (auto& b : game.get_buttons(GameStateType::GameOver)) {
 		b.update(game.get_window());
 	}
@@ -466,6 +463,86 @@ void GameOverState::render2d(Game& game) {
 	game.render_game2D();
 }
 
+// ================== GameOverState =========================
+void HighScoreState::enter(Game& game) {
+
+}
+
+void HighScoreState::update(Game& game, float dt) {
+	for (auto& b : game.get_buttons(GameStateType::HighScore)) {
+		b.update(game.get_window());
+	}
+}
+
+void HighScoreState::exit(Game& game) {
+
+}
+
+void HighScoreState::renderUI(Game& game) {
+	game.get_SpriteRenderer()->DrawColor(
+		{ 0.0f, 0.0f },
+		{ 16.0f, 9.0f },
+		{ 0.0f, 0.0f, 0.0f, 0.8f }
+	);
+
+	const std::vector<ScoreEntry>& scores = HighscoreManager::get_high_scores();
+
+	// Titolo
+	std::string title = "Classifica";
+	float titleScale = 1.0f;
+	float titleWidth = game.get_TextRenderer()->GetTextWidth(title, titleScale);
+	game.get_TextRenderer()->RenderText(
+		title,
+		-titleWidth * 0.5f,
+		2.8f,
+		titleScale,
+		{ 1.0f, 0.85f, 0.2f }
+	);
+
+	// Colonne tabella
+	float colRankX = -3.0f;
+	float colScoreX = -1.5f;
+	float colKillsX = 2.0f;
+
+	float headerY = 1.8f;
+	float headerScale = 0.7f;
+	float rowStartY = 1.2f;
+	float rowGap = 0.6f;
+	float rowScale = 0.7f;
+
+	game.get_TextRenderer()->RenderText("#", colRankX, headerY, headerScale, { 0.8f, 0.8f, 0.8f });
+	game.get_TextRenderer()->RenderText("Punteggio", colScoreX, headerY, headerScale, { 0.8f, 0.8f, 0.8f });
+	game.get_TextRenderer()->RenderText("Nemici", colKillsX, headerY, headerScale, { 0.8f, 0.8f, 0.8f });
+
+	const size_t totalSlots = 5;
+
+	for (size_t i = 0; i < totalSlots; i++) {
+		float rowY = rowStartY - rowGap * static_cast<float>(i);
+
+		char rankBuffer[8];
+		sprintf_s(rankBuffer, "%d.", static_cast<int>(i + 1));
+		game.get_TextRenderer()->RenderText(rankBuffer, colRankX, rowY, rowScale, { 1.0f, 1.0f, 1.0f });
+
+		if (i < scores.size()) {
+			char scoreBuffer[16];
+			sprintf_s(scoreBuffer, "%u", scores[i].score);
+			game.get_TextRenderer()->RenderText(scoreBuffer, colScoreX, rowY, rowScale, { 1.0f, 1.0f, 1.0f });
+
+			char killsBuffer[16];
+			sprintf_s(killsBuffer, "%u", scores[i].enemiesKilled);
+			game.get_TextRenderer()->RenderText(killsBuffer, colKillsX, rowY, rowScale, { 1.0f, 1.0f, 1.0f });
+		}
+		else {
+			game.get_TextRenderer()->RenderText("---", colScoreX, rowY, rowScale, { 0.5f, 0.5f, 0.5f });
+			game.get_TextRenderer()->RenderText("---", colKillsX, rowY, rowScale, { 0.5f, 0.5f, 0.5f });
+		}
+	}
+
+	for (Button& b : game.get_buttons(GameStateType::HighScore)) {
+		b.render(*game.get_SpriteRenderer(), *game.get_TextRenderer());
+	}
+}
+
 // ================== GAME MANAGER ==========================
 
 Game* Game::_INSTANCE = nullptr;
@@ -521,7 +598,10 @@ void Game::init(
 	//game.enemyManager->spawn_enemy(EnemyTipe::Mage, 1);+
 	game.bulletManager = BulletManager::get_instance();
 	game.init_renderers(projection);
+	game.init_audio();
 	game.init_buttons();
+	HighscoreManager::load();
+	game.playMusicForState(GameStateType::Title);
 
 	game.castManager->init(&game.figCastRenderer, &game.figAstroCastRenderer, &game.figAstroShadowCastRenderer, &game.asteroidModelRenderer);
 	EnemyManager::get_instance()->init(audioEngine);
@@ -553,18 +633,35 @@ int Game::init_renderers(const glm::mat4& projection) {
 	return 0;
 }
 
+void Game::init_audio() {
+	musicTracks[GameStateType::Title] = "assets/audio/bgm_title_screen.wav";
+	musicTracks[GameStateType::InGame] = "assets/audio/bgm_in_game.wav";
+	musicTracks[GameStateType::GameOver] = "assets/audio/bgm_game_over.wav";
+}
+
 void Game::init_buttons() {
+	SpriteTexture buttonTexture = ResourceManager::GetTexture("button_menu");
+
 	stateButtons[GameStateType::Title] = {
 		Button(
 			"Inizia",
-			glm::vec2(-4.2f, 1.0f),
-			glm::vec2(5.0f, 1.3f),
+			glm::vec2(-4.7f, 1.5f),
+			glm::vec2(4.0f, 1.5f),
+			buttonTexture,
 			[this]() {spawn_game();  switch_state(GameStateType::InGame); }
 		),
 		Button(
+			"Classifica",
+			glm::vec2(-4.7f, -0.5f),
+			glm::vec2(4.0f, 1.5f),
+			buttonTexture,
+			[this]() { switch_state(GameStateType::HighScore); }
+		),
+		Button(
 			"Esci",
-			glm::vec2(-4.2f, -1.0f),
-			glm::vec2(5.0f, 1.3f),
+			glm::vec2(-4.7f, -2.5f),
+			glm::vec2(4.0f, 1.5f),
+			buttonTexture,
 			[this]() { glfwSetWindowShouldClose(window, true); }
 		)
 	};
@@ -573,13 +670,15 @@ void Game::init_buttons() {
 		Button(
 			"Riprendi",
 			glm::vec2(0.0f, 0.7f),
-			glm::vec2(5.0f, 1.1f),
+			glm::vec2(4.0f, 1.5f),
+			buttonTexture,
 			[this]() {  switch_state(GameStateType::InGame); }
 		),
 		Button(
 			"Abbandona",
-			glm::vec2(0.0f, -0.7f),
-			glm::vec2(5.0f, 1.1f),
+			glm::vec2(0.0f, -1.3f),
+			glm::vec2(4.0f, 1.5f),
+			buttonTexture,
 			[this]() {reset(); switch_state(GameStateType::Title); }
 		)
 	};
@@ -588,15 +687,27 @@ void Game::init_buttons() {
 		Button(
 			"Riprova",
 			glm::vec2(0.0f, 0.7f),
-			glm::vec2(5.0f, 1.1f),
+			glm::vec2(4.0f, 1.5f),
+			buttonTexture,
 			[this]() { switch_state(GameStateType::InGame); spawn_game(); }
 		),
 		Button(
 			"Abbandona",
-			glm::vec2(0.0f, -0.7f),
-			glm::vec2(5.0f, 1.1f),
+			glm::vec2(0.0f, -1.3f),
+			glm::vec2(4.0f, 1.5f),
+			buttonTexture,
 			[this]() { switch_state(GameStateType::Title); }
 		)
+	};
+
+	stateButtons[GameStateType::HighScore] = {
+		Button(
+			"Indietro",
+			glm::vec2(0.0f, -2.5f),
+			glm::vec2(4.0f, 1.5f),
+			buttonTexture,
+			[this]() { switch_state(GameStateType::Title); }
+		),
 	};
 }
 
@@ -643,8 +754,36 @@ void Game::switch_state(GameStateType state) {
 	case GameStateType::GameOver:
 		game_state = &gameOverState;
 		break;
+	case GameStateType::HighScore:
+		game_state = &highScoreState;
+		break;
 	}
 	game_state->enter(*this);
+	playMusicForState(state);
+}
+
+void Game::playMusicForState(GameStateType state) {
+	auto it = musicTracks.find(state);
+	if (it == musicTracks.end()) {
+		return;
+	}
+
+	if (state == currentMusicState) {
+		return;
+	}
+
+	if (currentMusic) {
+		currentMusic->stop();
+		currentMusic->drop();
+		currentMusic = nullptr;
+	}
+
+	currentMusic = audioEngine->play2D(it->second.c_str(), true, false, true);
+	if (currentMusic) {
+		currentMusic->setVolume(0.3f);
+	}
+
+	currentMusicState = state;
 }
 
 Player* Game::get_player() {
@@ -714,7 +853,6 @@ ModelRenderer* Game::get_lamp_model() {
 irrklang::ISoundEngine* Game::get_engine() {
 	return audioEngine;
 }
-
 
 void Game::render_game2D() {
 	(*renderer).Draw(

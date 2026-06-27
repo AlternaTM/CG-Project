@@ -171,6 +171,9 @@
     <ClCompile Include="src\button\button.cpp">
       <Filter>File di origine</Filter>
     </ClCompile>
+    <ClCompile Include="highscoreManager.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\glad\glad.h">
@@ -283,6 +286,9 @@
     </ClInclude>
     <ClInclude Include="src\game\globals.h">
       <Filter>File di origine\game</Filter>
+    </ClInclude>
+    <ClInclude Include="highscoreManager.h">
+      <Filter>File di origine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

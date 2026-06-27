@@ -5,7 +5,7 @@
 #include "spriteRenderer/spriteRenderer.h"
 #include "camera/camera.h"
 #include "figureRenderer/figureRenderer.h"
-#include <glm/glm.hpp>
+#include "resourceManager/resourceManager.h"
 #include "textRenderer/textRenderer.h"
 #include "animSystem/animSystem.h"
 #include "entity.h"
@@ -24,15 +24,15 @@ enum Upgrades {
 };
 
 
-inline std::string toString(Upgrades upgrade) {
+inline SpriteTexture toIcon(Upgrades upgrade) {
 	switch (upgrade) {
-	case Upgrades::BulletSpeed:   return "Bullet speed";
-	case Upgrades::BulletSize:    return "Bullet dimension";
-	case Upgrades::ShootingSpeed: return "Shooting speed";
-	case Upgrades::BulletDamager: return "Bullet damage";
-	case Upgrades::BulletPierce: return "Bullet Piercing";
+		case Upgrades::BulletSpeed:   return ResourceManager::GetTexture("Bullet_speed");
+		case Upgrades::BulletSize:    return ResourceManager::GetTexture("Bullet_dimension");
+		case Upgrades::ShootingSpeed: return ResourceManager::GetTexture("Shooting_speed");
+		case Upgrades::BulletDamager: return ResourceManager::GetTexture("Bullet_damage");
+		case Upgrades::BulletPierce:  return ResourceManager::GetTexture("Bullet_Piercing");
 	}
-	return "Sconosciuto";
+	return ResourceManager::GetTexture("Sconosciuto");
 }
 
 inline Upgrades randomUpgrade() {
@@ -46,10 +46,10 @@ inline Upgrades randomUpgrade() {
 class Card : public Button {
 
 public:
-	Card(const std::string& label, glm::vec2 position, glm::vec2 size,
+	Card(SpriteTexture icon, glm::vec2 position, glm::vec2 size, SpriteTexture texture,
 		Upgrades upgrade,
 		std::function<void(Upgrades)> onUpgradeChosen)  
-		: Button(label, position, size,
+		: Button(icon, size * 0.6f, position, size, texture,
 			[upgrade, onUpgradeChosen]() {           
 				onUpgradeChosen(upgrade);             
 			}),
@@ -67,7 +67,6 @@ class UpgradeUI {
 	Card* card1 = nullptr;
 	Card* card2 = nullptr;
 	Card* card3 = nullptr;
-
 	
 public:
 	bool applied = false;

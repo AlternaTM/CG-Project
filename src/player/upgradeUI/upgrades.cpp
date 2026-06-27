@@ -52,13 +52,12 @@ void UpgradeUI::render(TextRenderer* textRenderer, SpriteRenderer* spriteRendere
 
 }
 
-
 void UpgradeUI::createScene() {
 	destroyScene();
-
+	SpriteTexture texture = ResourceManager::GetTexture("button_card");
 
 	Upgrades up = randomUpgrade();
-	card1 = new Card(toString(up), {-3.0f, 0.0f}, {2.0f, 3.0f},up , [this](Upgrades u) {
+	card1 = new Card(toIcon(up), {-3.0f, 0.0f}, {2.0f, 2.0f}, texture, up , [this](Upgrades u) {
 		//player.applyUpgrade(u);
 		if (!applied && Game::get_instance()->get_chestManager().finished) {
 			applied = true;
@@ -66,7 +65,7 @@ void UpgradeUI::createScene() {
 		}
 	});
 	up = randomUpgrade();
-	card2 = new Card(toString(up), {0.0f, 0.0f}, {2.0f, 3.0f},up, [this](Upgrades u) {
+	card2 = new Card(toIcon(up), {0.0f, 0.0f}, {2.0f, 2.0f}, texture, up, [this](Upgrades u) {
 		if (!applied && Game::get_instance()->get_chestManager().finished) {
 			applied = true;
 			Game::get_instance()->get_player()->apply_upgrade(u);
@@ -74,7 +73,7 @@ void UpgradeUI::createScene() {
 		//player.applyUpgrade(u);
 	});
 	up = randomUpgrade();
-	card3 = new Card(toString(up),{ 3.0f, 0.0f }, {2.0f, 3.0f},up, [this](Upgrades u) {
+	card3 = new Card(toIcon(up),{ 3.0f, 0.0f }, {2.0f, 2.0f}, texture, up, [this](Upgrades u) {
 		//player.applyUpgrade(u);
 		if (!applied && Game::get_instance()->get_chestManager().finished) {
 			applied = true;
