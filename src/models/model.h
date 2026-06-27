@@ -37,6 +37,18 @@ public:
         loadModel(path);
     }
 
+    Model(vector<Vertex> vertices, vector<unsigned int> indices, const string& texturePath)
+    {
+        
+        Texture tex;
+        tex.id = TextureFromFile(texturePath.c_str(), ""); 
+        tex.type = "texture_diffuse";
+        tex.path = texturePath;
+        textures_loaded.push_back(tex);
+
+        meshes.push_back(Mesh(vertices, indices, { tex }));
+    }
+
     void Draw(Shader& shader)
     {
         
@@ -199,7 +211,13 @@ private:
 inline unsigned int TextureFromFile(const char* path, const string& directory, bool gamma)
 {
     string filename = string(path);
+
     filename = directory + '/' + filename;
+
+    if (!filename.empty() && (filename[0] == '/' || filename[0] == '\\'))
+        filename = filename.substr(1);
+
+    //std::cout << "Trying to load texture: [" << filename << "]" << std::endl;
 
     unsigned int textureID;
     glGenTextures(1, &textureID);
@@ -230,7 +248,7 @@ inline unsigned int TextureFromFile(const char* path, const string& directory, b
     }
     else
     {
-        std::cout << "Texture failed to load at path: " << path << std::endl;
+        std::cout << "Texture failed to load at path: " << filename << std::endl;
         stbi_image_free(data);
     }
 

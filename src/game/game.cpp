@@ -46,13 +46,22 @@ void TitleGameState::renderUI(Game& game) {
 
 void TitleGameState::render3d(Game& game, float dt) {
 	glm::mat4 bearMatrix = glm::mat4(1.0f);
-	bearMatrix = glm::translate(bearMatrix, glm::vec3(0.0f, 0.0f, 0.0f)); 
-	bearMatrix = glm::rotate(bearMatrix, glm::radians(30.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	bearMatrix = glm::translate(bearMatrix, glm::vec3(0.20f, -0.208f, 0.68f)); 
+	bearMatrix = glm::rotate(bearMatrix, glm::radians(37.47f), glm::vec3(0.0f, 1.0f, 0.0f));
+	bearMatrix = glm::scale(bearMatrix, glm::vec3(0.68f));
+	//glm::mat4 bearMatrix = positionerObjectHElper(game.get_window(), dt);
+
 	//parentMatrix = glm::scale(parentMatrix, glm::vec3(0.2f));
 	game.get_bear_model()->shader->use();
 
 	game.get_bear_model()->shader->setVec3("lightPos1", glm::vec3(-2.0f, 0, 0));
 	game.get_bear_model()->shader->setVec3("lightColor1", glm::vec3(1, 1, 1));
+
+	//glm::mat4 lioghMatrix = positionerObjectHElper(game.get_window(), dt);
+	
+	game.get_bear_model()->shader->setVec3("lightPos2", glm::vec3(2.26f, 1.64f, 2.42f)); //  glm::vec3(2.2f, 2.0f, 1.6f)
+	game.get_bear_model()->shader->setVec3("lightColor2", glm::vec3(0.6f, 0.6f, 0.6f)); 
+
 
 	game.get_bear_model()->render(
 		game.get_camera3D()->getViewMatrix(),
@@ -61,17 +70,27 @@ void TitleGameState::render3d(Game& game, float dt) {
 	);
 	
 	glm::mat4 lampMatrix = glm::mat4(1.0f);
-	lampMatrix = glm::translate(lampMatrix, glm::vec3(3.0f, -0.7f, 2.0f));
-	lampMatrix = glm::rotate(lampMatrix, glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-	lampMatrix = glm::scale(lampMatrix, glm::vec3(0.8f));
+	lampMatrix = glm::translate(lampMatrix, glm::vec3(2.60f, -0.54f, 2.82f));
+	lampMatrix = glm::rotate(lampMatrix, glm::radians(28.82f), glm::vec3(0.0f, 1.0f, 0.0f));
+	lampMatrix = glm::scale(lampMatrix, glm::vec3(0.68f));
 
-	game.get_bear_model()->shader->setVec3("lightPos2", glm::vec3(2.2f, 2.0f, 1.6f));
-	game.get_bear_model()->shader->setVec3("lightColor2", glm::vec3(0.6f, 0.6f, 0.6f));
+	//glm::mat4 lampMatrix = positionerObjectHElper(game.get_window(), dt);
 
 	game.get_lamp_model()->render(
 		game.get_camera3D()->getViewMatrix(),
 		game.get_projection3D(),
 		&lampMatrix
+	);
+
+	glm::mat4 planeMatrix = glm::mat4(1.0f);
+	planeMatrix = glm::translate(planeMatrix, glm::vec3(0.0f, -0.55f, 0.0f));
+	//planeMatrix = glm::rotate(planeMatrix, glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	//planeMatrix = glm::scale(planeMatrix, glm::vec3(0.5f));
+
+	game.get_plane_model()->render(
+		game.get_camera3D()->getViewMatrix(),
+		game.get_projection3D(),
+		&planeMatrix
 	);
 	
 }
@@ -554,8 +573,7 @@ Game::Game(
 	SpriteRenderer* renderer, 
 	Camera3D* camera3D,
 	const glm::mat4 projection3D,
-	irrklang::ISoundEngine* audioEngine,
-	const std::array<ModelRenderer*, 4>& models
+	irrklang::ISoundEngine* audioEngine
 )
 	: 
 	player(camera), 
@@ -567,8 +585,7 @@ Game::Game(
 	window(window),
 	camera3D(camera3D),
 	projection3D(projection3D),
-	audioEngine(audioEngine),
-	models(models)
+	audioEngine(audioEngine)
 {
 	game_state = &titleState;
 
@@ -582,8 +599,7 @@ void Game::init(
 	SpriteRenderer* renderer,
 	Camera3D* camera3D,
 	const glm::mat4 projection3D,
-	irrklang::ISoundEngine* audioEngine,
-	const std::array<ModelRenderer*, 4>& models
+	irrklang::ISoundEngine* audioEngine
 ) {
 	static Game game(
 		window,
@@ -591,8 +607,7 @@ void Game::init(
 		renderer,
 		camera3D,
 		projection3D,
-		audioEngine,
-		models
+		audioEngine
 	);
 
 	//game.enemyManager->spawn_enemy(EnemyTipe::Mage, 1);+
@@ -603,7 +618,7 @@ void Game::init(
 	HighscoreManager::load();
 	game.playMusicForState(GameStateType::Title);
 
-	game.castManager->init(&game.figCastRenderer, &game.figAstroCastRenderer, &game.figAstroShadowCastRenderer, &game.asteroidModelRenderer);
+	game.castManager->init(&game.figCastRenderer, &game.figAstroCastRenderer, &game.figAstroShadowCastRenderer, &ResourceManager::GetModel("asteroid"));
 	EnemyManager::get_instance()->init(audioEngine);
 
 	EnemyManager::_PLAYER = game.get_player();
@@ -835,7 +850,7 @@ const glm::mat4 Game::get_projection3D() {
 }
 
 std::array<ModelRenderer*, 2> Game::get_chest_part() {
-	return { models[0], models[1] };
+	return { &ResourceManager::GetModel("chest"), &ResourceManager::GetModel("chest_lid") };
 }
 
 std::vector<Button>& Game::get_buttons(GameStateType type) {
@@ -844,10 +859,14 @@ std::vector<Button>& Game::get_buttons(GameStateType type) {
 
 
 ModelRenderer* Game::get_bear_model() {
-	return models[2];
+	return &ResourceManager::GetModel("orso");
 }
 ModelRenderer* Game::get_lamp_model() {
-	return models[3];
+	return &ResourceManager::GetModel("lamp");
+}
+
+ModelRenderer* Game::get_plane_model() {
+	return &ResourceManager::GetModel("plane");
 }
 
 irrklang::ISoundEngine* Game::get_engine() {
@@ -911,3 +930,5 @@ void Game::spawn_game() {
 	chestManager.spawn_chest();
 	chestManager.spawn_chest();
 }
+
+

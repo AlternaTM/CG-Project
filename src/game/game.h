@@ -131,7 +131,6 @@ private:
 	
 	Camera3D* camera3D;
 	const glm::mat4 projection3D;
-	std::array<ModelRenderer*, 4> models;
 
 	std::unordered_map<GameStateType, std::vector<Button>> stateButtons;
 
@@ -146,7 +145,7 @@ private:
 	FigRenderer figAstroCastRenderer = FigRenderer("shaders/astroCast/astroVert.glsl","shaders/astroCast/astroFrag.glsl");
 	FigRenderer figAstroShadowCastRenderer = FigRenderer("shaders/astroCast/astroShadowVert.glsl", "shaders/astroCast/astroShadowFrag.glsl");
 	TextRenderer textRenderer{};
-	ModelRenderer asteroidModelRenderer = ModelRenderer("assets/models/astro/asteroid.obj", "shaders/asteroid3d/ast3dVertex.glsl", "shaders/asteroid3d/ast3dFrag.glsl");
+
 
 	irrklang::ISoundEngine* audioEngine;
 	uint16_t score = 0;
@@ -162,8 +161,7 @@ private:
 		SpriteRenderer* renderer,
 		Camera3D* camera3D,
 		const glm::mat4 projection3D,
-		irrklang::ISoundEngine* audioEngine,
-		const std::array<ModelRenderer*, 4>& models
+		irrklang::ISoundEngine* audioEngine
 	);
 
 	int init_renderers(const glm::mat4& projection);
@@ -181,8 +179,7 @@ public:
 		SpriteRenderer* renderer, 
 		Camera3D* camera3D,
 		const glm::mat4 projection3D,
-		irrklang::ISoundEngine* audioEngine,
-		const std::array<ModelRenderer*, 4>& models
+		irrklang::ISoundEngine* audioEngine
 	);
 	void switch_state(GameStateType new_state);
 	void playMusicForState(GameStateType state);
@@ -220,9 +217,51 @@ public:
 	std::array<ModelRenderer*, 2> get_chest_part();
 	ModelRenderer* get_bear_model();
 	ModelRenderer* get_lamp_model();
+	ModelRenderer* get_plane_model();
 	static Game* get_instance();
 
 	void updateScoreCount(uint8_t score);
 	uint8_t get_score() { return score; }
 	uint8_t get_enemiesKilled() { return enemiesKilled; }
 };
+
+
+inline glm::mat4 positionerObjectHElper(GLFWwindow* window, float dt)
+{
+	static glm::vec3 pos(0.0f);
+	static float rotY = 0.0f;
+	static float scale = 1.0f;
+
+	float moveSpeed = 2.0f * dt;
+	float rotSpeed = 90.0f * dt;
+	float scaleSpeed = 1.0f * dt;
+
+	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) pos.z -= moveSpeed;
+	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) pos.z += moveSpeed;
+	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) pos.x -= moveSpeed;
+	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) pos.x += moveSpeed;
+	if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) pos.y += moveSpeed;
+	if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) pos.y -= moveSpeed;
+
+	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) rotY -= rotSpeed;
+	if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) rotY += rotSpeed;
+
+	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) scale += scaleSpeed;
+	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) scale = std::max(0.01f, scale - scaleSpeed);
+
+	static bool pWasPressed = false;
+	if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS && !pWasPressed) {
+		std::cout << "[debugMatrix] pos(" << pos.x << ", " << pos.y << ", " << pos.z << ") "
+			<< "rotY=" << rotY << " scale=" << scale << std::endl;
+		pWasPressed = true;
+	}
+	else if (glfwGetKey(window, GLFW_KEY_P) == GLFW_RELEASE) {
+		pWasPressed = false;
+	}
+
+	glm::mat4 m = glm::mat4(1.0f);
+	m = glm::translate(m, pos);
+	m = glm::rotate(m, glm::radians(rotY), glm::vec3(0, 1, 0));
+	m = glm::scale(m, glm::vec3(scale));
+	return m;
+}

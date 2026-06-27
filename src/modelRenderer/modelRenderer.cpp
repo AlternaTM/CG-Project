@@ -1,21 +1,28 @@
 #include "modelRenderer.h"
-#include "../models/model.h"
+
 #include "../shader/shader.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/quaternion.hpp>
 
 
-ModelRenderer::ModelRenderer(const std::string& modelPath, const std::string& vertexShader,
-    const std::string& fragmentShader)
-    : position(0.0f), scale(1.0f), rotation(0.0f),pivot(0.0f)
+ModelRenderer::ModelRenderer(const std::string& modelPath, Shader* shader)
+    : position(0.0f), scale(1.0f), rotation(0.0f),pivot(0.0f), shader(shader)
 {
     model = new Model(modelPath);
-    shader = new Shader(vertexShader.c_str(), fragmentShader.c_str());
+}
+
+
+ModelRenderer::ModelRenderer(Model* model, Shader* shader) 
+    : position(0.0f), scale(1.0f), rotation(0.0f), pivot(0.0f), shader(shader)
+{
+    this->model = model;
+    //shader = new Shader(vertexShader.c_str(), fragmentShader.c_str());
 }
 
 ModelRenderer::~ModelRenderer() {
-    delete model;   
-    delete shader;
+    //std::cout << "~ModelRenderer() called, model ptr: " << model << std::endl;
+    delete model;
+    model = nullptr;
 }
 
 void ModelRenderer::setPosition(glm::vec3 pos) { position = pos; }
