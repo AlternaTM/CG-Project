@@ -39,3 +39,50 @@ void ResourceManager::Clear() {
         glDeleteTextures(1, &it.second.ID);
     Textures.clear();
 }
+
+
+//============Models
+
+std::map<std::string, ModelRenderer*> ResourceManager::models;
+
+
+ModelRenderer& ResourceManager::LoadModel(
+    const std::string& name,
+    const std::string& path,
+    const std::string& vertShader,
+    const std::string& fragShader)
+{
+    if (models.find(name) != models.end())
+        return *models[name];
+
+    ModelRenderer* mr = new ModelRenderer(path, vertShader, fragShader);
+    models[name] = mr;
+    return *mr;
+}
+
+ModelRenderer& ResourceManager::GetModel(const std::string& path)
+{
+    if (models.find(path) == models.end())
+        throw std::runtime_error("ResourceManager: modello non trovato: " + path);
+
+    return *models[path];
+}
+
+
+void ResourceManager::addModel(const std::string& name, ModelRenderer* modelRenderer)
+{
+    if (models.find(name) != models.end())
+        delete models[name];  
+
+    models[name] = modelRenderer;
+}
+
+
+
+void ResourceManager::clearModels()
+{
+    for (auto& pair : models)
+        delete pair.second;  
+
+    models.clear();
+}

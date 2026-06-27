@@ -23,8 +23,11 @@ ModelRenderer::ModelRenderer(Model* model, const std::string& vertexShader,
 }
 
 ModelRenderer::~ModelRenderer() {
-    delete model;   
+    //std::cout << "~ModelRenderer() called, model ptr: " << model << std::endl;
+    delete model;
     delete shader;
+    model = nullptr;
+    shader = nullptr;
 }
 
 void ModelRenderer::setPosition(glm::vec3 pos) { position = pos; }

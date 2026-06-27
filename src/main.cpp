@@ -189,9 +189,10 @@ int main(void)
 
 
     // ------------------- Orso -------------------
-    ModelRenderer orso("assets/models/bear/Orso.obj", "shaders/bear_shader/bearVertexShader.glsl", "shaders/bear_shader/bearFragShader.glsl");
-    ModelRenderer lamp("assets/models/lamp/lampada.obj", "shaders/bear_shader/bearVertexShader.glsl", "shaders/bear_shader/bearFragShader.glsl");
 
+    ModelRenderer& lamp = ResourceManager::LoadModel("lamp","assets/models/lamp/lampada.obj", "shaders/bear_shader/bearVertexShader.glsl", "shaders/bear_shader/bearFragShader.glsl");
+
+    ModelRenderer& orso = ResourceManager::LoadModel("orso", "assets/models/bear/Orso.obj", "shaders/bear_shader/bearVertexShader.glsl", "shaders/bear_shader/bearFragShader.glsl");
 
 
 
@@ -257,6 +258,7 @@ int main(void)
 
 
     ResourceManager::Clear();
+    ResourceManager::clearModels();
     glfwTerminate();
     return 0;
 }
