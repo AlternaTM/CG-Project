@@ -155,6 +155,7 @@ int main(void)
     ResourceManager::LoadTexture("Shooting_speed", "assets/textures/Shooting_speed.png");
     ResourceManager::LoadTexture("Bullet_damage", "assets/textures/Bullet_damage.png");
     ResourceManager::LoadTexture("Bullet_Piercing", "assets/textures/Bullet_Piercing.png");
+    ResourceManager::LoadTexture("Health_Plus", "assets/textures/Health_Plus.png");
 
     // Avvio motore audio
     irrklang::ISoundEngine* engine = irrklang::createIrrKlangDevice();

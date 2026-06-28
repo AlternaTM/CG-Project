@@ -1,16 +1,10 @@
 #pragma once
 
 #include <glm/glm.hpp>
-#include <string>
 #include "spriteRenderer/spriteRenderer.h"
-#include "camera/camera.h"
-#include "figureRenderer/figureRenderer.h"
 #include "resourceManager/resourceManager.h"
 #include "textRenderer/textRenderer.h"
-#include "animSystem/animSystem.h"
-#include "entity.h"
 #include "button/button.h"
-#include <vector>
 #include <random>
 
 
@@ -32,7 +26,7 @@ inline SpriteTexture toIcon(Upgrades upgrade) {
 		case Upgrades::ShootingSpeed: return ResourceManager::GetTexture("Shooting_speed");
 		case Upgrades::BulletDamager: return ResourceManager::GetTexture("Bullet_damage");
 		case Upgrades::BulletPierce:  return ResourceManager::GetTexture("Bullet_Piercing");
-		case Upgrades::HealtPlus:     return ResourceManager::GetTexture("Bullet_Piercing");
+		case Upgrades::HealtPlus:     return ResourceManager::GetTexture("Health_Plus");
 	}
 	return ResourceManager::GetTexture("Sconosciuto");
 }
@@ -40,7 +34,7 @@ inline SpriteTexture toIcon(Upgrades upgrade) {
 inline Upgrades randomUpgrade() {
 	static std::random_device rd;
 	static std::mt19937 gen(rd());
-	static std::uniform_int_distribution<int> dist(0, 4); 
+	static std::uniform_int_distribution<int> dist(0, 5); 
 
 	return static_cast<Upgrades>(dist(gen));
 }
