@@ -13,6 +13,8 @@
 class Player;
 class Enemy;
 
+#define MAX_DAMAGE_MULTI 3
+
 // ============= ENEMY STATES ==================================
 
 
@@ -111,6 +113,8 @@ protected:
     EnemyState* currentState = nullptr;
 
     int16_t life = 255;
+
+    
     
 public:
     uint32_t ID;

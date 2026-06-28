@@ -140,7 +140,10 @@ Enemy::Enemy(EnemyTipe type):type(type) {
 
 
 void Enemy::make_damage(uint8_t damage) {
-    life -= damage;
+    float t = glm::clamp(Game::get_instance()->get_timer()->getTime() / (15.0f * 60.0f), 0.0f, 1.0f);
+    float scaled =  glm::mix((float)damage, (float)(damage * MAX_DAMAGE_MULTI),t);
+
+    life -= (uint8_t)damage;
 
 }
 
@@ -348,8 +351,8 @@ uint16_t EnemyManager::randomAmmountSpawn() {
     static std::mt19937 gen(rd());
 
 
-    const float maxMinutes = 15.0f;
-    float t = clamp(Game::get_instance()->get_timer()->getTime() / (maxMinutes * 60.0f), 0.0f, 1.0f);
+
+    float t = clamp(Game::get_instance()->get_timer()->getTime() / (15.0f * 60.0f), 0.0f, 1.0f);
 
     float bias = t * t * t;
 
