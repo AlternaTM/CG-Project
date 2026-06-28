@@ -146,7 +146,7 @@ int main(void)
     ResourceManager::LoadTexture("skeleton", "assets/textures/skelSheet.png");
     ResourceManager::LoadTexture("mago", "assets/textures/magoSheet.png");
     ResourceManager::LoadTexture("cannon", "assets/textures/cannon.png");
-    ResourceManager::LoadTexture("bullet", "assets/textures/proiettile_base.png");
+    ResourceManager::LoadTexture("bullet", "assets/textures/proiettile_pastello.png");
     ResourceManager::LoadTexture("titleScreen", "assets/textures/title.png");
     ResourceManager::LoadTexture("button_menu", "assets/textures/button_menu.png");
     ResourceManager::LoadTexture("button_card", "assets/textures/button_card.png");
