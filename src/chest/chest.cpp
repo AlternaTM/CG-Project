@@ -55,7 +55,7 @@ void ChestManager::render_chest(Camera3D& camera3D, const glm::mat4& projection3
     if (angle > 95.0f) {
         finished = true;
     }else {
-        angle += 40.0f * dt;
+        angle += 60.0f * dt;
         
     }
     
