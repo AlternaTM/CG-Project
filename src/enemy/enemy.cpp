@@ -143,6 +143,8 @@ void Enemy::make_damage(uint8_t damage) {
     float t = glm::clamp(Game::get_instance()->get_timer()->getTime() / (15.0f * 60.0f), 0.0f, 1.0f);
     float scaled =  glm::mix((float)damage, (float)(damage * MAX_DAMAGE_MULTI),t);
 
+    damageTimer = 0.4f;
+
     life -= (uint8_t)damage;
 
 }
@@ -154,6 +156,7 @@ void Enemy::change_state(EnemyState* new_state) {
 }
 
 void Enemy::update( float dt) {
+    damageTimer -= (damageTimer > 0.0f) ? dt : 0.0f;
     currentState->update(*this, dt);
 }
 
@@ -242,7 +245,9 @@ void EnemyManager::remove_enemy(uint32_t ID) {
 */
 
 void EnemyManager::render(SpriteRenderer& renderer, FigRenderer& figRenderer, Camera& camera) {
+    
     for ( Enemy* e : enemys) {
+        glm::vec4 color = (e->damageTimer > 0.0f) ? glm::vec4(1.0f, 0.5f, 0.5f, 1.0f) : glm::vec4(1.0f);
         renderer.Draw(
             ResourceManager::GetTexture(e->get_texture_name()),
             *e->get_pos(),
@@ -250,7 +255,8 @@ void EnemyManager::render(SpriteRenderer& renderer, FigRenderer& figRenderer, Ca
             0.0f,
             camera.getViewMatrix(),
             e->get_offset(),
-            e->get_frame_size()
+            e->get_frame_size(),
+            color
         );
         drawlife(figRenderer, camera, *e->get_pos(), e->get_life());
     }

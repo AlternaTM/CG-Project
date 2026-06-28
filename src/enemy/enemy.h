@@ -115,10 +115,11 @@ protected:
     int16_t life = 255;
 
     
-    
 public:
     uint32_t ID;
     EnemyTipe type;
+
+    float damageTimer = 0.0f;
     virtual float       get_attack_distance() const = 0;
     virtual uint8_t     get_base_damage()     const = 0;
     virtual std::string get_texture_name()    const = 0;
