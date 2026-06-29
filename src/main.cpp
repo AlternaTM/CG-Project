@@ -17,8 +17,6 @@
 #include "spriteRenderer/spriteRenderer.h"
 #include "textRenderer/textRenderer.h"
 
-
-
 #include "chest/chest.h"
 #include "models/model.h"
 #include "modelRenderer/modelRenderer.h"
@@ -110,11 +108,6 @@ int main(void)
     spriteShader.setMat4("uProj", projection);
     spriteShader.setInt("uTexture", 0);
 
-
-
-
-
-
     // ========== SETUP 3D ===============
 
     glm::mat4 projection3D = glm::perspective(
@@ -193,14 +186,11 @@ int main(void)
     float lid_max_z = ModelHelper::getMaxZ(chest_lid);
     float lid_height = lid_max_y - lid_min_y;
 
-
     chest_lid.setPosition(glm::vec3(
         0.0f,
         chest_top + (lid_height / 4) ,  
         0.0f                           
     ));
-
-
 
     // ------------------- Orso -------------------
 
@@ -227,7 +217,6 @@ int main(void)
     ResourceManager::LoadModel("asteroid", "assets/models/ball/palla.obj", &asterShader);
     
     //------------------- GAME -------------------
-    
 
     Game::init(
         window,
@@ -245,8 +234,6 @@ int main(void)
     float now = 0.0f;
 	float dt = 0.0f;
 
-
-
     //------------------- CICLO ------------------- 
     while (!glfwWindowShouldClose(window)) {
         now = (float)glfwGetTime();
@@ -257,8 +244,6 @@ int main(void)
         game->update(dt);
 
         camera.follow(*game->get_player()->get_pos());
-
-
 
         glClearColor(0.08f, 0.08f, 0.10f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -284,9 +269,6 @@ int main(void)
         glfwPollEvents();
     }
 
-
-
-    
     ResourceManager::clearModels();
     ResourceManager::clearShaders();
     ResourceManager::Clear();

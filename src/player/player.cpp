@@ -61,7 +61,7 @@ void DeadState::update(Player& player, float dt, GLFWwindow* window) {
 //Player ---------------------------------
 
 Player::Player(Camera& camera)
-    :  aimPosition(0.0f), speed(4.5f), aimRotation(0.0f), camera(camera){
+    :  aimPosition(0.0f), speed(3.5f), aimRotation(0.0f), camera(camera){
     currentState = PlayingState::instance();
     state = State::InGame;
     PlayerInput::register_input(GLFW_KEY_E);
