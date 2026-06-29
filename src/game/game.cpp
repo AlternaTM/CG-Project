@@ -3,7 +3,7 @@
 #include "../resourceManager/resourceManager.h"
 #include "../modelRenderer/modelRenderer.h"
 #include "globals.h"
-#include "../highscoreManager.h"
+#include "../highscoreManager/highscoreManager.h"
 
 // ================== TitleState ==========================
 void TitleGameState::enter(Game& game) {

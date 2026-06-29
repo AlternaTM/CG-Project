@@ -131,7 +131,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="highscoreManager.cpp" />
     <ClCompile Include="src\button\button.cpp" />
     <ClCompile Include="src\camera\camera.cpp" />
     <ClCompile Include="src\camera\camera3D.cpp" />
@@ -145,6 +144,7 @@
     <ClCompile Include="src\figureRenderer\figureRenderer.cpp" />
     <ClCompile Include="src\game\game.cpp" />
     <ClCompile Include="src\glad.c" />
+    <ClCompile Include="src\highscoreManager\highscoreManager.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\modelRenderer\modelRenderer.cpp" />
     <ClCompile Include="src\models\modelBuilder\modelBuilder.cpp" />
@@ -162,7 +162,6 @@
     <ClCompile Include="src\world\world.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="highscoreManager.h" />
     <ClInclude Include="src\animSystem\animSystem.h" />
     <ClInclude Include="src\button\button.h" />
     <ClInclude Include="src\camera\camera.h" />
@@ -180,6 +179,7 @@
     <ClInclude Include="src\figureRenderer\figureRenderer.h" />
     <ClInclude Include="src\game\game.h" />
     <ClInclude Include="src\game\globals.h" />
+    <ClInclude Include="src\highscoreManager\highscoreManager.h" />
     <ClInclude Include="src\modelRenderer\modelRenderer.h" />
     <ClInclude Include="src\models\chest.h" />
     <ClInclude Include="src\chest\chest.h" />

@@ -177,7 +177,7 @@
     <ClCompile Include="src\models\modelBuilder\modelBuilder.cpp">
       <Filter>File di origine\models\modelBuilder</Filter>
     </ClCompile>
-    <ClCompile Include="highscoreManager.cpp">
+    <ClCompile Include="src\highscoreManager\highscoreManager.cpp">
       <Filter>File di origine</Filter>
     </ClCompile>
   </ItemGroup>
@@ -296,7 +296,7 @@
     <ClInclude Include="src\models\modelBuilder\modelBuilder.h">
       <Filter>File di origine\models\modelBuilder</Filter>
     </ClInclude>
-    <ClInclude Include="highscoreManager.h">
+    <ClInclude Include="src\highscoreManager\highscoreManager.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
   </ItemGroup>
