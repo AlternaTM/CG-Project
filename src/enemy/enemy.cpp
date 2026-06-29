@@ -413,3 +413,33 @@ void EnemyManager::stopConstantSound(irrklang::ISound* isound) {
 
 
 
+void EnemyManager::pauseSounds() {
+    for (Enemy* e : enemys) {
+        MageEnemy* mage = dynamic_cast<MageEnemy*>(e);
+        if (!mage) continue;
+
+        irrklang::ISound* sound = mage->get_sound();
+
+        if (sound) {
+            sound->setIsPaused(true);
+        }
+        
+    }
+}
+
+void EnemyManager::restartSounds() {
+    for (Enemy* e : enemys) {
+        MageEnemy* mage = dynamic_cast<MageEnemy*>(e);
+        if (!mage) continue;
+
+        irrklang::ISound* sound = mage->get_sound();
+
+        if (sound) {
+            sound->setIsPaused(false);
+        }
+
+    }
+}
+
+
+
