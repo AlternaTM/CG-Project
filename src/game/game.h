@@ -215,6 +215,7 @@ public:
 	void spawn_game();
 
 	void render_game2D();
+	void render_baseUI();
 
 	ChestManager& get_chestManager();
 

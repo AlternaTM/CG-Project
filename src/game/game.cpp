@@ -129,50 +129,8 @@ void InGameState::exit(Game& game) {
 }
 
 void InGameState::renderUI(Game& game) {
-	int min = game.get_timer()->getMinutes();
-	int sec = game.get_timer()->getSeconds();
-
-	char buffer[6];
-	sprintf_s(buffer, "%02d:%02d", min, sec);
-
-	float timerScale = 0.7f;
-	float timerX = -7.5f;
-	float timerY = 3.7f;
-
-	game.get_TextRenderer()->RenderText(buffer, timerX, timerY, timerScale, { 1.0f, 1.0f, 1.0f });
-
-	// Barra della vita, sotto il timer
-	float textWidth = game.get_TextRenderer()->GetTextWidth(buffer, timerScale);
-	float barHeight = 0.2f;
-	float gap = 0.15f;
-
-	float barY = timerY - gap - barHeight * 0.5f;
-
-	uint8_t life = game.get_player()->get_life();
-	float lifeRatio = life / 255.0f;
-
-	glm::vec2 barCenter = { timerX + textWidth * 0.5f, barY };
-	glm::vec2 barFullSize = { textWidth, barHeight };
-
-	// vita mancante
-	game.get_SpriteRenderer()->DrawColor(
-		barCenter,
-		barFullSize,
-		{ 0.3f, 0.3f, 0.3f, 1.0f }
-	);
-
-	// vita attuale
-	float redWidth = textWidth * lifeRatio;
-	glm::vec2 redCenter = { timerX + redWidth * 0.5f, barY };
-	glm::vec2 redSize = { redWidth, barHeight };
-
-	if (redWidth > 0.0f) {
-		game.get_SpriteRenderer()->DrawColor(
-			redCenter,
-			redSize,
-			{ 0.85f, 0.15f, 0.15f, 1.0f }
-		);
-	}
+	// Renderizzo timer e barra della vita
+	game.render_baseUI();
 
 	// Stats
 	float statsScale = 0.4f;
@@ -256,50 +214,8 @@ void LootingGameState::render3d(Game& game,float dt) {
 }
 
 void LootingGameState::renderUI(Game& game) {
-	int min = game.get_timer()->getMinutes();
-	int sec = game.get_timer()->getSeconds();
-
-	char buffer[6];
-	sprintf_s(buffer, "%02d:%02d", min, sec);
-
-	float timerScale = 0.7f;
-	float timerX = -7.5f;
-	float timerY = 3.7f;
-
-	game.get_TextRenderer()->RenderText(buffer, timerX, timerY, timerScale, { 1.0f, 1.0f, 1.0f });
-
-	// Barra della vita, sotto il timer
-	float textWidth = game.get_TextRenderer()->GetTextWidth(buffer, timerScale);
-	float barHeight = 0.2f;
-	float gap = 0.15f;
-
-	float barY = timerY - gap - barHeight * 0.5f;
-
-	uint8_t life = game.get_player()->get_life();
-	float lifeRatio = life / 255.0f;
-
-	glm::vec2 barCenter = { timerX + textWidth * 0.5f, barY };
-	glm::vec2 barFullSize = { textWidth, barHeight };
-
-	// vita mancante
-	game.get_SpriteRenderer()->DrawColor(
-		barCenter,
-		barFullSize,
-		{ 0.3f, 0.3f, 0.3f, 1.0f }
-	);
-
-	// vita attuale
-	float redWidth = textWidth * lifeRatio;
-	glm::vec2 redCenter = { timerX + redWidth * 0.5f, barY };
-	glm::vec2 redSize = { redWidth, barHeight };
-
-	if (redWidth > 0.0f) {
-		game.get_SpriteRenderer()->DrawColor(
-			redCenter,
-			redSize,
-			{ 0.85f, 0.15f, 0.15f, 1.0f }
-		);
-	}
+	// Renderizzo timer e barra della vita
+	game.render_baseUI();
 
 	if (game.get_chestManager().finished) {
 		game.upgradeUI.render(game.get_TextRenderer(), game.get_SpriteRenderer());
@@ -328,50 +244,8 @@ void PauseGameState::exit(Game& game) {
 }
 
 void PauseGameState::renderUI(Game& game) {
-	int min = game.get_timer()->getMinutes();
-	int sec = game.get_timer()->getSeconds();
-
-	char buffer[6];
-	sprintf_s(buffer, "%02d:%02d", min, sec);
-
-	float timerScale = 0.7f;
-	float timerX = -7.5f;
-	float timerY = 3.7f;
-
-	game.get_TextRenderer()->RenderText(buffer, timerX, timerY, timerScale, { 1.0f, 1.0f, 1.0f });
-
-	// Barra della vita, sotto il timer
-	float textWidth = game.get_TextRenderer()->GetTextWidth(buffer, timerScale);
-	float barHeight = 0.2f;
-	float gap = 0.15f;
-
-	float barY = timerY - gap - barHeight * 0.5f;
-
-	uint8_t life = game.get_player()->get_life();
-	float lifeRatio = life / 255.0f;
-
-	glm::vec2 barCenter = { timerX + textWidth * 0.5f, barY };
-	glm::vec2 barFullSize = { textWidth, barHeight };
-
-	// vita mancante
-	game.get_SpriteRenderer()->DrawColor(
-		barCenter,
-		barFullSize,
-		{ 0.3f, 0.3f, 0.3f, 1.0f }
-	);
-
-	// vita attuale
-	float redWidth = textWidth * lifeRatio;
-	glm::vec2 redCenter = { timerX + redWidth * 0.5f, barY };
-	glm::vec2 redSize = { redWidth, barHeight };
-
-	if (redWidth > 0.0f) {
-		game.get_SpriteRenderer()->DrawColor(
-			redCenter,
-			redSize,
-			{ 0.85f, 0.15f, 0.15f, 1.0f }
-		);
-	}
+	// Renderizzo timer e barra della vita
+	game.render_baseUI();
 
 	game.get_SpriteRenderer()->DrawColor(
 		{ 0.0f, 0.0f },
@@ -451,50 +325,8 @@ void GameOverState::exit(Game& game) {
 }
 
 void GameOverState::renderUI(Game& game) {
-	int min = game.get_timer()->getMinutes();
-	int sec = game.get_timer()->getSeconds();
-
-	char buffer[6];
-	sprintf_s(buffer, "%02d:%02d", min, sec);
-
-	float timerScale = 0.7f;
-	float timerX = -7.5f;
-	float timerY = 3.7f;
-
-	game.get_TextRenderer()->RenderText(buffer, timerX, timerY, timerScale, { 1.0f, 1.0f, 1.0f });
-
-	// Barra della vita, sotto il timer
-	float textWidth = game.get_TextRenderer()->GetTextWidth(buffer, timerScale);
-	float barHeight = 0.2f;
-	float gap = 0.15f;
-
-	float barY = timerY - gap - barHeight * 0.5f;
-
-	uint8_t life = game.get_player()->get_life();
-	float lifeRatio = life / 255.0f;
-
-	glm::vec2 barCenter = { timerX + textWidth * 0.5f, barY };
-	glm::vec2 barFullSize = { textWidth, barHeight };
-
-	// vita mancante
-	game.get_SpriteRenderer()->DrawColor(
-		barCenter,
-		barFullSize,
-		{ 0.3f, 0.3f, 0.3f, 1.0f }
-	);
-
-	// vita attuale
-	float redWidth = textWidth * lifeRatio;
-	glm::vec2 redCenter = { timerX + redWidth * 0.5f, barY };
-	glm::vec2 redSize = { redWidth, barHeight };
-
-	if (redWidth > 0.0f) {
-		game.get_SpriteRenderer()->DrawColor(
-			redCenter,
-			redSize,
-			{ 0.85f, 0.15f, 0.15f, 1.0f }
-		);
-	}
+	// Renderizzo timer e barra della vita
+	game.render_baseUI();
 
 	game.get_SpriteRenderer()->DrawColor(
 		{0.0f, 0.0f},
@@ -679,8 +511,6 @@ Game::Game(
 	audioEngine(audioEngine)
 {
 	game_state = &titleState;
-
-	
 }
 
 void Game::init(
@@ -998,6 +828,54 @@ void Game::render_game2D() {
 		player.aimRotation,
 		camera.getViewMatrix()
 	);
+}
+
+void Game::render_baseUI()
+{
+	int min = get_timer()->getMinutes();
+	int sec = get_timer()->getSeconds();
+
+	char buffer[6];
+	sprintf_s(buffer, "%02d:%02d", min, sec);
+
+	float timerScale = 0.7f;
+	float timerX = -7.5f;
+	float timerY = 3.7f;
+
+	get_TextRenderer()->RenderText(buffer, timerX, timerY, timerScale, { 1.0f, 1.0f, 1.0f });
+
+	// Barra della vita, sotto il timer
+	float textWidth = get_TextRenderer()->GetTextWidth(buffer, timerScale);
+	float barHeight = 0.2f;
+	float gap = 0.15f;
+
+	float barY = timerY - gap - barHeight * 0.5f;
+
+	uint8_t life = get_player()->get_life();
+	float lifeRatio = life / 255.0f;
+
+	glm::vec2 barCenter = { timerX + textWidth * 0.5f, barY };
+	glm::vec2 barFullSize = { textWidth, barHeight };
+
+	// vita mancante
+	get_SpriteRenderer()->DrawColor(
+		barCenter,
+		barFullSize,
+		{ 0.3f, 0.3f, 0.3f, 1.0f }
+	);
+
+	// vita attuale
+	float redWidth = textWidth * lifeRatio;
+	glm::vec2 redCenter = { timerX + redWidth * 0.5f, barY };
+	glm::vec2 redSize = { redWidth, barHeight };
+
+	if (redWidth > 0.0f) {
+		get_SpriteRenderer()->DrawColor(
+			redCenter,
+			redSize,
+			{ 0.85f, 0.15f, 0.15f, 1.0f }
+		);
+	}
 }
 
 void Game::updateScoreCount(uint16_t score) {
