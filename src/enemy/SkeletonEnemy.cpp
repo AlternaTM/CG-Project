@@ -5,12 +5,13 @@
 SkeletonEnemy::SkeletonEnemy():Enemy(EnemyTipe::Skeleton) {
 	init_states();
 	life = 255;
+    speed = 1.8f;
 }
 
 void SkeletonEnemy::init_states() {
     attackState.tot_framex = 13;
     attackState.tot_rows = 4;
-    attackState.frame_duration = 0.15f;
+    attackState.frame_duration = 0.10f;
     attackState.y_offset = 3;
     attackState.max_frame = 10;
 

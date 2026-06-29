@@ -31,8 +31,8 @@ void MovingState::update(Enemy& e, float dt) {
         direction.y /= length;
     }
 
-    e.get_pos()->x += direction.x * ENEMY_SPEED * dt;
-    e.get_pos()->y += direction.y * ENEMY_SPEED * dt;
+    e.get_pos()->x += direction.x * e.speed * dt;
+    e.get_pos()->y += direction.y * e.speed * dt;
 
     //std::cout << CollisionChecker::distance(e, *EnemyManager::_PLAYER) << std::endl;
     

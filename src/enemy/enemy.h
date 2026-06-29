@@ -18,7 +18,7 @@ class Enemy;
 // ============= ENEMY STATES ==================================
 
 
-const float ENEMY_SPEED = 1;
+const float ENEMY_SPEED = 1.4;
 
 enum EnemyTipe
 {
@@ -118,6 +118,8 @@ protected:
 public:
     uint32_t ID;
     EnemyTipe type;
+
+    float speed = ENEMY_SPEED;
 
     float damageTimer = 0.0f;
     virtual float       get_attack_distance() const = 0;
