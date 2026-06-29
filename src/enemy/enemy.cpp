@@ -346,7 +346,7 @@ EnemyTipe EnemyManager::randomWeightedEnemyType() {
     static std::random_device rd;
     static std::mt19937 gen(rd());
 
-    static std::discrete_distribution<int> dist({ 67, 30, 3 });
+    static std::discrete_distribution<int> dist({ 63, 30, 7 });
 
     return static_cast<EnemyTipe>(dist(gen));
 }
