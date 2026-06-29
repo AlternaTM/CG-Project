@@ -37,6 +37,7 @@ public:
         loadModel(path);
     }
 
+    
     Model(vector<Vertex> vertices, vector<unsigned int> indices, const string& texturePath)
     {
         
@@ -69,27 +70,21 @@ private:
             cout << "ERROR::ASSIMP:: " << importer.GetErrorString() << endl;
             return;
         }
-        // retrieve the directory path of the filepath
         directory = path.substr(0, path.find_last_of('/'));
-
-        // process ASSIMP's root node recursively
         processNode(scene->mRootNode, scene);
         
 
     }
 
-
+    // visita ricorsiva dell'albero di nodi della scena
     void processNode(aiNode* node, const aiScene* scene)
     {
-        // process each mesh located at the current node
         for (unsigned int i = 0; i < node->mNumMeshes; i++)
         {
-            // the node object only contains indices to index the actual objects in the scene. 
-            // the scene contains all the data, node is just to keep stuff organized (like relations between nodes).
+            // i nodi contengono solo indicii dati effettivi delle mesh risiedono nella scena            
             aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
             meshes.push_back(processMesh(mesh, scene));
         }
-        // after we've processed all of the meshes (if any) we then recursively process each of the children nodes
         for (unsigned int i = 0; i < node->mNumChildren; i++)
         {
             processNode(node->mChildren[i], scene);
@@ -99,22 +94,20 @@ private:
 
     Mesh processMesh(aiMesh* mesh, const aiScene* scene)
     {
-        // data to fill
         vector<Vertex> vertices;
         vector<unsigned int> indices;
         vector<Texture> textures;
 
-        // walk through each of the mesh's vertices
         for (unsigned int i = 0; i < mesh->mNumVertices; i++)
         {
             Vertex vertex;
-            glm::vec3 vector; // we declare a placeholder vector since assimp uses its own vector class that doesn't directly convert to glm's vec3 class so we transfer the data to this placeholder glm::vec3 first.
-            // positions
+            glm::vec3 vector; 
+            // posizioni
             vector.x = mesh->mVertices[i].x;
             vector.y = mesh->mVertices[i].y;
             vector.z = mesh->mVertices[i].z;
             vertex.Position = vector;
-            // normals
+            // normali
             if (mesh->HasNormals())
             {
                 vector.x = mesh->mNormals[i].x;
@@ -123,12 +116,10 @@ private:
                 vertex.Normal = vector;
             }
             
-            // texture coordinates
-            if (mesh->mTextureCoords[0]) // does the mesh contain texture coordinates?
+            // texture cord
+            if (mesh->mTextureCoords[0]) 
             {
                 glm::vec2 vec;
-                // a vertex can contain up to 8 different texture coordinates. We thus make the assumption that we won't 
-                // use models where a vertex can have multiple texture coordinates so we always take the first set (0).
                 vec.x = mesh->mTextureCoords[0][i].x;
                 vec.y = mesh->mTextureCoords[0][i].y;
                 vertex.TexCoords = vec;
@@ -138,29 +129,23 @@ private:
 
             vertices.push_back(vertex);
         }
-        // now wak through each of the mesh's faces (a face is a mesh its triangle) and retrieve the corresponding vertex indices.
         for (unsigned int i = 0; i < mesh->mNumFaces; i++)
         {
             aiFace face = mesh->mFaces[i];
-            // retrieve all indices of the face and store them in the indices vector
             for (unsigned int j = 0; j < face.mNumIndices; j++)
                 indices.push_back(face.mIndices[j]);
         }      
 
-        // process materials
         aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
 
 
-        std::cout << "Material: " << material->GetName().C_Str() << std::endl;
-        std::cout << "  DIFFUSE count:  " << material->GetTextureCount(aiTextureType_DIFFUSE) << std::endl;
-        std::cout << "  SPECULAR count: " << material->GetTextureCount(aiTextureType_SPECULAR) << std::endl;
-        std::cout << "  BASE_C count: " << material->GetTextureCount(aiTextureType_BASE_COLOR) << std::endl;
-        std::cout << "  NON CONOSCIUTE count:  " << material->GetTextureCount(aiTextureType_UNKNOWN) << std::endl;
 
-        // we assume a convention for sampler names in the shaders. Each diffuse texture should be named
-        // as 'texture_diffuseN' where N is a sequential number ranging from 1 to MAX_SAMPLER_NUMBER. 
-        // Same applies to other texture as the following list summarizes:
-        // diffuse: texture_diffuseN
+        //std::cout << "Material: " << material->GetName().C_Str() << std::endl;
+        //std::cout << "  DIFFUSE count:  " << material->GetTextureCount(aiTextureType_DIFFUSE) << std::endl;
+        //std::cout << "  SPECULAR count: " << material->GetTextureCount(aiTextureType_SPECULAR) << std::endl;
+        //std::cout << "  BASE_C count: " << material->GetTextureCount(aiTextureType_BASE_COLOR) << std::endl;
+        //std::cout << "  NON CONOSCIUTE count:  " << material->GetTextureCount(aiTextureType_UNKNOWN) << std::endl;
+        // convenzione nomi sampler: texture_diffuseN, texture_specularN (N da 1 in su)
 
         // 1. diffuse maps
         vector<Texture> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
@@ -170,12 +155,10 @@ private:
         textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
 
 
-        // return a mesh object created from the extracted mesh data
         return Mesh(vertices, indices, textures);
     }
 
-    // checks all material textures of a given type and loads the textures if they're not loaded yet.
-    // the required info is returned as a Texture struct.
+    
     vector<Texture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, string typeName)
     {
         vector<Texture> textures;
@@ -183,25 +166,24 @@ private:
         {
             aiString str;
             mat->GetTexture(type, i, &str);
-            // check if texture was loaded before and if so, continue to next iteration: skip loading a new texture
             bool skip = false;
             for (unsigned int j = 0; j < textures_loaded.size(); j++)
             {
                 if (std::strcmp(textures_loaded[j].path.data(), str.C_Str()) == 0)
                 {
                     textures.push_back(textures_loaded[j]);
-                    skip = true; // a texture with the same filepath has already been loaded, continue to next one. (optimization)
+                    skip = true; 
                     break;
                 }
             }
             if (!skip)
-            {   // if texture hasn't been loaded already, load it
+            {   
                 Texture texture;
                 texture.id = TextureFromFile(str.C_Str(), this->directory);
                 texture.type = typeName;
                 texture.path = str.C_Str();
                 textures.push_back(texture);
-                textures_loaded.push_back(texture);  // store it as texture loaded for entire model, to ensure we won't unnecessary load duplicate textures.
+                textures_loaded.push_back(texture);  
             }
         }
         return textures;
