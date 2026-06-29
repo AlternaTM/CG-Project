@@ -147,10 +147,10 @@ private:
         //std::cout << "  NON CONOSCIUTE count:  " << material->GetTextureCount(aiTextureType_UNKNOWN) << std::endl;
         // convenzione nomi sampler: texture_diffuseN, texture_specularN (N da 1 in su)
 
-        // 1. diffuse maps
+        // diffuse maps
         vector<Texture> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
         textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
-        // 2. specular maps
+        // specular maps
         vector<Texture> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
         textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
 
