@@ -99,6 +99,7 @@ void TitleGameState::render3d(Game& game, float dt) {
 // ================== InGameState ==========================
 void InGameState::enter(Game& game) {
 	game.get_enemyManager()->restartSounds();
+	//glfwSetInputMode(game.get_window(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 }
 
 void InGameState::update(Game& game, float dt) {
@@ -126,6 +127,7 @@ void InGameState::update(Game& game, float dt) {
 
 void InGameState::exit(Game& game) {
 	game.get_enemyManager()->pauseSounds();
+	//glfwSetInputMode(game.get_window(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 }
 
 void InGameState::renderUI(Game& game) {
