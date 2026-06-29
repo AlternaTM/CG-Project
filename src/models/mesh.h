@@ -26,19 +26,19 @@ struct Vertex {
 
 struct Texture {
     unsigned int id;
-    string type;
+    string type; // texture_diffuse o texture_specular
     string path;
 };
 
 class Mesh {
 public:
-    // mesh Data
+
     vector<Vertex>       vertices;
     vector<unsigned int> indices;
     vector<Texture>      textures;
     unsigned int VAO;
 
-    // constructor
+
     Mesh(vector<Vertex> vertices, vector<unsigned int> indices, vector<Texture> textures)
     {
         this->vertices = vertices;
@@ -50,7 +50,6 @@ public:
 
     void Draw(Shader& shader)
     {
-        // bind appropriate textures
         unsigned int diffuseNr = 1;
         unsigned int specularNr = 1;
         // std::cout << "Textures count: " << textures.size() << std::endl;
@@ -72,7 +71,6 @@ public:
             glBindTexture(GL_TEXTURE_2D, textures[i].id);
         }
 
-        // draw mesh
         glBindVertexArray(VAO);
         glDrawElements(GL_TRIANGLES, static_cast<unsigned int>(indices.size()), GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
@@ -81,7 +79,6 @@ public:
     }
 
 private:
-    // render data 
     unsigned int VBO, EBO;
 
 
