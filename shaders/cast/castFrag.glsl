@@ -20,7 +20,7 @@ void main()
 
     float alpha = 1.0 - smoothstep(core, core + glow, dist);
 
-    float hihihi = smoothstep(0.0, 0.05, vUV.x) *(1.0 - smoothstep(0.95, 1.0, vUV.x));
+    float propagation  = smoothstep(0.0, 0.05, vUV.x) *(1.0 - smoothstep(0.95, 1.0, vUV.x));
 
 
     float pulse = 0.75 + 0.25 * sin(uTime * 12.0);
@@ -28,7 +28,7 @@ void main()
     float noise = sin(vUV.x * 30.0 + uTime * 20.0) * 0.05;
     alpha += noise;
 
-    alpha *= hihihi * pulse;
+    alpha *= propagation * pulse;
 
     FragColor = vec4(uColor.rgb, uColor.a * alpha * pulse);
 }
