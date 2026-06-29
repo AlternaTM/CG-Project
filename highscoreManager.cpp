@@ -20,14 +20,16 @@ void HighscoreManager::load(const std::string& path) {
         if (line.empty()) continue;
 
         std::stringstream ss(line);
-        std::string scoreStr, killsStr;
+        std::string scoreStr, killsStr, nameStr;
 
         if (!std::getline(ss, scoreStr, ';')) continue;
-        if (!std::getline(ss, killsStr)) continue;
+        if (!std::getline(ss, killsStr, ';')) continue;
+        if (!std::getline(ss, nameStr)) continue;
 
         ScoreEntry entry;
         entry.score = static_cast<uint32_t>(std::stoul(scoreStr));
         entry.enemiesKilled = static_cast<uint32_t>(std::stoul(killsStr));
+        entry.name = nameStr;
 
         scores.push_back(entry);
     }
@@ -35,8 +37,16 @@ void HighscoreManager::load(const std::string& path) {
     file.close();
 }
 
-void HighscoreManager::trySaveScore(uint16_t score, uint16_t enemiesKilled) {
-    ScoreEntry entry{ score, enemiesKilled };
+int HighscoreManager::getRank(uint16_t score) {
+    for (int i = 0; i < (int)scores.size(); i++) {
+        if (score > scores[i].score) return i;
+    }
+    if ((int)scores.size() < 5) return (int)scores.size();
+    return -1;
+}
+
+void HighscoreManager::saveScore(uint16_t score, uint16_t enemiesKilled, const std::string& name) {
+    ScoreEntry entry{ score, enemiesKilled, name };
 
     auto it = std::find_if(scores.begin(), scores.end(), [&](const ScoreEntry& e) {
         return e.score < entry.score;
@@ -59,7 +69,7 @@ void HighscoreManager::save() {
     }
 
     for (const auto& entry : scores) {
-        file << entry.score << ";" << entry.enemiesKilled << "\n";
+        file << entry.score << ";" << entry.enemiesKilled << ";" << entry.name << "\n";
     }
 
     file.close();

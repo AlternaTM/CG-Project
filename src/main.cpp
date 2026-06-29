@@ -44,6 +44,7 @@
 //#include <filesystem>
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+void character_callback(GLFWwindow* window, unsigned int codepoint);
 
 // settings
 const unsigned int SCR_WIDTH = 1920;
@@ -82,6 +83,7 @@ int main(void)
 	glfwMakeContextCurrent(window);
 	glfwSetWindowAspectRatio(window, 16, 9);
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    glfwSetCharCallback(window, character_callback);
 
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
@@ -297,4 +299,9 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
     // make sure the viewport matches the new window dimensions; note that width and 
     // height will be significantly larger than specified on retina displays.
     glViewport(0, 0, width, height);
+}
+
+void character_callback(GLFWwindow*, unsigned int codepoint)
+{
+    Game::get_instance()->onChar(codepoint);
 }

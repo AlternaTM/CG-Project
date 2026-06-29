@@ -13,7 +13,6 @@
 #include "timer/timer.h"
 #include "button/button.h"
 #include <irrKlang/irrKlang.h>
-#include "../highscoreManager.h"
 
 class Game;
 class CastManager;
@@ -42,6 +41,7 @@ public:
 	virtual void render2d(Game& game){}
 	virtual void render3d(Game& game, float dt) {}
 	virtual void renderUI(Game& game) {}
+	virtual void onChar(unsigned int codepoint) {}
 	virtual GameStateType get_type() {
 		return state_type;
 	}
@@ -96,6 +96,13 @@ public:
 	virtual void exit(Game& game) override;
 	virtual void renderUI(Game& game) override;
 	virtual void render2d(Game& game) override;
+	virtual void onChar(unsigned int codepoint) override;
+
+private:
+	bool waitingForName = false;
+	char nameBuffer[4] = { ' ', ' ', ' ', '\0' };
+	int cursor = 0;
+	int rankAchieved = -1;
 };
 
 class HighScoreState : public IGameState {
@@ -171,7 +178,6 @@ private:
 public: 
 	UpgradeUI upgradeUI;
 
-
 	static void init(
 		GLFWwindow* window, 
 		Camera& camera, 
@@ -202,7 +208,8 @@ public:
 	irrklang::ISoundEngine* get_engine();
 
 	std::vector<Button>& get_buttons(GameStateType type);
-
+	bool won = false;
+	void onChar(unsigned int codepoint);
 
 	void reset();
 	void spawn_game();

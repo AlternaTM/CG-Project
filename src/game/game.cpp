@@ -3,6 +3,7 @@
 #include "../resourceManager/resourceManager.h"
 #include "../modelRenderer/modelRenderer.h"
 #include "globals.h"
+#include "../highscoreManager.h"
 
 // ================== TitleState ==========================
 void TitleGameState::enter(Game& game) {
@@ -111,6 +112,11 @@ void InGameState::update(Game& game, float dt) {
 
 	game.get_player()->update(dt,game.get_window());
 	game.get_timer()->update(dt);
+
+	if (game.get_timer()->getMinutes() == 15) {
+		game.won = true;
+		game.switch_state(GameStateType::GameOver);
+	}
 
 	game.get_CastManager()->update(dt);
 	game.get_enemyManager()->update(*game.get_player(), dt);
@@ -395,14 +401,48 @@ void PauseGameState::render2d(Game& game) {
 
 // ================== GameOverState =========================
 void GameOverState::enter(Game& game) {
-	if (game.get_score() > 0) {
-		HighscoreManager::trySaveScore(game.get_score(), game.get_enemiesKilled());
+	waitingForName = false;
+	cursor = 0;
+	rankAchieved = -1;
+	nameBuffer[0] = nameBuffer[1] = nameBuffer[2] = ' ';
+	nameBuffer[3] = '\0';
+
+	rankAchieved = HighscoreManager::getRank(game.get_score());
+
+	if (game.get_score() > 0 && rankAchieved != -1) {
+		waitingForName = true;
 	}
 }
 
 void GameOverState::update(Game& game, float dt) {
-	for (auto& b : game.get_buttons(GameStateType::GameOver)) {
-		b.update(game.get_window());
+	if (waitingForName)
+	{
+		if (PlayerInput::isKeyJustPressed(game.get_window(), GLFW_KEY_BACKSPACE))
+		{
+			if (cursor > 0)
+			{
+				cursor--;
+				nameBuffer[cursor] = ' ';
+			}
+		}
+
+		if (cursor == 3 &&
+			PlayerInput::isKeyJustPressed(game.get_window(), GLFW_KEY_ENTER))
+		{
+			HighscoreManager::saveScore(
+				game.get_score(),
+				game.get_enemiesKilled(),
+				std::string(nameBuffer, 3));
+
+			waitingForName = false;
+		}
+
+		return;
+	}
+	else
+	{
+		for (auto& b : game.get_buttons(GameStateType::GameOver))
+			b.update(game.get_window());
 	}
 }
 
@@ -462,7 +502,8 @@ void GameOverState::renderUI(Game& game) {
 		{ 0.0f, 0.0f, 0.0f, 0.8f }
 	);
 
-	std::string title = "Game Over";
+	std::string title = game.won ? "Hai vinto!" : "Game Over";
+
 	float titleScale = 1.2f;
 	float titleWidth = game.get_TextRenderer()->GetTextWidth(title, titleScale);
 	game.get_TextRenderer()->RenderText(
@@ -473,8 +514,35 @@ void GameOverState::renderUI(Game& game) {
 		{ 1.0f, 1.0f, 1.0f }
 	);
 
-	for (auto& b : game.get_buttons(GameStateType::GameOver)) {
-		b.render(*game.get_SpriteRenderer(), *game.get_TextRenderer());
+	if (waitingForName) {
+		char rankMsg[32];
+		sprintf_s(rankMsg, "Nuovo record! Posizione #%d", rankAchieved + 1);
+		std::string rankStr(rankMsg);
+		float rankScale = 0.55f;
+		float rankW = game.get_TextRenderer()->GetTextWidth(rankStr, rankScale);
+		game.get_TextRenderer()->RenderText(rankStr, -rankW * 0.5f, 1.1f, rankScale, { 1.f, 0.85f, 0.2f });
+
+		std::string prefix = "Inserisci il tuo nome: ";
+		char nameDisplay[4] = {
+			nameBuffer[0] == ' ' ? '_' : nameBuffer[0],
+			nameBuffer[1] == ' ' ? '_' : nameBuffer[1],
+			nameBuffer[2] == ' ' ? '_' : nameBuffer[2],
+			'\0'
+		};
+		std::string fullLine = prefix + nameDisplay;
+		float lineScale = 0.45f;
+		float lineW = game.get_TextRenderer()->GetTextWidth(fullLine, lineScale);
+		game.get_TextRenderer()->RenderText(fullLine, -lineW * 0.5f, 0.2f, lineScale, { 1.f, 1.f, 1.f });
+
+		std::string hint = "Premi INVIO per salvare";
+		float hintScale = 0.35f;
+		float hintW = game.get_TextRenderer()->GetTextWidth(hint, hintScale);
+		game.get_TextRenderer()->RenderText(hint, -hintW * 0.5f, -0.5f, hintScale, { 0.6f, 0.6f, 0.6f });
+	}
+	else {
+		for (auto& b : game.get_buttons(GameStateType::GameOver)) {
+			b.render(*game.get_SpriteRenderer(), *game.get_TextRenderer());
+		}
 	}
 }
 
@@ -482,7 +550,24 @@ void GameOverState::render2d(Game& game) {
 	game.render_game2D();
 }
 
-// ================== GameOverState =========================
+void GameOverState::onChar(unsigned int codepoint)
+{
+	if (!waitingForName)
+		return;
+
+	if (cursor >= 3)
+		return;
+
+	if (codepoint >= 'a' && codepoint <= 'z')
+		codepoint -= ('a' - 'A');
+
+	if (codepoint >= 'A' && codepoint <= 'Z')
+	{
+		nameBuffer[cursor++] = static_cast<char>(codepoint);
+	}
+}
+
+// ================== HighScoreState =========================
 void HighScoreState::enter(Game& game) {
 
 }
@@ -519,9 +604,10 @@ void HighScoreState::renderUI(Game& game) {
 	);
 
 	// Colonne tabella
-	float colRankX = -3.0f;
-	float colScoreX = -1.5f;
-	float colKillsX = 2.0f;
+	float colRankX = -4.5f;
+	float colNameX = -3.5f;
+	float colScoreX = -0.5f;
+	float colKillsX = 3.5f;
 
 	float headerY = 1.8f;
 	float headerScale = 0.7f;
@@ -529,7 +615,8 @@ void HighScoreState::renderUI(Game& game) {
 	float rowGap = 0.6f;
 	float rowScale = 0.7f;
 
-	game.get_TextRenderer()->RenderText("#", colRankX, headerY, headerScale, { 0.8f, 0.8f, 0.8f });
+	// Header
+	game.get_TextRenderer()->RenderText("Nome", colNameX, headerY, headerScale, { 0.8f, 0.8f, 0.8f });
 	game.get_TextRenderer()->RenderText("Punteggio", colScoreX, headerY, headerScale, { 0.8f, 0.8f, 0.8f });
 	game.get_TextRenderer()->RenderText("Nemici", colKillsX, headerY, headerScale, { 0.8f, 0.8f, 0.8f });
 
@@ -540,9 +627,11 @@ void HighScoreState::renderUI(Game& game) {
 
 		char rankBuffer[8];
 		sprintf_s(rankBuffer, "%d.", static_cast<int>(i + 1));
-		game.get_TextRenderer()->RenderText(rankBuffer, colRankX, rowY, rowScale, { 1.0f, 1.0f, 1.0f });
 
 		if (i < scores.size()) {
+			game.get_TextRenderer()->RenderText(rankBuffer, colRankX, rowY, rowScale, { 1.0f, 1.0f, 1.0f });
+			game.get_TextRenderer()->RenderText(scores[i].name.c_str(), colNameX, rowY, rowScale, { 1.0f, 1.0f, 1.0f });
+
 			char scoreBuffer[16];
 			sprintf_s(scoreBuffer, "%u", scores[i].score);
 			game.get_TextRenderer()->RenderText(scoreBuffer, colScoreX, rowY, rowScale, { 1.0f, 1.0f, 1.0f });
@@ -552,6 +641,8 @@ void HighScoreState::renderUI(Game& game) {
 			game.get_TextRenderer()->RenderText(killsBuffer, colKillsX, rowY, rowScale, { 1.0f, 1.0f, 1.0f });
 		}
 		else {
+			game.get_TextRenderer()->RenderText(rankBuffer, colRankX, rowY, rowScale, { 0.5f, 0.5f, 0.5f });
+			game.get_TextRenderer()->RenderText("---", colNameX, rowY, rowScale, { 0.5f, 0.5f, 0.5f });
 			game.get_TextRenderer()->RenderText("---", colScoreX, rowY, rowScale, { 0.5f, 0.5f, 0.5f });
 			game.get_TextRenderer()->RenderText("---", colKillsX, rowY, rowScale, { 0.5f, 0.5f, 0.5f });
 		}
@@ -922,6 +1013,7 @@ void Game::reset() {
 	timer.reset();
 	score = 0;
 	enemiesKilled = 0;
+	won = false;
 }
 
 void Game::spawn_game() {
@@ -931,4 +1023,6 @@ void Game::spawn_game() {
 	chestManager.spawn_chest();
 }
 
-
+void Game::onChar(unsigned int c) {
+	game_state->onChar(c);
+}

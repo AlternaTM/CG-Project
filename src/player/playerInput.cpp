@@ -21,8 +21,7 @@ bool PlayerInput::isPressed(GLFWwindow* window, int l) {
 bool PlayerInput::isKeyJustPressed(GLFWwindow* window, int l) {
     auto it = wasPressed.find(l);
     if (it == wasPressed.end()) {
-        std::cout << "Tasto " << l << " non registrato!" << std::endl;
-        return false;
+        return glfwGetKey(window, l) == GLFW_PRESS;
     }
     return  (!it->second && glfwGetKey(window, l));
 }

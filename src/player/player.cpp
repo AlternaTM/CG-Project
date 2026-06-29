@@ -67,6 +67,8 @@ Player::Player(Camera& camera)
     PlayerInput::register_input(GLFW_KEY_E);
 	PlayerInput::register_input(GLFW_KEY_ESCAPE);
 	PlayerInput::register_input(GLFW_MOUSE_BUTTON_LEFT);
+	PlayerInput::register_input(GLFW_KEY_BACKSPACE);
+    PlayerInput::register_input(GLFW_KEY_ENTER);
     
     currentState->enter(*this);
 }
