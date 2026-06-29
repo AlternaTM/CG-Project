@@ -18,7 +18,7 @@ void SkeletonEnemy::init_states() {
 
     movingState.tot_framex = 13;
     movingState.tot_rows = 4;
-    movingState.frame_duration = 0.8f;
+    movingState.frame_duration = 0.10f;
     movingState.y_offset = 0;
     movingState.max_frame = 10;
 
