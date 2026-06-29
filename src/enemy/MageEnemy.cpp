@@ -196,7 +196,6 @@ void PreAttackState::update(Enemy& e,float dt) {
     em->get_cast()->update_model(model);
 }
 
-
 void PreAttackState::exit(Enemy& e) {
     WaitingState::exit(e);
     MageEnemy* em = dynamic_cast<MageEnemy*>(&e);
@@ -207,7 +206,7 @@ void PreAttackState::exit(Enemy& e) {
 // ====================================
 
 MageEnemy::MageEnemy() 
-    :preAttackState(2.0f,&attackState), endAttackDelay(1.0f, &movingState), cast(nullptr), Enemy(EnemyTipe::Mage)
+    :preAttackState(1.0f,&attackState), endAttackDelay(1.0f, &movingState), cast(nullptr), Enemy(EnemyTipe::Mage)
 {
     init_states();
     life = 255;
