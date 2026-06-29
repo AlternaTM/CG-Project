@@ -64,10 +64,12 @@ int main(void)
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_DEPTH_BITS, 24);
-
+    //glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
 
 	/* Create a windowed mode window and its OpenGL context */
-	window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Battlefield in the Bedroom", NULL, NULL);
+
+
+	window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Battlefield in the Bedroom", nullptr, nullptr);
 	if (!window)
 	{
 		glfwTerminate();
@@ -75,13 +77,16 @@ int main(void)
 	}
 
 	/* Capturing mouse if it stays inside the window */
-	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
 
 	/* Make the window's context current */
 	glfwMakeContextCurrent(window);
 	glfwSetWindowAspectRatio(window, 16, 9);
+    glfwSetWindowPos(window, 0, 0);
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     glfwSetCharCallback(window, character_callback);
+
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
