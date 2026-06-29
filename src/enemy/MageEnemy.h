@@ -8,7 +8,7 @@ class MageEnemy;
 class RangedAttackState : public EnemyState, public Animable {
 private:
     Enemy* owner = nullptr;
-    irrklang::ISound* attackSound = nullptr;
+    
     uint8_t last_frame = 0;
     float start_time;
     float ttl;
@@ -16,6 +16,8 @@ private:
         const glm::vec2 start, const glm::vec2 forward,
         const float beamWidth, const float currentLength) const;
 public:
+
+    irrklang::ISound* attackSound = nullptr;
     uint8_t start_pos;
     uint8_t end_pos;
     uint8_t duration;
@@ -78,6 +80,8 @@ public:
 
     void spawn_cast(glm::mat4 model, const glm::vec4& color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
     void remove_cast();
+
+    irrklang::ISound* get_sound();
 
 
     Cast* get_cast() {

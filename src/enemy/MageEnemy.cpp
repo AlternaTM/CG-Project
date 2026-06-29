@@ -282,3 +282,8 @@ void MageEnemy::remove_cast() {
     delete cast;
     cast = nullptr;
 }
+
+
+irrklang::ISound* MageEnemy::get_sound() {
+    return attackState.attackSound;
+}

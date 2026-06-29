@@ -185,6 +185,10 @@ public:
     irrklang::ISound* playCostantSound(const std::string& file);
     void stopConstantSound(irrklang::ISound* isound);
 
+
+    void pauseSounds();
+    void restartSounds();
+
     void fix_overlaps();
 
     void reset();
